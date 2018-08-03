@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/line_popup_window"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#e1e1e1" />
+    <Button
+        android:id="@+id/bt_popup_window"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:text="相册"
+        android:textColor="#333"
+        android:textSize="18sp" />
+
+
+
+</LinearLayout>
