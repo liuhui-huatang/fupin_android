@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
-import com.example.library.control.TxtKandy;
-import com.example.library.http.HttpRequestClient;
-import com.example.library.login.AccessKandy;
+
+
+
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -173,82 +173,6 @@ public class MyActivity extends BaseActivity {
 
     int num = 0;
 
-    public void kandyRegisterAll() {
-        num=0;
-        HttpRequest.getKandyNoLeader(this, new HttpRequest.MyCallBack() {
-            @Override
-            public void ok(String json) {
-
-//                final Leader bean = JsonUtil.json2Bean(json, Leader.class);
-                List<Leader> beans = JsonUtil.toList(json, Leader.class);
-
-                DialogUIUtils.showTie(MyActivity.this, "通讯注册...");
-                for (final Leader bean : beans) {
-
-//                    HttpRequest.saveKandy(MyActivity.this, bean.getId(), bean.getLeader_phone() + bean.getId()+"@huatang.txtechnology.com.cn", "kandy" + bean.getPassword(), new HttpRequest.MyCallBack() {
-//                        @Override
-//                        public void ok(String json) {
-//                            ToastUtil.show("注册成功！");
-//                            MLog.e("kandy==ssaveKandy==ok", "ok");
-//                        }
-//                    });
-
-
-
-                    Map<String, String> values = new HashMap<String, String>();
-                    values.put("user_id", bean.getLeader_phone() + bean.getId());
-                    values.put("user_email", "email@sdkdemo.txtechnology.com.cn");
-                    values.put("user_password", "kandy" + bean.getPassword());
-                    TxtKandy.getAccessKandy().registerKandyUser(values, new HttpRequestClient.RequestHttpCallBack() {
-                        @Override
-                        public void onSuccess(final String json) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(json);
-                                if (jsonObject.getString("status").equals("0")) {
-                                    JSONObject resultJson = jsonObject.getJSONObject("result");
-                                    final String user_password = resultJson.getString("user_password");
-                                    final String full_user_id = resultJson.getString("full_user_id");
-
-                                    MyActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            HttpRequest.saveKandy(MyActivity.this, bean.getId(), full_user_id, user_password, new HttpRequest.MyCallBack() {
-                                                @Override
-                                                public void ok(String json) {
-//                                                    ToastUtil.show("注册成功！");
-                                                    num++;
-                                                    MLog.e("kandy==ssaveKandy==ok", "ok=="+num);
-                                                }
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    MyActivity.this.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ToastUtil.show("注册失败！");
-                                            MLog.e("通讯注册失败=>", "id:" + bean.getId() + "--phone:" + bean.getLeader_phone());
-                                            MLog.e("失败原因=>", json);
-                                        }
-                                    });
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFail(String err, int code) {
-                            DialogUIUtils.dismssTie();
-                            MLog.d("kandy==onFail=registerKandyUser:" + TxtKandy.getDataMpvConnnect().getCurrentLoginUser());
-                        }
-                    });
-                }
-
-
-            }
-        });
-    }
 
 
     /**
@@ -285,11 +209,7 @@ public class MyActivity extends BaseActivity {
 
                     setJpushAlias(SPUtil.getString("phone"));
 
-                    if (TextUtils.isEmpty(JsonUtil.getString(json, "kandy_pwd"))) {
-                        kandyRegister(phone + SPUtil.getString("id"), "android" + SPUtil.getString("password"));
-                    } else {
-                        kandyLogin(JsonUtil.getString(json, "kandy_user"), JsonUtil.getString(json, "kandy_pwd"));
-                    }
+
                     tvYear.setText(SPUtil.getString("year"));
                 } else {
                     //贫困户
@@ -314,78 +234,6 @@ public class MyActivity extends BaseActivity {
     }
 
 
-    //   通讯登录
-    public void kandyLogin(String kandy_user, String kandy_pwd) {
-        DialogUIUtils.showTie(this, "加载中...");
-        TxtKandy.getAccessKandy().userLogin(kandy_user, kandy_pwd, new AccessKandy.LoginRequestCallBack() {
-            @Override
-            public void onSuccess() {
-                DialogUIUtils.dismssTie();
-                MLog.e("kandy==MyActivity=onSuccess:" + TxtKandy.getDataMpvConnnect().getCurrentLoginUser());
-            }
-
-            @Override
-            public void onFail(int i, String s) {
-                DialogUIUtils.dismssTie();
-                try {
-                    MLog.e("kandy=MyActivity=onFail:" + TxtKandy.getDataMpvConnnect().getCurrentLoginUser());
-                } catch (Exception e) {
-                    MLog.e("kandy=MyActivity=onFail:", e.getMessage());
-                }
-            }
-        });
-    }
-
-    // 通讯注册
-    public void kandyRegister(String phone, String pwd) {
-        DialogUIUtils.showTie(this, "通讯注册...");
-        Map<String, String> values = new HashMap<String, String>();
-        values.put("user_id", phone);
-        values.put("user_email", "email@sdkdemo.txtechnology.com.cn");
-        values.put("user_password", pwd);
-        TxtKandy.getAccessKandy().registerKandyUser(values, new HttpRequestClient.RequestHttpCallBack() {
-            @Override
-            public void onSuccess(String json) {
-                DialogUIUtils.dismssTie();
-                MLog.e("kandy==registerKandyUser=onSuccess:" + json);
-                try {
-                    JSONObject jsonObject = new JSONObject(json);
-
-                    if (jsonObject.getString("status").equals("0")) {
-                        JSONObject resultJson = jsonObject.getJSONObject("result");
-                        TxtKandy.getAccessKandy().mDomainName = SPUtil.getString("name");
-                        final String user_password = resultJson.getString("user_password");
-                        final String full_user_id = resultJson.getString("full_user_id");
-                        HttpRequest.saveKandy(MyActivity.this, SPUtil.getString("id"), full_user_id, user_password, new HttpRequest.MyCallBack() {
-                            @Override
-                            public void ok(String json) {
-                                MLog.e("kandy==ssaveKandy==ok", "ok");
-                                SPUtil.saveString("kandy_user", full_user_id);
-                                SPUtil.saveString("kandy_pwd", user_password);
-                                kandyRegisterAll();
-                            }
-                        });
-                    } else {
-                        MyActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtil.show("注册失败！");
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFail(String err, int code) {
-                DialogUIUtils.dismssTie();
-                MLog.d("kandy==onFail=registerKandyUser:" + TxtKandy.getDataMpvConnnect().getCurrentLoginUser());
-            }
-        });
-    }
-
 
     /**
      * 设置极光推送别名
@@ -407,7 +255,7 @@ public class MyActivity extends BaseActivity {
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                kandyExit();
+
                 dialog.dismiss();
             }
         });
@@ -420,43 +268,7 @@ public class MyActivity extends BaseActivity {
         builder.create().show();
     }
 
-    /**
-     * kandy通讯退出
-     */
-    public void kandyExit() {
-        if (TxtKandy.getAccessKandy().userIsLogin()) {
-            TxtKandy.getAccessKandy().logout(new AccessKandy.LogoutRequestCallBack() {
-                @Override
-                public void onSuccess() {
-                    MLog.e("kandy==logout==onSuccess");
 
-                    //停止捕获log信息
-                    SystemLogHelper.getmInstance().stop();
-                    //删除极光推送别名
-                    delJpushAlias();
-
-                    //清空登录信息，销毁首页，跳转登录页，关闭当前页
-                    clearInfo();
-                    AppManager.getAppManager().finishActivity(HomeActivity.class);
-                    LoginActivity.startIntent(MyActivity.this);
-                    finish();
-                }
-
-                @Override
-                public void onFail(int i, String s) {
-                    MLog.e("kandy==logout==onfail" + s);
-
-                }
-            });
-        } else {
-            MLog.e("kandy==logout==else");
-            //清空登录信息，销毁首页，跳转登录页，关闭当前页
-            clearInfo();
-            AppManager.getAppManager().finishActivity(HomeActivity.class);
-            LoginActivity.startIntent(MyActivity.this);
-            finish();
-        }
-    }
 
 
     /**

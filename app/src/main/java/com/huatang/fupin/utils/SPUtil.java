@@ -3,8 +3,18 @@ package com.huatang.fupin.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Base64;
 
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.app.MyApplication;
+import com.huatang.fupin.bean.NewLeader;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 
 /**
@@ -74,8 +84,53 @@ public class SPUtil {
     }
 
 
+    /**
+     * @param object
+     */
+    public static void saveObject(String key,Object object) throws Exception {
+        if(object instanceof Serializable) {
+            SharedPreferences sharedPreferences = getSharedPreferences();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(object);//把对象写到流里
+                String temp = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
+                oos.close();
+                baos.close();
 
+                editor.putString(key, temp);
+                editor.commit();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            throw new Exception("User must implements Serializable");
+        }
+    }
 
+    public static Object getObject(String key ) {
+        SharedPreferences sharedPreferences=getSharedPreferences();
+        String temp = sharedPreferences.getString(key, "");
+        ByteArrayInputStream bais =  new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
+        Object object = null;
+        try {
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            object = (Object) ois.readObject();
+        } catch (IOException e) {
+        }catch(ClassNotFoundException e1) {
 
+        }
+        return object;
+    }
+    public static NewLeader getLeaderFromSharePref(){
+        NewLeader leader = new NewLeader();
+        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
+            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
+        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
+            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        }
+        return  leader;
+    }
 
 }

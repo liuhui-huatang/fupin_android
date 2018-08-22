@@ -24,10 +24,15 @@ import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.app.MyApplication;
 import com.huatang.fupin.bean.Area;
 import com.huatang.fupin.bean.Basic;
+import com.huatang.fupin.bean.NewArea;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.DateUtil;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.ImageUtil;
@@ -35,6 +40,7 @@ import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.PopWindowUtil;
 import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.StringUtil;
 import com.huatang.fupin.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -46,6 +52,8 @@ import butterknife.OnClick;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
+
+import static com.huatang.fupin.app.Config.IS_OPEN_TEST_DISTANCE;
 
 /**
  * 帮扶日志添加页面
@@ -59,10 +67,12 @@ public class BangFuSignActivity extends BaseActivity {
 
     @BindView(R.id.left_menu)
     ImageView leftMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.right_menu)
-    TextView rightMenu;
+    ImageView rightMenu;
+    @BindView(R.id.right_tx_menu)
+    TextView right_tx_menu;
     @BindView(R.id.et_title)
     EditText etTitle;
     @BindView(R.id.et_text)
@@ -97,6 +107,18 @@ public class BangFuSignActivity extends BaseActivity {
     RelativeLayout rlBasic;
     @BindView(R.id.ll_sign)
     LinearLayout llSign;
+    private NewLeader leader;
+    private String signAddress;
+    private String signType;
+    private String signVillage;
+    private String signVillageId;
+    private String signTown;
+    private String signTownId;
+    private String img;
+    private NewPoor poor = new NewPoor();
+    private List<NewArea> arealist;
+    List<String> imagePathList = new ArrayList<>();
+    private List<NewPoor> poorList;
 
     /*
          * @ forever 在 17/5/17 下午2:28 创建
@@ -120,12 +142,25 @@ public class BangFuSignActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
         ButterKnife.bind(this);
+        initHeadView();
         initImageView();
         initLocation();
+        leader = SPUtil.getLeaderFromSharePref();
+        if(!leader.isHasbasic()){
+            tvBasic.setText("选择贫困村");
+        }
+    }
+
+    private void initHeadView() {
+        right_tx_menu.setText("提交");
+        right_tx_menu.setVisibility(View.VISIBLE);
+        tvTitle.setText("工作日志");
+
     }
 
 
-    @OnClick({R.id.left_menu, R.id.right_menu, R.id.tv_location, R.id.iv_sign_add1, R.id.iv_sign_add_2, R.id.rl_location, R.id.rl_basic})
+
+    @OnClick({R.id.left_menu, R.id.right_tx_menu, R.id.tv_location, R.id.iv_sign_add1, R.id.iv_sign_add_2, R.id.rl_location, R.id.rl_basic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:
@@ -135,53 +170,53 @@ public class BangFuSignActivity extends BaseActivity {
 
                 break;
             case R.id.rl_basic:
-                selectBasic();
+                selectPoor();
                 break;
-            case R.id.right_menu:
-                rightMenu.setClickable(false);
+            case R.id.right_tx_menu:
+                right_tx_menu.setClickable(false);
                 String title = etTitle.getText().toString().trim();
                 String text = etText.getText().toString().trim();
                 String location = tvLocation.getText().toString().trim();
                 String basic = tvBasic.getText().toString().trim();
                 if (TextUtils.isEmpty(title)) {
                     ToastUtil.show("标题未填写");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
                 if (title.length() < 2) {
                     ToastUtil.show("标题不得少于2个字");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
 
                 if (TextUtils.isEmpty(text)) {
                     ToastUtil.show("内容暂未填写");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
                 if (text.length() < 5) {
                     ToastUtil.show("内容不得少于5个字");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
 
                 if (TextUtils.isEmpty(location)) {
                     ToastUtil.show("定位信息不全");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
                 if (imagePathList.size() == 0) {
                     ToastUtil.show("请先选择图片");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
                 if (TextUtils.isEmpty(basic)) {
                     ToastUtil.show("请选择帮扶户");
-                    rightMenu.setClickable(true);
+                    right_tx_menu.setClickable(true);
                     return;
                 }
-
-                uploadSign(title, text, location, latitude + "", longitude + "", basic);
+                signAddress = location;
+                uploadSign(title,text);
                 break;
 
             case R.id.iv_sign_add1:
@@ -201,21 +236,59 @@ public class BangFuSignActivity extends BaseActivity {
         }
     }
 
-    List<Basic> basiclist;
+
     int mPosition=-1;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RESULT_OK){
+            if(resultCode == MsgSendSearchActivity.POOR_RESULT_CODE){
+                NewPoor newPoor = (NewPoor)data.getSerializableExtra(Config.PENKUNHU_KEY);
+                if(poor.equals(newPoor)){
+                    ToastUtil.show("当前用户已选择");
+                    return;
+                }
+                double mi = getDistance(longitude,latitude,Double.parseDouble(newPoor.getLongitude()),Double.parseDouble(newPoor.getDimension()));
+                if(mi > Double.parseDouble(Config.BAI_DU_MAP_DISTANCE)){
+                    //签到范围外
+                    ToastUtil.show("超出限定范围：" + mi + "米");
+                }else{
+                    poor = newPoor;
+                    signVillage = poor.getVillage_name();
+                    signVillageId = poor.getVillage();
+                    signTown = poor.getTown_name();
+                    signTownId = poor.getTown();
+                    tvBasic.setText(newPoor.getFname());
+                    tvLocation.setText(mlocation + newPoor.getTown_name() + newPoor.getVillage_name());
+                }
+
+            }
+
+        }
+    }
+
+    public void selectPoor() {
+       // if(leader.isHasbasic()){
+          //  selectBasic();
+        //}else{
+            ToastUtil.show("没有帮扶户");
+             selectArea();
+      //  }
+
+    }
     public void selectBasic() {
-        HttpRequest.getBasic(this, SPUtil.getString("id"),SPUtil.getString("year"), new HttpRequest.MyCallBack() {
+        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
-                basiclist = JsonUtil.toList(json, Basic.class);
-                if (basiclist == null || basiclist.size() == 0) {
+                poorList = JsonUtil.toList(json,NewPoor.class);
+                if (poorList == null || poorList.size() == 0) {
                     ToastUtil.show("没有帮扶户");
                     selectArea();
                 } else {
-                    String[] words2 = new String[basiclist.size()];
-                    for (int i = 0; i < basiclist.size(); i++) {
-                        words2[i] = basiclist.get(i).getFname() == null ? " " : basiclist.get(i).getFname();
+                    String[] words2 = new String[poorList.size()];
+                    for (int i = 0; i < poorList.size(); i++) {
+                        words2[i] = poorList.get(i).getFname() == null ? " " : poorList.get(i).getFname();
                     }
                     DialogUIUtils.showSingleChoose(BangFuSignActivity.this, "请选择帮扶户", mPosition, words2, new DialogUIItemListener() {
                         @Override
@@ -226,25 +299,24 @@ public class BangFuSignActivity extends BaseActivity {
                             }
 
 
-                            double mi = getDistance(longitude, latitude, Double.parseDouble(basiclist.get(mPosition).getLongitude()), Double.parseDouble(basiclist.get(mPosition).getDimension()));
+                            double mi = getDistance(longitude, latitude, Double.parseDouble(poorList.get(mPosition).getLongitude()), Double.parseDouble(poorList.get(mPosition).getDimension()));
                             MLog.e("longitude1==" + longitude);
                             MLog.e("latitude1==" + latitude);
-                            MLog.e("longitude2==" + basiclist.get(mPosition).getLongitude());
-                            MLog.e("latitude2==" + basiclist.get(mPosition).getDimension());
+                            MLog.e("longitude2==" + poorList.get(mPosition).getLongitude());
+                            MLog.e("latitude2==" + poorList.get(mPosition).getDimension());
                             MLog.e("距离==" + mi);
-
-                            if (mi > Double.parseDouble(SPUtil.getString("fanwei"))) {
+                            //SPUtil.getString("fanwei")
+                            if (mi > Double.parseDouble(Config.BAI_DU_MAP_DISTANCE) && Config.IS_OPEN_TEST_DISTANCE) {
                                 //签到范围外
                                 ToastUtil.show("超出限定范围：" + mi + "米");
                             } else {
-                                basicId = basiclist.get(mPosition).getId();
-                                basicFcard = basiclist.get(mPosition).getFcard();
-                                basicVillage = basiclist.get(mPosition).getVillage_name();
-                                basicVillageId = basiclist.get(mPosition).getVillage();
-                                year = basiclist.get(mPosition).getYear();
-
-                                tvBasic.setText(text);
-                                tvLocation.setText(mlocation + basiclist.get(mPosition).getTown_name() + basiclist.get(mPosition).getVillage_name());
+                                poor =  poorList.get(mPosition);
+                                signVillage = poor.getVillage_name();
+                                signVillageId = poor.getVillage();
+                                signTown = poor.getTown_name();
+                                signTownId = poor.getTown();
+                                tvBasic.setText(poor.getFname());
+                                tvLocation.setText(mlocation + poor.getTown_name() + poor.getVillage_name());
                             }
 
                         }
@@ -252,23 +324,28 @@ public class BangFuSignActivity extends BaseActivity {
                 }
 
             }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+            }
         });
     }
 
-    List<Area> arealist;
 
     public void selectArea() {
-        HttpRequest.getAreaById(this, SPUtil.getString("town_id"), new HttpRequest.MyCallBack() {
+
+        NewHttpRequest.getVillageList(this, leader.getHelp_town_id(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
-                arealist = JsonUtil.toList(json, Area.class);
+                arealist = JsonUtil.toList(json, NewArea.class);
                 if (arealist == null || arealist.size() == 0) {
                     ToastUtil.show("没有查到村");
                     return;
                 }
                 String[] words2 = new String[arealist.size()];
                 for (int i = 0; i < arealist.size(); i++) {
-                    words2[i] = arealist.get(i).getArea_name();
+                    words2[i] = arealist.get(i).getVillage_name();
                 }
 
                 DialogUIUtils.showSingleChoose(BangFuSignActivity.this, "请选择当前所在的村", mPosition, words2, new DialogUIItemListener() {
@@ -286,31 +363,31 @@ public class BangFuSignActivity extends BaseActivity {
                         MLog.e("latitude2==" + arealist.get(mPosition).getDimension());
                         MLog.e("距离==" + mi);
 
-                        if (mi > Double.parseDouble(SPUtil.getString("fanwei"))) {
+                        if (mi > Double.parseDouble(Config.BAI_DU_MAP_DISTANCE)  && Config.IS_OPEN_TEST_DISTANCE) {
                             //签到范围外
                             ToastUtil.show("超出限定范围：" + mi + "米");
                         } else {
-                            basicVillage = arealist.get(mPosition).getArea_name();
-                            basicVillageId = arealist.get(mPosition).getId();
-                            year = SPUtil.getString("year");
+                            signVillage = arealist.get(mPosition).getVillage_name();
+                            signVillageId = arealist.get(mPosition).getVillage();
+
+                           // year = SPUtil.getString("year");
                             tvBasic.setText(text);
-                            tvLocation.setText(mlocation + arealist.get(mPosition).getArea_name());
+                            tvLocation.setText(mlocation + arealist.get(mPosition).getVillage_name());
                         }
                     }
                 }).show();
             }
+
+            @Override
+            public void no(String msg) {
+
+            }
         });
     }
 
-    String img = "";
-    String basicId = "";
-    String basicFcard = "";
-    String basicVillage = "";
-    String basicVillageId = "";
-    String year = "";
 
-    public void uploadSign(final String title, final String text, final String location, final String latitude, final String longitude, final String basic_name) {
-        HttpRequest.addSign(BangFuSignActivity.this, SPUtil.getString("id"), title, text, String.valueOf(DateUtil.getMillis() / 1000), location, img, latitude, longitude, basic_name, basicId, basicFcard, basicVillage, basicVillageId, year, new HttpRequest.MyCallBack() {
+    public void uploadSign(String title,String content) {
+        NewHttpRequest.addSign(this, leader, title, content, signType, signAddress, signVillage, signVillageId, signTown, signTownId, StringUtil.listToString(imagePathList,"##"),  String.valueOf(longitude), String.valueOf(latitude),poor, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 img = "";
@@ -318,8 +395,15 @@ public class BangFuSignActivity extends BaseActivity {
                 ToastUtil.show("签到成功");
                 finish();
             }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+            }
+
         });
         rightMenu.setClickable(true);
+
     }
 
 
@@ -346,8 +430,9 @@ public class BangFuSignActivity extends BaseActivity {
 //                bdLocation.getLocType();    //获取定位类型
                 latitude = bdLocation.getLatitude();    //获取纬度信息
                 longitude = bdLocation.getLongitude();    //获取经度信息
+
 //                bdLocation.getRadius();    //获取定位精准度
-//                bdLocation.getAddrStr();    //获取地址信息
+//               signAddress =bdLocation.getAddrStr();    //获取地址信息
 //                bdLocation.getCountry();    //获取国家信息
 //                bdLocation.getCity();    //获取城市信息
 //                bdLocation.getDistrict();    //获取区县信息
@@ -407,7 +492,7 @@ public class BangFuSignActivity extends BaseActivity {
 
 
     List<ImageView> imageViewList = new ArrayList<>();
-    List<String> imagePathList = new ArrayList<>();
+
 
     /*
      * @ forever 在 17/5/17 下午5:20 创建
@@ -463,7 +548,7 @@ public class BangFuSignActivity extends BaseActivity {
                 String imagePath = resultList.get(0).getPhotoPath();
                 imagePath = ImageUtil.getCompressedImgPath(imagePath);
                 MLog.e("onHanlderSuccess", imagePath);
-                upLoadImg(imagePath);
+                imagesUpload(imagePath);
             }
         }
 
@@ -473,26 +558,24 @@ public class BangFuSignActivity extends BaseActivity {
         }
     };
 
-    public void upLoadImg(String path) {
-        HttpRequest.upLoadImg(this, path, new HttpRequest.MyCallBack() {
-            @Override
-            public void ok(String json) {
 
-                if (TextUtils.isEmpty(img)) {
-                    img = json;
-                } else {
-                    img = img + "##" + json;
-                }
-                imagePathList.add(BaseConfig.apiUrl + json);
+    public void imagesUpload(String filePath) {
+        /**
+         * 图片上传服务器
+         */
+        NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
+            @Override
+            public void callback(String json) {
+                ToastUtil.show("上传成功");
+                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
+                imagePathList.add(photoUrl);
                 setImageShow();
-            }
 
-            @Override
-            public void no(String msg) {
-                super.no(msg);
-                rightMenu.setClickable(true);
             }
         });
+
+
+
     }
 
     /*

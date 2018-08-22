@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.utils.AndroidInfoUtils;
 import com.huatang.fupin.utils.SPUtil;
 
@@ -37,12 +38,11 @@ public class WelcomeActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                String identity = SPUtil.getString("identity");
-                if (!TextUtils.isEmpty(identity)) {
-                    HomeActivity.startIntent(WelcomeActivity.this);
-//                    LoginActivity.startIntent(WelcomeActivity.this);
+                String token = SPUtil.getString(Config.TOKEN);//游客没有token，退出登陆，删除token
+                if (!TextUtils.isEmpty(token)) {
+                    NewHomeActivity.startIntent(WelcomeActivity.this);//
                 } else {
-                    LoginActivity.startIntent(WelcomeActivity.this);
+                    NewLoginActivity.startIntent(WelcomeActivity.this);
                 }
                 finish();
             }

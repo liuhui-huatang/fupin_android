@@ -15,12 +15,18 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.Basics;
 import com.huatang.fupin.bean.Leaders;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.JsonUtil;
+import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 
@@ -40,22 +46,27 @@ import butterknife.OnClick;
 
 public class MsgSendSearchActivity extends BaseActivity {
 
-
+    public final static String TAG = "tag" ;
+    public final static int LEADER_RESULT_CODE = 100;
+    public final static int POOR_RESULT_CODE = 200 ;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
 
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
+
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
-    @BindView(R.id.right_menu)
-    TextView rightMenu;
+
     @BindView(R.id.et_text)
     EditText etText;
     @BindView(R.id.bt_send)
     Button btSend;
     @BindView(R.id.listview)
     ListView listview;
+    List<NewLeader> leader_list = new ArrayList<>();
+    List<NewPoor> poorList = new ArrayList<>();
+    private NewLeader leader;
 
     /*
          * @ forever 在 17/5/17 下午2:28 创建
@@ -82,19 +93,26 @@ public class MsgSendSearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-        tag = getIntent().getStringExtra("tag");
+        tag = getIntent().getStringExtra(TAG);
+        initHeadView();
+        leader = SPUtil.getLeaderFromSharePref();
+
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (tag.equals("leader")) {
-                    setResult(100, new Intent().putExtra("leaders", leaders.get(position)));
+                if (tag.equals(Config.GANBU_KEY)) {
+                    setResult(LEADER_RESULT_CODE, new Intent().putExtra(Config.GANBU_KEY, leader_list.get(position)));
                 } else {
-                    setResult(200, new Intent().putExtra("basics", basics.get(position)));
+                    setResult(POOR_RESULT_CODE, new Intent().putExtra(Config.PENKUNHU_KEY, poorList.get(position)));
                 }
                 finish();
             }
         });
+    }
+
+    private void initHeadView() {
+        tvTitle.setText(tag.equals(Config.GANBU_KEY) ? "选择干部" : "选择贫困户");
     }
 
     @OnClick({R.id.left_menu, R.id.bt_send})
@@ -110,30 +128,90 @@ public class MsgSendSearchActivity extends BaseActivity {
                     ToastUtil.show("请输入查询关键字");
                     return;
                 }
-                if (tag.equals("leader")) {
-                    getLeaders(text);
-                } else {
-                    getBasics(text);
+                if (tag.equals(Config.GANBU_KEY)) {
+                    getLeaderList(text);
+                } else if(tag.equals(Config.PENKUNHU_KEY)){
+                    getPoorList();
                 }
 
                 break;
         }
     }
 
-    List<Leaders> leaders = new ArrayList<>();
 
-    public void getLeaders(String text) {
-        HttpRequest.getLeaders(this, text, new HttpRequest.MyCallBack() {
+
+    public void getLeaderList(String text) {
+        NewHttpRequest.searchGanbuList(this,text,new NewHttpRequest.MyCallBack(){
+
             @Override
             public void ok(String json) {
-                leaders = JsonUtil.toList(json, Leaders.class);
-                if (leaders.size() > 0) {
+                DialogUIUtils.dismssTie();
+                    leader_list = JsonUtil.toList(json,NewLeader.class);
+                    if(leader_list.size() > 0){
+                        tvEmpty.setVisibility(View.GONE);
+                        listview.setVisibility(View.VISIBLE);
+                        listview.setAdapter(new BaseAdapter() {
+                            @Override
+                            public int getCount() {
+                                return leader_list.size();
+                            }
+
+                            @Override
+                            public Object getItem(int position) {
+                                return null;
+                            }
+
+                            @Override
+                            public long getItemId(int position) {
+                                return 0;
+                            }
+
+                            @Override
+                            public View getView(int position, View convertView, ViewGroup parent) {
+                                if (convertView == null) {
+                                    convertView = View.inflate(MsgSendSearchActivity.this, R.layout.item_list, null);
+                                }
+                                TextView item_name = ViewHolderUtil.get(convertView, R.id.item_name);
+                                TextView item_phone = ViewHolderUtil.get(convertView, R.id.item_phone);
+                                RadioButton item_radio = ViewHolderUtil.get(convertView, R.id.item_radio);
+                                item_radio.setVisibility(View.GONE);
+
+                                item_name.setText(leader_list.get(position).getLeader_name());
+                                item_phone.setText(leader_list.get(position).getLeader_phone());
+
+                                return convertView;
+                            }
+                        });
+                    }else{
+                        tvEmpty.setVisibility(View.VISIBLE);
+                        listview.setVisibility(View.GONE);
+                    }
+
+                }
+
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
+
+    }
+
+
+    public void getPoorList() {
+        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                poorList = JsonUtil.toList(json,NewPoor.class);
+                if(poorList.size() > 0){
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
                     listview.setAdapter(new BaseAdapter() {
                         @Override
                         public int getCount() {
-                            return leaders.size();
+                            return poorList.size();
                         }
 
                         @Override
@@ -156,66 +234,24 @@ public class MsgSendSearchActivity extends BaseActivity {
                             RadioButton item_radio = ViewHolderUtil.get(convertView, R.id.item_radio);
                             item_radio.setVisibility(View.GONE);
 
-                            item_name.setText(leaders.get(position).getLeader_name());
-                            item_phone.setText(leaders.get(position).getLeader_phone());
+                            item_name.setText(poorList.get(position).getFname());
+                            item_phone.setText(poorList.get(position).getFphone());
 
                             return convertView;
                         }
                     });
-                } else {
+
+
+                }else {
                     tvEmpty.setVisibility(View.VISIBLE);
                     listview.setVisibility(View.GONE);
                 }
             }
-        });
-    }
 
-    List<Basics> basics = new ArrayList<>();
-    public void getBasics(String text) {
-        HttpRequest.getBasics(this, text, new HttpRequest.MyCallBack() {
             @Override
-            public void ok(String json) {
-                basics = JsonUtil.toList(json, Basics.class);
-                if (basics.size() > 0) {
-                    tvEmpty.setVisibility(View.GONE);
-                    listview.setVisibility(View.VISIBLE);
-                    listview.setAdapter(new BaseAdapter() {
-                        @Override
-                        public int getCount() {
-                            return basics.size();
-                        }
+            public void no(String msg) {
+                ToastUtil.show(msg);
 
-                        @Override
-                        public Object getItem(int position) {
-                            return null;
-                        }
-
-                        @Override
-                        public long getItemId(int position) {
-                            return 0;
-                        }
-
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            if (convertView == null) {
-                                convertView = View.inflate(MsgSendSearchActivity.this, R.layout.item_list, null);
-                            }
-                            TextView item_name = ViewHolderUtil.get(convertView, R.id.item_name);
-                            TextView item_phone = ViewHolderUtil.get(convertView, R.id.item_phone);
-                            RadioButton item_radio = ViewHolderUtil.get(convertView, R.id.item_radio);
-                            item_radio.setVisibility(View.GONE);
-
-                            item_name.setText(basics.get(position).getFname());
-                            item_phone.setText(basics.get(position).getFphone());
-
-                            return convertView;
-                        }
-                    });
-
-                } else {
-                    tvEmpty.setVisibility(View.VISIBLE);
-                    listview.setVisibility(View.GONE);
-                }
             }
         });
     }

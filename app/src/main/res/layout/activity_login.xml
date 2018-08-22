@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="@mipmap/bg_bg"
     android:orientation="vertical">
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,7 +89,7 @@
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="30dp"
-            android:background="@mipmap/bg_login"
+            android:background="@mipmap/login_submit_red"
             android:text="登  录"
             android:textColor="@color/color_white"
             android:textSize="18dp" />
@@ -127,5 +129,5 @@
             android:textColor="@color/bg_white" />
 
     </LinearLayout>
-
+</ScrollView>
 </RelativeLayout>

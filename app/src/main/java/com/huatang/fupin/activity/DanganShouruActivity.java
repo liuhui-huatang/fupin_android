@@ -16,6 +16,9 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.Archive;
+import com.huatang.fupin.bean.NewRevenue;
 import com.huatang.fupin.bean.Revenue;
 import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.utils.JsonUtil;
@@ -43,10 +46,11 @@ public class DanganShouruActivity extends BaseActivity {
 
     @BindView(R.id.left_menu)
     ImageView leftMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.lv_revenue)
     ListView lvRevenue;
+    private Archive archive;
 
     /*
              * @ forever 在 17/5/17 下午2:28 创建
@@ -54,9 +58,9 @@ public class DanganShouruActivity extends BaseActivity {
              * 描述：跳转到登录页面
              *
              */
-    public static void startIntent(Activity activity, String basic_id) {
+    public static void startIntent(Activity activity, Archive archive) {
         Intent it = new Intent(activity, DanganShouruActivity.class);
-        it.putExtra("basic_id", basic_id);
+        it.putExtra("archive", archive);
         activity.startActivity(it);
     }
 
@@ -71,8 +75,8 @@ public class DanganShouruActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dangansouru);
         ButterKnife.bind(this);
-
-
+        archive = (Archive)getIntent().getSerializableExtra("archive");
+        tvTitle.setText("收支情况");
         initData();
     }
 
@@ -125,33 +129,31 @@ public class DanganShouruActivity extends BaseActivity {
 
     }
 
-    String year= SPUtil.getString("year");
+    String year= SPUtil.getString(Config.YEAR);
     private void getData(String year) {
         values.clear();
         MLog.d("getBasicRevenue==", getIntent().getStringExtra("basic_id"));
-        HttpRequest.getBasicRevenue(this, getIntent().getStringExtra("basic_id"),year, new HttpRequest.MyCallBack() {
-            @Override
-            public void ok(String json) {
-                Revenue bean = JsonUtil.json2Bean(json, Revenue.class);
-                if(bean==null){
+
+        NewRevenue revenue = archive.getReve();
+                if(revenue==null){
                     ToastUtil.show("当前年度未录入数据");
                     return;
                 }
-                values.add(bean.getRe_year()+"  >");
-                values.add(bean.getIncome_wage());
-                values.add(bean.getProduction_income());
-                values.add(bean.getProperty_income());
-                values.add(bean.getOther_transfer_income());
-                values.add(bean.getTransfer_income());
-                values.add(bean.getAllyear_income());
-                values.add(bean.getNet_income());
-                values.add(bean.getPer_capita());
-                values.add(bean.getProduction_costs());
-                values.add(bean.getFamily_planning());
-                values.add(bean.getLow_income());
-                values.add(bean.getSupporting_gold());
-                values.add(bean.getOld_age_income());
-                values.add(bean.getEcology_income());
+                values.add(revenue.getYear()+"  >");
+                values.add(revenue.getIncome_wage());
+                values.add(revenue.getProduction_income());
+                values.add(revenue.getProperty_income());
+                values.add(revenue.getOther_transfer_income());
+                values.add(revenue.getTransfer_income());
+                values.add(revenue.getAllyear_income());
+                values.add(revenue.getNet_income());
+                values.add(revenue.getPer_capita());
+                values.add(revenue.getProduction_costs());
+                values.add(revenue.getFamily_planning());
+                values.add(revenue.getLow_income());
+                values.add(revenue.getSupporting_gold());
+                values.add(revenue.getOld_age_income());
+                values.add(revenue.getEcology_income());
 
                 lvRevenue.setAdapter(new BaseAdapter() {
                     @Override
@@ -183,8 +185,8 @@ public class DanganShouruActivity extends BaseActivity {
                         return convertView;
                     }
                 });
-            }
-        });
+
+
     }
 
     @OnClick(R.id.left_menu)

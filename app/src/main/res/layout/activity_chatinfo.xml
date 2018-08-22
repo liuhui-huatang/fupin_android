@@ -3,50 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_dcdcdc"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/chat_layout">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary">
+  <include layout="@layout/new_top"/>
 
-        <ImageView
-            android:id="@+id/left_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:src="@mipmap/icon_commen_break" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="标题"
-            android:textColor="@color/bg_white"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/right_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:textColor="@color/color_white" />
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/listview"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="48dp"
-        android:divider="@color/color_white" />
-
+        android:layout_marginTop="48dp">
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_white" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,7 +57,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/common_pop_window"
-            android:text="发送" />
+            android:text="图片" />
     </RelativeLayout>
 
 

@@ -7,10 +7,17 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 10
-        versionName "2.1"//
+        versionName "3.1"//
 
         // 1.签到添加标题内容的限制;
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        apply plugin: 'com.mob.sdk'
+
+        MobSDK {
+            appKey "22a38a84d4bc0"
+            appSecret "a3906710dde857aac47179badd60a3e5"
+            SMSSDK {}
+        }
     }
 
 
@@ -45,11 +52,11 @@ android {
                 variant.outputs.all { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                       def fileName = outputFile.name.replace(".apk", "_V${defaultConfig.versionName}.apk")
-                        outputFileName = fileName
+                        outputFileName = "奈曼扶贫_V${defaultConfig.versionName}.apk"
                     }
                 }
             }
+
         }
     }
 
@@ -58,6 +65,8 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+
 }
 
 dependencies {
@@ -92,6 +101,5 @@ dependencies {
     //二维码扫描zxing
     compile 'com.google.zxing:core:3.3.0'
 
-    compile project(path: ':library')
 
 }

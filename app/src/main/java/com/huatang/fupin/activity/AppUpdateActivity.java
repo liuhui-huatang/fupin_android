@@ -70,12 +70,14 @@ public class AppUpdateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appupdate);
         ButterKnife.bind(this);
-
+        ((TextView)findViewById(R.id.title_tx)).setText("APP更新");
         ((TextView) findViewById(R.id.tv_code)).setText("V " + AndroidInfoUtils.versionName());
 
         initUpdata();
 
     }
+
+
 
     String apkUrl = "";
     String apkName = "";

@@ -49,6 +49,16 @@ public class HttpRequest {
 //        MLog.e("HttpRequest", BaseConfig.apiUrl + "\n" + params.toString());
         params.clear();
     }
+    private static void executePost(Activity context,String url, HttpParams params, MyCallBack callback){
+        DialogUIUtils.showTie(context, "加载中...");
+        OkHttpUtils.post(BaseConfig.apiUrl+url)
+                .tag(context)
+                .params(params)
+                .execute(callback);
+//        MLog.e("HttpRequest", BaseConfig.apiUrl + "\n" + params.toString());
+        params.clear();
+
+    }
 
 
     public static abstract class MyCallBack extends AbsCallback<String> {
@@ -99,7 +109,7 @@ public class HttpRequest {
         httpParams = getHttpParams();
         httpParams.put("php", "login");
         httpParams.put("phone", phone);
-        httpParams.put("pwd", pwd);
+        httpParams.put("password", pwd);
         executePost(context, httpParams, callback);
     }
 
@@ -113,21 +123,7 @@ public class HttpRequest {
     }
 
 
-    public static void saveKandy(Activity context, String leader_id, String kandy_user, String kandy_pwd, MyCallBack callback) {
-        httpParams = getHttpParams();
-        httpParams.put("php", "saveKandy");
-        httpParams.put("leader_id", leader_id);
-        httpParams.put("kandy_user", kandy_user);
-        httpParams.put("kandy_pwd", kandy_pwd);
-        httpParams.put("token", BaseConfig.token);
-        MLog.d("HttpRequest", BaseConfig.apiUrl + "\n" + httpParams.toString());
 
-        OkHttpUtils.post(BaseConfig.apiUrl)
-                .tag(context)
-                .params(httpParams)
-                .execute(callback);
-        httpParams.clear();
-    }
 
     // 修改密码
     public static void updatePwd(Activity context, String phone, String pwd, MyCallBack callback) {
@@ -424,11 +420,7 @@ public class HttpRequest {
         executePost(context, httpParams, callback);
     }
 
-    //获取所有通讯未注册的干部
-    public static void getKandyNoLeader(Activity context, MyCallBack callback) {
-        httpParams = getHttpParams();
-        httpParams.put("php", "getKandyNoLeader");
-        executePost(context, httpParams, callback);
-    }
+
+
 
 }

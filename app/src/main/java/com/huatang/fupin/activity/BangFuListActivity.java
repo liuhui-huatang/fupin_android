@@ -17,12 +17,18 @@ import android.widget.TextView;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewSign;
 import com.huatang.fupin.bean.Sign;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.DateUtil;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.SkinUtil;
+import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -54,10 +60,11 @@ public class BangFuListActivity extends BaseActivity {
     ImageView leftMenu;
     @BindView(R.id.right_menu)
     ImageView rightMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
+    private int pageNo = 1;
 
 
     /*
@@ -78,26 +85,30 @@ public class BangFuListActivity extends BaseActivity {
     *
     */
     Adapter adapter;
+    NewLeader leader ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bangfu);
         ButterKnife.bind(this);
-
-
+        initHeadView();
+        leader = SPUtil.getLeaderFromSharePref();
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
+        refreshLayout.setEnableAutoLoadmore(false);
         refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout freshlayout) {
                 freshlayout.finishRefresh(true);
+                pageNo = 1 ;
                 getData();
+
 
             }
         });
@@ -105,6 +116,9 @@ public class BangFuListActivity extends BaseActivity {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadmore(1000);
+                list.clear();
+                pageNo ++ ;
+                getData();
             }
         });
 
@@ -121,16 +135,24 @@ public class BangFuListActivity extends BaseActivity {
         getData();
     }
 
+    private void initHeadView() {
 
-    List<Sign> list = new ArrayList<>();
+        rightMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.img_add));
+        rightMenu.setVisibility(View.VISIBLE);
+        tvTitle.setText("成员列表");
+    }
+
+
+    List<NewSign> list = new ArrayList<>();
 
     public void getData() {
-
-        HttpRequest.getSign(this, SPUtil.getString("id"), new HttpRequest.MyCallBack() {
+        NewHttpRequest.getSignList(this,leader.getId(),String.valueOf(pageNo),new NewHttpRequest.MyCallBack(){
             @Override
             public void ok(String json) {
-                list = JsonUtil.toList(json, Sign.class);
+                List<NewSign> signList = JsonUtil.toList(json, NewSign.class);
+                list.addAll(signList);
                 if (list.size() > 0) {
+
                     tvEmpty.setVisibility(View.GONE);
                     bfListview.setVisibility(View.VISIBLE);
                     adapter.notifyDataSetChanged();
@@ -138,6 +160,11 @@ public class BangFuListActivity extends BaseActivity {
                     tvEmpty.setVisibility(View.VISIBLE);
                     bfListview.setVisibility(View.GONE);
                 }
+            }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
 
             }
         });
@@ -145,6 +172,13 @@ public class BangFuListActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        list.clear();
+        pageNo = 1;
+        getData();
+    }
 
     @OnClick({R.id.left_menu, R.id.right_menu})
     public void onViewClicked(View view) {
@@ -207,9 +241,10 @@ public class BangFuListActivity extends BaseActivity {
             imageViewList.add((ImageView) ViewHolderUtil.get(convertView, R.id.iv_08));
 
 
-            if (!TextUtils.isEmpty(SPUtil.getString("photo"))) {
-                GlideUtils.displayHome(iv_photo, BaseConfig.apiUrl + SPUtil.getString("photo"));
+            if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
+               GlideUtils.displayHome(iv_photo, BaseConfig.ImageUrl + SPUtil.getString(Config.HEAD_PHOTO));
             }
+
             tv_title.setText(list.get(position).getSign_title());
             tv_text.setText(list.get(position).getSign_content());
             tv_location.setText(list.get(position).getSign_address());
@@ -223,7 +258,7 @@ public class BangFuListActivity extends BaseActivity {
                     if (i < strings.length) {
                         if (!TextUtils.isEmpty(strings[i])) {
                             imageViewList.get(i).setVisibility(View.VISIBLE);
-                            GlideUtils.displayHome(imageViewList.get(i), BaseConfig.apiUrl + strings[i]);
+                            GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + strings[i]);
                         }
                     } else {
                         imageViewList.get(i).setVisibility(View.GONE);

@@ -1,24 +1,33 @@
 package com.huatang.fupin.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
-import com.huatang.fupin.bean.SystemMsg;
-import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPushMsg;
+import com.huatang.fupin.http.NewHttpRequest;
+import com.huatang.fupin.utils.CustomDialog;
 import com.huatang.fupin.utils.DateUtil;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.SkinUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
@@ -48,12 +57,13 @@ public class MsgPushActivity extends BaseActivity {
     @BindView(R.id.left_menu)
     ImageView leftMenu;
     @BindView(R.id.right_menu)
-    TextView rightMenu;
+    ImageView rightMenu;
     @BindView(R.id.listview)
     ListView listview;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
 
+    NewLeader admin ;
     /*
          * @ forever 在 17/5/17 下午2:28 创建
          *
@@ -77,7 +87,7 @@ public class MsgPushActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_msginfo);
         ButterKnife.bind(this);
-
+        initHeadView();
         SPUtil.saveInt("push",0);
 
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
@@ -113,14 +123,27 @@ public class MsgPushActivity extends BaseActivity {
             }
         });
     }
+    private void initHeadView() {
+        ((TextView)findViewById(R.id.title_tx)).setText("系统消息");
+        leftMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_commen_break));
+        rightMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_main_select));
+        rightMenu.setVisibility(View.INVISIBLE);
+        String type = SPUtil.getString(Config.Type);
+        if(type.equals(Config.ADMIN_TYPE)){
+            rightMenu.setVisibility(View.VISIBLE);
+            admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
+            //admin = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
 
-    List<SystemMsg> list = new ArrayList<>();
+        }
+    }
+    List<NewPushMsg> list = new ArrayList<>();
 
     public void getData() {
-        HttpRequest.getSystemMsg(this, SPUtil.getString("phone"), new HttpRequest.MyCallBack() {
+
+        NewHttpRequest.getSystemMsg(this, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
-                list = JsonUtil.toList(json, SystemMsg.class);
+                list = JsonUtil.toList(json, NewPushMsg.class);
                 if (list.size() > 0) {
                     listview.setVisibility(View.VISIBLE);
                     tvEmpty.setVisibility(View.GONE);
@@ -129,6 +152,12 @@ public class MsgPushActivity extends BaseActivity {
                     listview.setVisibility(View.GONE);
                     tvEmpty.setVisibility(View.VISIBLE);
                 }
+
+            }
+
+            @Override
+            public void no(String msg){
+                ToastUtil.show(msg);
 
             }
         });
@@ -167,10 +196,10 @@ public class MsgPushActivity extends BaseActivity {
             TextView tv_time = ViewHolderUtil.get(convertView, R.id.tv_time);
             TextView tv_text = ViewHolderUtil.get(convertView, R.id.tv_text);
 
-            SystemMsg bean = list.get(position);
-            tv_title.setText(bean.getPush_title());
-            tv_time.setText(DateUtil.getStandardTime(Long.parseLong(bean.getPush_time())));
-            tv_text.setText(bean.getPush_content());
+            NewPushMsg bean = list.get(position);
+            tv_title.setText(bean.getTitle());
+            tv_time.setText(DateUtil.getStandardTime(Long.parseLong(bean.getCreate_time())));
+            tv_text.setText(bean.getContent());
             return convertView;
         }
     }
@@ -181,9 +210,82 @@ public class MsgPushActivity extends BaseActivity {
             case R.id.left_menu:
                 finish();
                 break;
+            case R.id.right_menu:
+                showSendMessageDialog();
+                break;
 
         }
     }
+
+    private void showSendMessageDialog() {
+
+        final CustomDialog dialog=new CustomDialog(this, R.style.myDialog);
+        final View view = View.inflate(this, R.layout.dialog_layout,null);
+        dialog.setView(view);
+      //  dialog.setProperty(0,0, 600, 400);//设置坐标和宽高
+        dialog.setCanceledOnTouchOutside(true);
+        final EditText title_v = (EditText)view.findViewById(R.id.msg_title);
+        final EditText content_v = (EditText)view.findViewById(R.id.msg_content);
+        final TextView error_v = (TextView)view.findViewById(R.id.error);
+        Button dialogCancel= (Button) view.findViewById(R.id.dialog_cancel);
+
+        dialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        Button dialogConfirm= (Button) view.findViewById(R.id.dialog_confirm);
+        dialogConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                error_v.setVisibility(View.INVISIBLE);
+                String title = title_v.getText().toString().trim();
+                String content = content_v.getText().toString().trim();
+
+                if( TextUtils.isEmpty(title)){
+                    error_v.setText("标题不能为空");
+                    error_v.setVisibility(View.VISIBLE);
+                    return;
+
+                }
+                if( TextUtils.isEmpty(content)){
+                    error_v.setText("内容不能为空");
+                    error_v.setVisibility(View.VISIBLE);
+                    return;
+
+                }
+                NewHttpRequest.sendPushMsg(MsgPushActivity.this,content,title,admin.getId(),admin.getLeader_name(),new NewHttpRequest.MyCallBack(){
+
+
+                    @Override
+                    public void ok(String json) {
+                        ToastUtil.show("发送成功！");
+                        dialog.dismiss();
+                        list.clear();
+                        getData();
+
+                    }
+
+                    @Override
+                    public void no(String msg) {
+                        ToastUtil.show(msg);
+                        error_v.setText(msg);
+                        error_v.setVisibility(View.VISIBLE);
+
+                    }
+                } );
+
+
+
+
+
+            }
+        });
+        dialog.show();
+
+    }
+
 
 
 }

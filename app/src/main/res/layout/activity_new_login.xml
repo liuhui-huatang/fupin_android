@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@mipmap/bg_bg">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/img_title" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="20dp"
+           >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/login_sharp_btn">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:id="@+id/user_type_tx"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="30dp"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="@color/color_white"
+                    android:text="请选择用户类型">
+
+                </TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:background="@drawable/login_sharp_btn"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="50dp"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+
+                    android:background="@mipmap/user"
+                    android:textSize="@dimen/text_size_small" />
+
+                <EditText
+                    android:id="@+id/login_username_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:hint="用户名"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:inputType="phone"
+                    android:textColorHint="@color/color_white"
+                    android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_sharp_btn"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+
+                    android:background="@mipmap/pwd"
+                    android:textSize="@dimen/text_size_small" />
+
+                <EditText
+                    android:id="@+id/login_pwd_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:hint="密码"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/color_white"
+                    android:inputType="textPassword"
+                    android:textSize="@dimen/text_size_small" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_sharp_btn"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@mipmap/code"
+                    android:textSize="@dimen/text_size_small" />
+
+                <EditText
+                    android:id="@+id/login_code_edt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:hint="验证码"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/color_white"
+                    android:inputType="number"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/text_size_small" />
+                <TextView
+                    android:id="@+id/sendCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:text="发送验证码"
+                    android:background="@android:color/transparent"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_size_small"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black_light"
+                android:textSize="@dimen/text_size_small"
+                android:text="忘记密码？"
+                android:background="@android:color/transparent"
+               />
+            <Button
+                android:id="@+id/login_submit"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="  "
+                android:textSize="@dimen/text_size_small"
+                android:background="@mipmap/login_submit_red"
+                android:textColor="@color/color_font"
+                />
+                <Button
+                    android:id="@+id/youkelogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text=""
+                    android:textSize="@dimen/text_size_small"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+
+                    android:textColor="@color/color_white"
+                    android:layout_gravity="right"
+                    android:background="@mipmap/youke_login"
+                    />
+        </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

@@ -6,97 +6,14 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary">
-
-        <ImageView
-            android:id="@+id/left_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:src="@mipmap/icon_commen_break" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="详情"
-            android:textColor="@color/bg_white"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/right_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:text="保存"
-            android:textColor="@color/color_white"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+    <include layout="@layout/new_top"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+        android:layout_height="match_parent">
 
 
-            <TextView
-                android:id="@+id/tv_item_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="20dp"
-                android:text="计划标题计划标题计划标"
-                android:textColor="#121313" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-
-                <TextView
-                    android:id="@+id/tv_item_ren"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/img_ren"
-                    android:text="  坚持时间"
-                    android:textColor="#909090"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tv_item_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:drawableLeft="@mipmap/img_time"
-                    android:text="  2017年11月06日 10:00:00"
-                    android:textSize="13sp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:background="#e1e1e1" />
 
             <!---->
             <!--<ImageView-->
@@ -127,13 +44,11 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
             </WebView>
 
-
-
-        </LinearLayout>
 
 
     </ScrollView>

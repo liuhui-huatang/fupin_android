@@ -14,8 +14,11 @@ import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.bean.Family;
 import com.huatang.fupin.bean.Leader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.JsonUtil;
+import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class DanganGanbuActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
+    private NewPoor poor;
 
     /*
          * @ forever 在 17/5/17 下午2:28 创建
@@ -49,9 +53,9 @@ public class DanganGanbuActivity extends BaseActivity {
          * 描述：跳转到登录页面
          *
          */
-    public static void startIntent(Activity activity,String basic_id) {
+    public static void startIntent(Activity activity,NewPoor poor) {
         Intent it = new Intent(activity, DanganGanbuActivity.class);
-        it.putExtra("basic_id", basic_id);
+        it.putExtra("poor", poor);
         activity.startActivity(it);
     }
 
@@ -66,14 +70,17 @@ public class DanganGanbuActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danganganbu);
         ButterKnife.bind(this);
-
-        getData(getIntent().getStringExtra("basic_id"));
+        Intent intent = getIntent();
+        poor = (NewPoor)intent.getSerializableExtra("poor");
+        getData();
     }
+
+
 
     List<Leader> list = new ArrayList<>();
 
-    public void getData(String basic_id) {
-        HttpRequest.getBasicLeader(this, basic_id, new HttpRequest.MyCallBack() {
+    public void getData() {
+        NewHttpRequest.getLeaderByPoorFcard(this,poor.getFcard(),new NewHttpRequest.MyCallBack(){
             @Override
             public void ok(String json) {
                 list = JsonUtil.toList(json, Leader.class);
@@ -86,6 +93,11 @@ public class DanganGanbuActivity extends BaseActivity {
                     tvEmpty.setVisibility(View.VISIBLE);
                     lvLeader.setVisibility(View.GONE);
                 }
+            }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
 
             }
         });

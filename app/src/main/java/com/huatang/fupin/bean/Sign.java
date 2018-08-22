@@ -35,6 +35,44 @@ public class Sign implements Serializable {
      * leader_phone : 5
      * leader_unit_id : 0
      * leader_fcard :
+     *
+     *
+     *
+     * {
+     "code": 200,
+     "info": "成功",
+     "data": [
+     {
+     "id": 8065,
+     "leader_id": 2704,
+     "basic_fname": "李宝军",
+     "basic_fcard": "152326196909188175",
+     "leader_name": "王晓茹",
+     "leader_duty": "局长",
+     "work_units": "奈曼旗质监局",
+     "unit_level": "1",
+     "leader_andscape": "4",
+     "basic_id": "25203",
+     "sign_title": "入户帮扶",
+     "sign_content": "李宝军妻子苑凤珍病情好转，2017年11月27日住院(通辽市附属医院，后转到通辽市医院)，医药费花费1.3万元，享受健康扶贫“三兜底\"之后，报销1.02万元，自行花费2600元。",
+     "sign_address": "中国内蒙古自治区通辽市奈曼旗国有六号农场六分场",
+     "sign_time": 1516236364,
+     "sign_imgs": "/upLoadImg/1516236800_android_1516236342247_2704.jpg##/upLoadImg/1516236815_android_1516236357181_2704.jpg",
+     "longitude": "121.438239",
+     "dimension": "43.394239",
+     "sign_type": "2",
+     "sign_town": "国有六号农场",
+     "sign_village": "六分场",
+     "sign_town_id": "14",
+     "sign_village_id": "426",
+     "year": "2018",
+     "leader_phone": "13947526788",
+     "leader_unit_id": "0",
+     "leader_fcard": "",
+     "create_time": "2018/01/18 08:46",
+     "update_time": "1970/01/01 08:00"
+     },
+     }
      */
 
     private String id;

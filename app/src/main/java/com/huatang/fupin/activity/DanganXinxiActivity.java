@@ -10,7 +10,15 @@ import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.Basic;
+import com.huatang.fupin.bean.NewFamily;
+import com.huatang.fupin.bean.NewPoor;
+import com.huatang.fupin.http.NewHttpRequest;
+import com.huatang.fupin.utils.JsonUtil;
+import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +33,7 @@ import butterknife.OnClick;
 
 public class DanganXinxiActivity extends BaseActivity {
 
-
+    private final static String DATA_KEY_ARCHIVE=  "archive";
     @BindView(R.id.left_menu)
     ImageView leftMenu;
     @BindView(R.id.rl_xinxi)
@@ -38,12 +46,15 @@ public class DanganXinxiActivity extends BaseActivity {
     RelativeLayout rlCuoshi;
     @BindView(R.id.rl_taizhang)
     RelativeLayout rlTaizhang;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.rl_jiating)
     RelativeLayout rlJiating;
     @BindView(R.id.rl_ganbu)
     RelativeLayout rlGanbu;
+    private  Archive archive ;
+    private String type;
+
 
     /*
          * @ forever 在 17/5/17 下午2:28 创建
@@ -51,33 +62,65 @@ public class DanganXinxiActivity extends BaseActivity {
          * 描述：跳转到登录页面
          *
          */
-    public static void startIntent(Activity activity, Basic bean) {
+    public static void startIntent(Activity activity,Archive archive) {
         Intent it = new Intent(activity, DanganXinxiActivity.class);
-        it.putExtra("basic", bean);
+        it.putExtra(DATA_KEY_ARCHIVE,archive);
         activity.startActivity(it);
     }
 
-
+    public static void startIntent(Activity activity) {
+        Intent it = new Intent(activity, DanganXinxiActivity.class);
+        activity.startActivity(it);
+    }
     /*
     * @ forever 在 17/5/17 下午2:28 创建
     *
     * 描述：页面创建时调用
     *
     */
-    Basic bean ;
-    String basic_id="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danganinfo);
-        bean = (Basic) getIntent().getSerializableExtra("basic");
-        basic_id=bean.getId();
         ButterKnife.bind(this);
+        type = SPUtil.getString(Config.Type);
+        archive = new Archive();
 
-        if(bean!=null&&bean.getFname()!=null){
-            tvTitle.setText(bean.getFname());
+        if(type.equals(Config.PENKUNHU_TYPE)){
+            getArchive();
+            rlGanbu.setVisibility(View.VISIBLE);
+        }else{
+            archive = (Archive) getIntent().getSerializableExtra(DATA_KEY_ARCHIVE);
+            rlGanbu.setVisibility(View.GONE);
         }
+        if(archive!= null){
+            tvTitle.setText(archive.getPoor().getFname());
+
+        }
+    }
+    private void getArchive(){
+        String year = SPUtil.getString(Config.YEAR);
+        NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
+        if(poor != null ){
+            NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(){
+
+                @Override
+                public void ok(String json) {
+                    archive = JsonUtil.json2Bean(json,Archive.class);
+                }
+
+                @Override
+                public void no(String msg) {
+                    ToastUtil.show(msg);
+
+                }
+            });
+        }else{
+            ToastUtil.show("系统出错了，请重新登录");
+        }
+
     }
 
 
@@ -87,27 +130,20 @@ public class DanganXinxiActivity extends BaseActivity {
             case R.id.left_menu:
                 finish();
                 break;
-            case R.id.rl_xinxi:
-                DanganJibenActivity.startIntent(this,bean);
+            case R.id.rl_xinxi://基本信息
+                DanganJibenActivity.startIntent(this,archive);
                 break;
-            case R.id.rl_jiating:
-                DanganJiatingActivity.startIntent(this, basic_id);
+            case R.id.rl_jiating://家庭
+                DanganJiatingActivity.startIntent(this, archive);
                 break;
-            case R.id.rl_ganbu:
-                DanganGanbuActivity.startIntent(this, basic_id);
+            case R.id.rl_ganbu://帮扶干部
+                DanganGanbuActivity.startIntent(this, archive.getPoor());
                 break;
-            case R.id.rl_shouru:
-                DanganShouruActivity.startIntent(this,basic_id);
+            case R.id.rl_shouru://shouru
+                DanganShouruActivity.startIntent(this,archive);
                 break;
-//            case R.id.rl_jihua:
-//                DanganJihuaActivity.startIntent(this,basic_id);
-//                break;
-//            case R.id.rl_cuoshi:
-//                DanganCuoshiActivity.startIntent(this);
-//                break;
-//            case R.id.rl_taizhang:
-//                DanganTaizhangActivity.startIntent(this);
-//                break;
+
+
         }
     }
 

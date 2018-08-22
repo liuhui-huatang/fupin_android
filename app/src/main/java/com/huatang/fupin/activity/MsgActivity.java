@@ -78,6 +78,8 @@ public class MsgActivity extends BaseActivity {
         View pushItem = View.inflate(this, R.layout.item_msg, null);
         tv_dian = pushItem.findViewById(R.id.tv_dian);
         listview.addHeaderView(pushItem);
+
+
         //条目点击事件
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,7 +87,7 @@ public class MsgActivity extends BaseActivity {
                 if (position == 0) {
                     MsgPushActivity.startIntent(MsgActivity.this);
                 } else {
-                    MsgChatActivity.startIntent(MsgActivity.this, list.get(position - 1));
+                    //MsgChatActivity.startIntent(MsgActivity.this, list.get(position - 1));
                 }
             }
         });
@@ -169,7 +171,7 @@ public class MsgActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.right_menu:
-                MsgSendActivity.startIntent(this);
+                MsgCreateChatActivity.startIntent(this);
                 break;
         }
     }

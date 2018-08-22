@@ -17,8 +17,15 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.Basic;
+import com.huatang.fupin.bean.NewBasic;
+import com.huatang.fupin.bean.NewFamily;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.SPUtil;
@@ -54,10 +61,11 @@ public class DanganListActivity extends BaseActivity {
     ImageView leftMenu;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.right_menu)
-    TextView rightMenu;
+    ImageView rightMenu;
+    private NewLeader leader;
 
     /*
      * @ forever 在 17/5/17 下午2:28 创建
@@ -82,7 +90,8 @@ public class DanganListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dangan);
         ButterKnife.bind(this);
-
+        initHeadView();
+        getLeaderInfo();
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
         //设置 Header 为 Material风格
@@ -94,7 +103,7 @@ public class DanganListActivity extends BaseActivity {
             @Override
             public void onRefresh(final RefreshLayout freshlayout) {
                 freshlayout.finishRefresh(true);
-                getData(SPUtil.getString("year"));
+                getData(SPUtil.getString(Config.YEAR));
 
             }
         });
@@ -123,17 +132,31 @@ public class DanganListActivity extends BaseActivity {
                 MyActivity.startIntent(DanganListActivity.this);
             }
         });
-        getData(SPUtil.getString("year"));
+        getData(SPUtil.getString(Config.YEAR));
 
     }
 
+    private void getLeaderInfo() {
+        leader = new NewLeader();
+        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
+            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
+        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
+            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        }
+    }
 
-    List<Basic> list = new ArrayList<>();
+    private void initHeadView() {
+        tvTitle.setText("档案信息");
+    }
+
+
+    List<Archive> list = new ArrayList<>();
     public void getData(String year) {
-        HttpRequest.getBasic(this, SPUtil.getString("id"), year, new HttpRequest.MyCallBack() {
+        NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(){
+
             @Override
             public void ok(String json) {
-                list = JsonUtil.toList(json, Basic.class);
+                list = JsonUtil.toList(json, Archive.class);
                 if (list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
@@ -142,6 +165,12 @@ public class DanganListActivity extends BaseActivity {
                     tvEmpty.setVisibility(View.VISIBLE);
                     listview.setVisibility(View.GONE);
                 }
+
+            }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
 
             }
         });
@@ -197,42 +226,48 @@ public class DanganListActivity extends BaseActivity {
             TextView tv_lable4 = ViewHolderUtil.get(convertView, R.id.tv_lable4);
             TextView tv_address = ViewHolderUtil.get(convertView, R.id.tv_address);
 
-            Basic bean = list.get(position);
-//            GlideUtils.displayHome(iv_photo, bean.get);
+            Archive archive = list.get(position);
+            NewPoor poor = archive.getPoor();
 
-            if (TextUtils.isEmpty(bean.getFname())) {
+            NewBasic basic = archive.getBasic().isIshave() ?  archive.getBasic() : new NewBasic();
+            if (TextUtils.isEmpty(poor.getFname())) {
                 tv_name.setText("户主：" + "");
             } else {
-                tv_name.setText("户主：" + bean.getFname());
+                tv_name.setText("户主：" + poor.getFname());
             }
 
             // 0:未脱贫 1:预脱贫 2:已脱贫 3:注销 4:返贫
-            if (TextUtils.isEmpty(bean.getOut_poor_state())) {
-                tv_statu.setText("脱贫状态");
+            if (TextUtils.isEmpty(basic.getOut_poor_state())) {
+                tv_statu.setText("脱贫状态");//1贫困户 2正常脱贫户  3返贫户  4:新识别贫困户  5:稳定脱贫户 6清退户',
             } else {
-                switch (bean.getOut_poor_state()) {
+                switch (basic.getOut_poor_state()) {
                     case "0":
-                        tv_statu.setText("脱贫状态：未脱贫");
+                        tv_statu.setText("脱贫状态：无");
                         break;
                     case "1":
-                        tv_statu.setText("脱贫状态：预脱贫");
+                        tv_statu.setText("脱贫状态：贫困户");
                         break;
                     case "2":
-                        tv_statu.setText("脱贫状态：已脱贫");
+                        tv_statu.setText("脱贫状态：正常脱贫户");
                         break;
                     case "3":
-                        tv_statu.setText("脱贫状态：注销");
+                        tv_statu.setText("脱贫状态：返贫户");
                         break;
                     case "4":
-                        tv_statu.setText("脱贫状态：返贫");
+                        tv_statu.setText("脱贫状态：新识别贫困户");
+                        break;
+                    case "5":
+                        tv_statu.setText("脱贫状态：稳定脱贫户");
+                    case "6":
+                        tv_statu.setText("脱贫状态：清退户");
                         break;
                 }
             }
 
-            if (TextUtils.isEmpty(bean.getSex())) {
+            if (TextUtils.isEmpty(poor.getSex())) {
                 tv_lable1.setText("性别：男");
             } else {
-                switch (bean.getSex()) {
+                switch (poor.getSex()) {
                     case "1":
                         tv_lable1.setText("性别：男");
                         break;
@@ -242,17 +277,14 @@ public class DanganListActivity extends BaseActivity {
                 }
             }
 
-            if (TextUtils.isEmpty(bean.getFamily_num())) {
-                tv_lable2.setText("0口人");
-            } else {
-                tv_lable2.setText(bean.getFamily_num() + "口人");
-            }
+                tv_lable2.setText(basic.getFamily_num()==null ? "0" : basic.getFamily_num()+ "口人");
+
 
             //主要致贫原因 1.因病 2.因残 3.因学 4.因灾 5.缺土地 6.缺水 7.缺技术 8.缺劳动力 9.缺资金 10.交通条件落后 11.自身发展动力不足
-            if (TextUtils.isEmpty(bean.getMain_pcause())) {
-                tv_lable3.setText("致贫原因");
+            if (TextUtils.isEmpty(basic.getMain_pcause())) {
+                tv_lable3.setText("致贫原因");//主要致贫原因: 1.因病 2.因残 3.因学 4.因灾 5.缺土地 6.缺水 7.缺技术 8.缺劳动力 9.缺资金 10.交通条件落后 11.自身发展动力不足',
             } else {
-                switch (bean.getMain_pcause()) {
+                switch (basic.getMain_pcause()) {
                     case "0":
                         tv_lable3.setText("致贫原因");
                         break;
@@ -293,10 +325,10 @@ public class DanganListActivity extends BaseActivity {
             }
 
             //贫困户属性: 1一般贫困户 2.低保兜底户 3.五保户 4.一般农户
-            if (TextUtils.isEmpty(bean.getFamily_state())) {
-                tv_lable4.setText("贫困户属性");
+            if (TextUtils.isEmpty(basic.getFamily_state())) {
+                tv_lable4.setText("贫困户属性");//'贫困户属性: 1一般贫困户 2低保兜底户 3五保户 4一般农户 ',
             } else {
-                switch (bean.getFamily_state()) {
+                switch (basic.getFamily_state()) {
                     case "0":
                         tv_lable4.setText("贫困户属性");
                         break;
@@ -315,10 +347,10 @@ public class DanganListActivity extends BaseActivity {
                 }
             }
 
-            if (TextUtils.isEmpty(bean.getCity()) && TextUtils.isEmpty(bean.getTown_name()) && TextUtils.isEmpty(bean.getVillage_name())) {
+            if (TextUtils.isEmpty(poor.getCity()) && TextUtils.isEmpty(poor.getTown_name()) && TextUtils.isEmpty(poor.getVillage_name())) {
                 tv_address.setText("  住址：");
             } else {
-                tv_address.setText("  住址：" + bean.getCity() + bean.getTown_name() + bean.getVillage_name());
+                tv_address.setText("  住址：" + poor.getCity() + poor.getTown_name() + poor.getVillage_name());
             }
 
 

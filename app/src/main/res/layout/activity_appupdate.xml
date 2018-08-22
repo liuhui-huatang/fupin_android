@@ -6,28 +6,7 @@
     android:background="@color/bg_white">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary">
-
-        <ImageView
-            android:id="@+id/left_menu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:padding="10dp"
-            android:src="@mipmap/icon_commen_break" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="APP更新"
-            android:textColor="@color/bg_white"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
+    <include layout="@layout/new_top"/>
 
 
     <LinearLayout
@@ -67,7 +46,7 @@
             android:id="@+id/bt_update"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@mipmap/bg_login"
+            android:background="@mipmap/login_submit_red"
             android:text="开始更新"
             android:visibility="gone"
             android:textColor="@color/color_white" />

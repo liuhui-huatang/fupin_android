@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_green">#FF2BAD3E</color>
+    <color name="color_editText_green">#FF70CD44</color>
+    <color name="color_editText_gray">#FF94A3BF</color>
+    <color name="color_font">#FFFFFF</color>
+
+</resources>

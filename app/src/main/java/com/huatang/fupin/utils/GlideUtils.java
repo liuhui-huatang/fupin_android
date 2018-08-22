@@ -225,4 +225,67 @@ public class GlideUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 加载网络图片
+     * @param mContext
+     * @param path
+     * @param imageview
+     */
+    public static void LoadImage(Context mContext, String path,
+                                 ImageView imageview) {
+        Glide.with(mContext).load(path).centerCrop().placeholder(R.mipmap.bg_banner)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageview);
+    }
+
+    /**
+     * 加载带尺寸的图片
+     * @param mContext
+     * @param path
+     * @param Width
+     * @param Height
+     * @param imageview
+     */
+    public static void LoadImageWithSize(Context mContext, String path,
+                                         int Width, int Height, ImageView imageview) {
+        Glide.with(mContext).load(path).override(Width, Height)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageview);
+    }
+
+    /**
+     * 加载本地图片
+     * @param mContext
+     * @param path
+     * @param imageview
+     */
+    public static void LoadImageWithLocation(Context mContext, Integer path,
+                                             ImageView imageview) {
+        Glide.with(mContext).load(path).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(imageview);
+    }
+
+    /**
+     * 圆形加载
+     *
+     * @param mContext
+     * @param path
+     * @param imageview
+     */
+    public static void LoadCircleImage(Context mContext, int path,
+                                       ImageView imageview) {
+        Glide.with(mContext).load(path).centerCrop().placeholder(R.mipmap.header_default)
+                .transform(new GlideCircleTransform(mContext,2,mContext.getResources().getColor(R.color.color_white)))
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageview);
+
+
+
+    }
+    public static void LoadCircleImageWithoutBorderColor(Context mContext, String path,
+                                                         ImageView imageview){
+        Glide.with(mContext).load(path).centerCrop().placeholder(R.mipmap.header_default)
+                .transform(new GlideCircleTransform(mContext))
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageview);
+    }
+
+
 }

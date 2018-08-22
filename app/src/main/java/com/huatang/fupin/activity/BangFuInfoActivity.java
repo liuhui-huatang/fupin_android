@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
+import com.huatang.fupin.bean.NewSign;
 import com.huatang.fupin.bean.Sign;
 import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.utils.DateUtil;
@@ -38,6 +39,8 @@ public class BangFuInfoActivity extends BaseActivity {
 
     @BindView(R.id.left_menu)
     ImageView leftMenu;
+    @BindView(R.id.title_tx)
+    TextView pageTitle;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_time)
@@ -72,24 +75,27 @@ public class BangFuInfoActivity extends BaseActivity {
        * 描述：跳转到登录页面
        *
        */
-    public static void startIntent(Activity activity, Sign bean) {
+    public static void startIntent(Activity activity, NewSign bean) {
         Intent it = new Intent(activity, BangFuInfoActivity.class);
         it.putExtra("sign", bean);
         activity.startActivity(it);
     }
 
-    Sign bean;
+    NewSign bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bangfuinfo);
         ButterKnife.bind(this);
-        bean = (Sign) getIntent().getSerializableExtra("sign");
+        bean = (NewSign) getIntent().getSerializableExtra("sign");
         initView();
     }
 
+
+
     public void initView() {
+        pageTitle.setText("日志详情");
         List<ImageView> imageViewList = new ArrayList<>();
         imageViewList.add(iv01);
         imageViewList.add(iv02);
@@ -124,7 +130,7 @@ public class BangFuInfoActivity extends BaseActivity {
                 if (i < strings.length) {
                     if (!TextUtils.isEmpty(strings[i])) {
                         imageViewList.get(i).setVisibility(View.VISIBLE);
-                        GlideUtils.displayHome(imageViewList.get(i), BaseConfig.apiUrl + strings[i]);
+                        GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + strings[i]);
                     }
                 } else {
                     imageViewList.get(i).setVisibility(View.GONE);

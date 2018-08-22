@@ -290,7 +290,7 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:background="@mipmap/bg_login"
+        android:background="@mipmap/login_submit_red"
         android:text="退出账号"
         android:textColor="@color/color_white" />
 

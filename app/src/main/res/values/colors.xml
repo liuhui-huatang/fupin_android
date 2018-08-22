@@ -30,5 +30,13 @@
     <color name="viewfinder_mask">#60000000</color>
 
 
+    <!--3.0版本颜色设置-->
+
+    <color name="color_green">#FF2BAD3E</color>
+    <color name="color_editText_green">#FF70CD44</color>
+    <color name="color_editText_gray">#FF94A3BF</color>
+    <color name="color_font">#FFFFFF</color>
+    <color name="color_red">#f52b37</color>
+
 
 </resources>

@@ -86,6 +86,26 @@ public class JsonUtil {
         }
         return (T) list;
     }
+    public static JSONObject arrayToJsonObject(String json){
+        JSONObject jsonObject = null ;
+        try {
+            JSONArray  jsonArray = new JSONArray(json);
+            jsonObject = jsonArray.getJSONObject(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+    public static String getStringFromArray(String json,String key){
+        String result = "";
+        JSONObject jsonObject = arrayToJsonObject(json);
+        try {
+            result = jsonObject.getString(key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
 
+    }
 
 }

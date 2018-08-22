@@ -29,13 +29,16 @@ import butterknife.OnClick;
 
 public class WebActivity extends BaseActivity {
 
-
+    public final static String TITLE = "title";
+    public final static String URL = "url";
     @BindView(R.id.webview)
     WebView webview;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
+    private String url;
+    private String title;
 
     /*
      * @ forever 在 17/5/17 下午2:28 创建
@@ -60,6 +63,10 @@ public class WebActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        url = intent.getStringExtra(URL);
+        title = intent.getStringExtra(TITLE);
+        tvTitle.setText(title);
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -97,7 +104,7 @@ public class WebActivity extends BaseActivity {
         webview.getSettings().setTextSize(WebSettings.TextSize.LARGEST);
 
 
-        webview.loadUrl(getIntent().getStringExtra("url"));
+        webview.loadUrl(url);
     }
 
 

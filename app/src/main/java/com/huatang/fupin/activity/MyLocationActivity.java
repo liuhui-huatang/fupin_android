@@ -46,7 +46,7 @@ public class MyLocationActivity extends BaseActivity {
 
     @BindView(R.id.left_menu)
     ImageView leftMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.tv_text)
     TextView tvText;
@@ -76,6 +76,7 @@ public class MyLocationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myfankui);
         ButterKnife.bind(this);
+        tvTitle.setText("我的位置");
         initLocation();
     }
 

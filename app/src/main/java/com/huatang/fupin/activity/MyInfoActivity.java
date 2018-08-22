@@ -15,9 +15,14 @@ import android.widget.Toast;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.NewFuzeren;
+import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.ImageUtil;
+import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.PopWindowUtil;
 import com.huatang.fupin.utils.SPUtil;
@@ -94,20 +99,66 @@ public class MyInfoActivity extends BaseActivity {
     }
 
     public void initView() {
-        if(!TextUtils.isEmpty(SPUtil.getString("photo"))) {
-            GlideUtils.displayHome(ivPhoto, BaseConfig.apiUrl + SPUtil.getString("photo"));
-        }
-        tvName.setText(SPUtil.getString("name"));
-        tvZhiwu.setText(SPUtil.getString("duty"));
-        tvDanwei.setText(SPUtil.getString("unit"));
-        tvPhone.setText(SPUtil.getString("phone"));
-        tvXiangzhen.setText(SPUtil.getString("town"));
+        tvName.setText(SPUtil.getString(Config.NAME));
+        tvPhone.setText(SPUtil.getString(Config.PHONE));
+        switch (SPUtil.getString(Config.Type)){
 
-        if ("2".equals(SPUtil.getString("identity"))) {
-            rlZhiwu.setVisibility(View.GONE);
-            rlDanwei.setVisibility(View.GONE);
-            rlXiangzhen.setVisibility(View.GONE);
+            case Config.PENKUNHU_TYPE:
+                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }
+                rlZhiwu.setVisibility(View.GONE);
+                rlDanwei.setVisibility(View.GONE);
+                rlXiangzhen.setVisibility(View.GONE);
+                break;
+            case Config.ADMIN_TYPE:
+                NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
+                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }else{
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,admin.getLeader_photo(),ivPhoto);
+                }
+                tvName.setText(admin.getLeader_name());
+                tvZhiwu.setText(admin.getLeader_duty());
+                tvDanwei.setText(admin.getLeader_unit());
+                tvPhone.setText(admin.getLeader_phone());
+                tvXiangzhen.setText(admin.getHelp_town());
+            case Config.GANBU_TYPE:
+                NewLeader leader = (NewLeader) SPUtil.getLeaderFromSharePref();
+                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }else{
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,leader.getLeader_photo(),ivPhoto);
+                }
+                tvName.setText(leader.getLeader_name());
+                tvZhiwu.setText(leader.getLeader_unit());
+                tvDanwei.setText(leader.getLeader_andscape());
+                tvPhone.setText(leader.getLeader_phone());
+                tvXiangzhen.setText(leader.getHelp_town());
+                break;
+            case Config.FUZEREN_TYPE:
+                NewFuzeren fuzeren = (NewFuzeren)SPUtil.getObject(Config.FUZEREN_KEY);
+                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }
+                tvName.setText(fuzeren.getVillage_name());
+                tvZhiwu.setText(fuzeren.getVillage_chief());
+                tvDanwei.setText(fuzeren.getChief_duty());
+                tvPhone.setText(fuzeren.getChief_phone());
+                tvXiangzhen.setVisibility(View.INVISIBLE);
+                break;
+            case Config.YOUKU_TYPE:
+                if(!TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }
+                rlZhiwu.setVisibility(View.GONE);
+                rlDanwei.setVisibility(View.GONE);
+                rlXiangzhen.setVisibility(View.GONE);
+                break;
         }
+
+
+
     }
 
     @OnClick({R.id.left_menu, R.id.iv_photo, R.id.rl_name, R.id.rl_zhiwu, R.id.rl_danwei, R.id.rl_phone, R.id.rl_xiangzhen})
@@ -190,12 +241,15 @@ public class MyInfoActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-        HttpRequest.updatePhoto(this, SPUtil.getString("identity"),SPUtil.getString("id"), filePath, new HttpRequest.MyCallBack() {
+
+        NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
-            public void ok(String json) {
+            public void callback(String json) {
                 ToastUtil.show("修改成功");
-                SPUtil.saveString("photo",json);
-                GlideUtils.displayHome(ivPhoto, BaseConfig.apiUrl+json);
+                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
+                SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
+                GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
+
             }
         });
 
