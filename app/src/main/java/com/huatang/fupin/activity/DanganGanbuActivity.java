@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.Family;
 import com.huatang.fupin.bean.Leader;
 import com.huatang.fupin.bean.NewLeader;
@@ -21,6 +23,7 @@ import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.JsonUtil;
+import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 
@@ -44,7 +47,7 @@ public class DanganGanbuActivity extends BaseActivity {
     ListView lvLeader;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
-    @BindView(R.id.tv_title)
+    @BindView(R.id.title_tx)
     TextView tvTitle;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
@@ -56,9 +59,9 @@ public class DanganGanbuActivity extends BaseActivity {
          * 描述：跳转到登录页面
          *
          */
-    public static void startIntent(Activity activity,NewPoor poor) {
+    public static void startIntent(Activity activity,Archive archive) {
         Intent it = new Intent(activity, DanganGanbuActivity.class);
-        it.putExtra("poor", poor);
+        it.putExtra("archive", archive);
         activity.startActivity(it);
     }
 
@@ -74,10 +77,15 @@ public class DanganGanbuActivity extends BaseActivity {
         setContentView(R.layout.activity_danganganbu);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        poor = (NewPoor)intent.getSerializableExtra("poor");
+        Archive archive = (Archive)intent.getSerializableExtra("archive");
+        poor = archive == null ? (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY): archive.getPoor();
+        initHeadView();
         getData();
     }
 
+    private void initHeadView() {
+        tvTitle.setText("帮扶干部详情");
+    }
 
 
     List<NewLeader> list = new ArrayList<>();
@@ -128,9 +136,8 @@ public class DanganGanbuActivity extends BaseActivity {
                 if (convertView == null) {
                     convertView = View.inflate(DanganGanbuActivity.this, R.layout.item_leader, null);
                 }
-                TextView iv_photo =  ViewHolderUtil.get(convertView, R.id.iv_photo);
+                ImageView iv_photo =  ViewHolderUtil.get(convertView, R.id.iv_photo);
                 TextView tv_name = ViewHolderUtil.get(convertView, R.id.tv_name);
-                TextView tv_danwei = ViewHolderUtil.get(convertView, R.id.tv_danwei);
                 TextView tv_zhiwu = ViewHolderUtil.get(convertView, R.id.tv_zhiwu);
                 TextView tv_phone = ViewHolderUtil.get(convertView, R.id.tv_phone);
                 TextView tv_pingjia = ViewHolderUtil.get(convertView,R.id.pingjia_btn);
@@ -138,7 +145,7 @@ public class DanganGanbuActivity extends BaseActivity {
                 final NewLeader leader = list.get(position);
                // GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getPhoto(),iv_photo);
                 tv_name.setText(leader.getLeader_name());
-                tv_danwei.setText(leader.getLeader_duty());
+
                 tv_zhiwu.setText(leader.getLeader_unit());
                 tv_phone.setText(leader.getLeader_phone());
                 tv_pingjia.setOnClickListener(new View.OnClickListener() {

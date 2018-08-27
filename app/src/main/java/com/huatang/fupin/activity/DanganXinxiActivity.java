@@ -137,7 +137,7 @@ public class DanganXinxiActivity extends BaseActivity {
                 DanganJiatingActivity.startIntent(this, archive);
                 break;
             case R.id.rl_ganbu://帮扶干部
-                DanganGanbuActivity.startIntent(this, archive.getPoor());
+                DanganGanbuActivity.startIntent(this, archive);
                 break;
             case R.id.rl_shouru://shouru
                 DanganShouruActivity.startIntent(this,archive);

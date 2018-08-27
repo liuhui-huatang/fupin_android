@@ -54,7 +54,10 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:layout_toRightOf="@id/tv_name"
-                        android:text="职务"
+                        android:text="奈曼旗信息化推荐中心"
+                        android:maxEms="6"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/color_333"
                         android:textSize="13sp" />
                 </LinearLayout>

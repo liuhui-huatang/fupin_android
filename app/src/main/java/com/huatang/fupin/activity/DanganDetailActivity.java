@@ -264,7 +264,7 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
                 DanganFundActivity.startIntent(this,archive);
                 break;
             case R.id.pingjia_layout:
-                DanganGanbuActivity.startIntent(this, archive.getPoor());
+                DanganGanbuActivity.startIntent(this, archive);
         }
     }
     public static void startIntent(Activity activity) {

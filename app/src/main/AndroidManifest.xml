@@ -99,7 +99,7 @@
         <activity android:name=".activity.DanganFundActivity"/>
         <activity android:name=".activity.FupinPolicyActivity"/>
         <activity android:name=".activity.FupinPolicyTabActivity"/>
-        <activity android:name=".activity.PingJiaActivity"/>
+        <activity android:name=".activity.PingJiaActivity" android:windowSoftInputMode="stateHidden|stateUnchanged"/>
 
 
 

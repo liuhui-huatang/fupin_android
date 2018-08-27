@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +50,10 @@ public class PingJiaActivity extends BaseActivity {
 
     @BindView(R.id.pingjia_et)
     EditText pingjia_et;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.iv_photo)
+    ImageView ivPhoto;
     private NewLeader leader;
 
 
@@ -67,11 +72,12 @@ public class PingJiaActivity extends BaseActivity {
         if(leader == null){
             return;
         }
+        tvName.setText(leader.getLeader_name());
         tv_zhiwu.setText(leader.getLeader_duty());
         tv_phone.setText(leader.getLeader_phone());
-        tv_town.setText(leader.getHelp_town());
+        tv_town.setText(TextUtils.isEmpty(leader.getHelp_town()) ? "" :"包连乡镇:"+leader.getHelp_town());
         //tv_poor_num.setText(leader.get);
-
+        // GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getPhoto(),iv_photo);
 
     }
 
@@ -113,12 +119,8 @@ public class PingJiaActivity extends BaseActivity {
 
     }
     public static void startIntent(Activity activity, NewLeader leader) {
-        Intent it = new Intent(activity, DanganFundActivity.class);
+        Intent it = new Intent(activity, PingJiaActivity.class);
         it.putExtra("leader", leader);
         activity.startActivity(it);
-    }
-
-    public void getLeader() {
-
     }
 }

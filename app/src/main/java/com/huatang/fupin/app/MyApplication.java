@@ -3,6 +3,8 @@ package com.huatang.fupin.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.XmlResourceParser;
+import android.view.LayoutInflater;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.galleryfinal.UILImageLoader;
@@ -17,6 +19,8 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import cn.finalteam.galleryfinal.CoreConfig;
 import cn.finalteam.galleryfinal.FunctionConfig;
@@ -41,7 +45,9 @@ public class MyApplication extends Application {
         super.onCreate();
         mContext = this;
         initTheme(this);
+        SPUtil.saveString(SkinUtil.CURSKINTYPEKEY,SkinUtil.skin_type_blue);
 
+       // LayoutInflater.from(this).inflate(R.layout.new_top,null).setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
 
         OkHttpUtils.init(this);
 

@@ -11,13 +11,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <include layout="@layout/new_top" />
+
         <RelativeLayout
             android:id="@+id/rl_geren"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/account_header">
+            android:background="@mipmap/account_head_bg">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical"
+                android:id="@+id/title_bar">
+                <ImageView
+                    android:id="@+id/left_menu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_commen_break" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="50dp"
+                    android:text="扶贫一点通"
+                    android:gravity="center"
+                    android:id="@+id/title_tx"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/bg_white"
+                    android:textSize="18sp" />
 
+                <ImageView
+                    android:id="@+id/right_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:src="@mipmap/img_message"
+                    android:visibility="invisible"/>
+                <TextView
+                    android:id="@+id/right_tx_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/text_size_normal"
+                    android:text="发布"
+                    />
+            </RelativeLayout>
             <LinearLayout
                 android:id="@+id/account_info"
                 android:layout_width="match_parent"
@@ -128,8 +174,8 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
@@ -140,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="30dp"
+
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
@@ -164,7 +210,8 @@
                 </LinearLayout>
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:layout_height="90dp"
                     android:background="@color/color_dcdcdc" />
                 <LinearLayout
                     android:id="@+id/rl_mima"
@@ -195,7 +242,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="30dp"
+
             android:layout_gravity="center_horizontal">
 
             <LinearLayout

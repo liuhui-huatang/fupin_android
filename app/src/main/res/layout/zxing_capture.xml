@@ -27,7 +27,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@mipmap/header">
+        android:background="@mipmap/header_skin_blue">
 
         <ImageView
             android:id="@+id/left_menu"

@@ -194,7 +194,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         titleText.setText("个人中心");
         rightMenu.setVisibility(View.VISIBLE);
         title_bar = (RelativeLayout)view.findViewById(R.id.title_bar);
-        title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
+        //title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
     }
     private void startCaptureActivityForResult() {
         Intent intent = new Intent(getActivity(), CaptureActivity.class);

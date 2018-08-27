@@ -329,6 +329,7 @@ public class DanganListNewActivity extends BaseActivity {
                 }
                 holder.zijin_layout.setOnClickListener(this);
             }
+            holder.pingjia_layout.setOnClickListener(this);
             return convertView;
         }
 
@@ -355,6 +356,9 @@ public class DanganListNewActivity extends BaseActivity {
                     break;
                 case R.id.zijin_layout:
                     DanganFundActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    break;
+                case R.id.pingjia_layout:
+                    DanganGanbuActivity.startIntent((Activity)mContext,list.get(curentPosition));
                     break;
             }
         }
