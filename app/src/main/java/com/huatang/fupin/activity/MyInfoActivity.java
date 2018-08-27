@@ -18,6 +18,8 @@ import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewFuzeren;
 import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
+import com.huatang.fupin.bean.YouKe;
 import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.GlideUtils;
@@ -46,7 +48,7 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
 
 public class MyInfoActivity extends BaseActivity {
 
-
+    public static final int UPDATE_HEAD_PHOTO = 1002;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
     @BindView(R.id.iv_photo)
@@ -104,8 +106,11 @@ public class MyInfoActivity extends BaseActivity {
         switch (SPUtil.getString(Config.Type)){
 
             case Config.PENKUNHU_TYPE:
+                NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }else{
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,poor.getPhoto(),ivPhoto);
                 }
                 rlZhiwu.setVisibility(View.GONE);
                 rlDanwei.setVisibility(View.GONE);
@@ -123,6 +128,7 @@ public class MyInfoActivity extends BaseActivity {
                 tvDanwei.setText(admin.getLeader_unit());
                 tvPhone.setText(admin.getLeader_phone());
                 tvXiangzhen.setText(admin.getHelp_town());
+                break;
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getLeaderFromSharePref();
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
@@ -131,8 +137,8 @@ public class MyInfoActivity extends BaseActivity {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,leader.getLeader_photo(),ivPhoto);
                 }
                 tvName.setText(leader.getLeader_name());
-                tvZhiwu.setText(leader.getLeader_unit());
-                tvDanwei.setText(leader.getLeader_andscape());
+                tvZhiwu.setText(leader.getLeader_duty());
+                tvDanwei.setText(leader.getLeader_unit());
                 tvPhone.setText(leader.getLeader_phone());
                 tvXiangzhen.setText(leader.getHelp_town());
                 break;
@@ -140,6 +146,8 @@ public class MyInfoActivity extends BaseActivity {
                 NewFuzeren fuzeren = (NewFuzeren)SPUtil.getObject(Config.FUZEREN_KEY);
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }else{
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,fuzeren.getPhoto(),ivPhoto);
                 }
                 tvName.setText(fuzeren.getVillage_name());
                 tvZhiwu.setText(fuzeren.getVillage_chief());
@@ -148,9 +156,14 @@ public class MyInfoActivity extends BaseActivity {
                 tvXiangzhen.setVisibility(View.INVISIBLE);
                 break;
             case Config.YOUKU_TYPE:
-                if(!TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){
+                YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
+                if(TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){//photo为空表示没有注册的游客
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
+                }else{
+                    //tvName.setText(TextUtils.isEmpty(youKe.getName()) ? SPUtil.getString(Config.NAME):youKe.getName());
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,youKe.getPhoto(),ivPhoto);
                 }
+
                 rlZhiwu.setVisibility(View.GONE);
                 rlDanwei.setVisibility(View.GONE);
                 rlXiangzhen.setVisibility(View.GONE);
@@ -165,6 +178,7 @@ public class MyInfoActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:
+                setResult(RESULT_OK);
                 finish();
                 break;
             case R.id.iv_photo:
@@ -249,7 +263,6 @@ public class MyInfoActivity extends BaseActivity {
                 String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
                 SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
                 GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
-
             }
         });
 

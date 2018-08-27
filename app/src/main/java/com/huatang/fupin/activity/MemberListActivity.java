@@ -34,7 +34,7 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
     private TextView rightMenu;
     private TextView title;
     private NewChat chat;
-    private String phones;
+    private String phones = "";
     private List<NewLeader> leader_list ;
     private ListView listview;
     private Adapter leaderAdapter;
@@ -55,6 +55,7 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
 
     private void initHeadView() {
         leftMenu = (ImageView)findViewById(R.id.left_menu);
+        leftMenu.setOnClickListener(this);
         rightMenu = (TextView)findViewById(R.id.right_tx_menu);
         rightMenu.setText("添加成员");
         rightMenu.setVisibility(View.VISIBLE);
@@ -112,6 +113,11 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.right_tx_menu:
                 //添加
+                if(TextUtils.isEmpty(phones)){
+                    ToastUtil.show("请选择成员");
+                    return;
+
+                }
                 updateChatMember();
                 break;
 
@@ -125,6 +131,8 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
             public void ok(String json) {
                 ToastUtil.show("添加成功");
                 finish();
+
+                setResult(RESULT_OK);
             }
 
             @Override

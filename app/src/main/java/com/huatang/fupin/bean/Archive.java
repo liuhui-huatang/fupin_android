@@ -9,8 +9,8 @@ public class Archive implements Serializable {
     private NewBasic basic;
     private Info info;
     private NewRevenue reve;
-    private Policy policy;
-    private Fund funds;
+    private List<Policy> policy;
+    private List<Fund> funds;
     private List<NewFamily> family;
 
     public NewPoor getPoor() {
@@ -45,22 +45,20 @@ public class Archive implements Serializable {
         this.reve = reve;
     }
 
-
-
-    public Fund getFunds() {
-        return funds;
-    }
-
-    public void setFunds(Fund funds) {
-        this.funds = funds;
-    }
-
-    public Policy getPolicy() {
+    public List<Policy> getPolicy() {
         return policy;
     }
 
-    public void setPolicy(Policy policy) {
+    public void setPolicy(List<Policy> policy) {
         this.policy = policy;
+    }
+
+    public List<Fund> getFunds() {
+        return funds;
+    }
+
+    public void setFunds(List<Fund> funds) {
+        this.funds = funds;
     }
 
     public List<NewFamily> getFamily() {

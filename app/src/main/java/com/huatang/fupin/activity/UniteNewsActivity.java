@@ -73,16 +73,13 @@ public class UniteNewsActivity extends BaseActivity {
         ggListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(UniteNewsActivity.this,UnitNewsInfoActivity.class);
-                intent.putExtra(UnitNewsInfoActivity.COLUMN,list.get(position));
-                startActivity(intent);
+                UnitNewsInfoActivity.startIntent(UniteNewsActivity.this,list.get(position));
             }
         });
 
 
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
@@ -195,7 +192,7 @@ public class UniteNewsActivity extends BaseActivity {
 
             NewColumn bean = list.get(position);
             if (!TextUtils.isEmpty(bean.getImg())) {
-                GlideUtils.displayHome(iv_item_photo, BaseConfig.ImageUrl + bean.getImg());
+                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(),R.mipmap.news_default_img);
             }
             tv_item_title.setText(bean.getTitle());
             tv_item_ren.setText("  " + bean.getOrigin());

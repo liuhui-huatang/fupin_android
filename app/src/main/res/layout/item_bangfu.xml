@@ -16,7 +16,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:src="@mipmap/img_photo" />
+            android:src="@mipmap/header_default" />
 
         <LinearLayout
             android:layout_width="match_parent"

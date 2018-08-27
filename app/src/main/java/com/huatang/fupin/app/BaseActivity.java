@@ -3,7 +3,11 @@ package com.huatang.fupin.app;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.RelativeLayout;
+
+import com.huatang.fupin.R;
 import com.huatang.fupin.utils.AppManager;
+import com.huatang.fupin.utils.SkinUtil;
 
 import cn.jpush.android.api.JPushInterface;
 

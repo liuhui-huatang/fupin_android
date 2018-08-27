@@ -12,13 +12,12 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageButton
+        <ImageView
             android:id="@+id/tab_home_img"
             android:layout_width="wrap_content"
             android:layout_height= "wrap_content"
-            android:src="@null"
             android:clickable="false"
-            android:background="@mipmap/img_home_normal"/>
+            android:src="@mipmap/img_home_normal"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,13 +32,13 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageButton
+        <ImageView
             android:id="@+id/tab_account_img"
             android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height= "wrap_content"
-
-            android:background="@mipmap/img_account_normal"/>
+            android:src="@mipmap/img_account_normal"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

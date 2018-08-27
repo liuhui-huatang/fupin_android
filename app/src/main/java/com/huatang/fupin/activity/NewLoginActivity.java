@@ -20,6 +20,7 @@ import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewFuzeren;
 import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.bean.NewPoor;
+import com.huatang.fupin.bean.YouKe;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.CountDownUtil;
 import com.huatang.fupin.utils.JsonUtil;
@@ -227,7 +228,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                 SMSSDK.getVerificationCode(country, phone);
                 break;
             case R.id.forget_password:
-
+                PwdUpdateActivity.startIntent(this);
                 break;
 
             case R.id.youkelogin://游客登陆
@@ -307,7 +308,12 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                 if(type.equals(Config.YOUKU_TYPE)){//游客
                     SPUtil.saveString(Config.TOKEN,JsonUtil.getString(json,Config.TOKEN));
                     SPUtil.saveString(Config.NAME,JsonUtil.getString(json,Config.NAME));
-
+                    YouKe youKe = JsonUtil.json2Bean(json,YouKe.class);
+                    try {
+                        SPUtil.saveObject(Config.YOUKE,youKe);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }else if(type.equals(Config.PENKUNHU_TYPE)){
 
                     NewPoor poor = JsonUtil.json2Bean(json, NewPoor.class);

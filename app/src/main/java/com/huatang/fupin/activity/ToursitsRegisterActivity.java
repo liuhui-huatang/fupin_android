@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.YouKe;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.SPUtil;
@@ -32,6 +33,8 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
     private Button register_btn;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
+    @BindView(R.id.right_tx_menu)
+    TextView rightMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,9 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
         ((TextView) findViewById(R.id.title_tx)).setText("游客注册");
         leftMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_commen_break));
         leftMenu.setOnClickListener(this);
+        rightMenu.setText("注 册");
+        rightMenu.setVisibility(View.VISIBLE);
+        rightMenu.setOnClickListener(this);
         register_phone = (EditText)findViewById(R.id.register_username_edt);
         register_name = (EditText)findViewById(R.id.register_name);
         register_pwd = (EditText)findViewById(R.id.register_pwd_edt);
@@ -81,7 +87,7 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.register_btn:
+            case R.id.right_tx_menu:
                 String phone = register_phone.getText().toString().trim();
                 String pwd = register_pwd.getText().toString().trim();
                 String name = register_name.getText().toString().trim();
@@ -125,6 +131,11 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
                  SPUtil.saveString(Config.TOKEN,token);
                  SPUtil.saveString(Config.PHONE,JsonUtil.getString(json,Config.PHONE));
                  SPUtil.saveString(Config.NAME,JsonUtil.getString(json,Config.NAME));
+                try {
+                    SPUtil.saveObject(Config.YOUKE,JsonUtil.json2Bean(json, YouKe.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 // SPUtil.saveString(Config.Type,Config.YOUKU_TYPE);
                 setResult(RESULT_OK);
                  finish();

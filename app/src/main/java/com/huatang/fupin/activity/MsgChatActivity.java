@@ -125,12 +125,12 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         myAdapter = new Adapter(MsgChatActivity.this);
         listview.setAdapter(myAdapter);
         refreshLayout = (com.scwang.smartrefresh.layout.api.RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
         refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
-
+        refreshLayout.setEnableAutoLoadmore(false);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final com.scwang.smartrefresh.layout.api.RefreshLayout freshlayout) {
@@ -206,16 +206,44 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
                 Intent intent = new Intent();
                 intent.setClass(this,MemberListActivity.class);
                 intent.putExtra(MemberListActivity.CHAT,chat);
-                startActivity(intent);
-                //startActivityForResult(intent,MemberListActivity.REQUEST_CODE_ADD_LEADER);
+                //startActivity(intent);
+                startActivityForResult(intent,MemberListActivity.REQUEST_CODE_ADD_LEADER);
                 break;
         }
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == MemberListActivity.REQUEST_CODE_ADD_LEADER){
+                //list.clear();
+               //// getData();
+               // tile.setText(chat.getTitle() + "(" + chat.getLeader_num() + "人)");
+                refreshChat();
+            }
+        }
+    }
+
+    private void refreshChat() {
+        NewHttpRequest.getchatById(this, chat.getId(), new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                chat = JsonUtil.json2Bean(json,NewChat.class);
+                tile.setText(chat.getTitle() + "(" + chat.getLeader_num() + "人)");
+            }
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
-        getData();
+        refreshChat();
     }
 
     public void sendContent(){
@@ -258,6 +286,11 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             @Override
             public void ok(String json) {
                 List<NewChat> result = JsonUtil.toList(json, NewChat.class);
+                if(result ==null || result.size() == 0){
+                    ToastUtil.show("没有更多数据了");
+                    return;
+
+                }
                 list.addAll(0,result);
                 myAdapter.notifyDataSetChanged();
 
@@ -349,7 +382,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
                 }
             }
 
-            GlideUtils.displayHome(holder.itemPhoto, BaseConfig.ImageUrl + chat.getPush_leader_photo());
+            GlideUtils.displayHomeUrl(holder.itemPhoto, BaseConfig.ImageUrl + chat.getPush_leader_photo(),R.mipmap.header_default);
             holder.itemName.setText(chat.getPush_leader_name());
 
             if(TextUtils.isEmpty(chat.getContent()) && !TextUtils.isEmpty(chat.getPush_photo())){
@@ -444,7 +477,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                ToastUtil.show("修改成功");
+                ToastUtil.show("发送成功");
                 SPUtil.saveString("photo", JsonUtil.getStringFromArray(json,"url"));
                 sendPhoto = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
                 //GlideUtils.displayHome(ivPhoto, photoUrl);

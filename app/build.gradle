@@ -100,6 +100,6 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     //二维码扫描zxing
     compile 'com.google.zxing:core:3.3.0'
-
-
+   //tab
+   // compile 'com.android.support:design:26.1.0'
 }

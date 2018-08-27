@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.huatang.fupin.R;
 import com.huatang.fupin.app.MyApplication;
 
 import java.io.IOException;
@@ -46,29 +47,30 @@ public class SkinUtil {
 
         switch (currentSkin){
             case skin_type_default:
-                if(resEntryName.endsWith("_skip")){
-                    newResouceName = resEntryName.split("_skip")[0];
+                if(resEntryName.endsWith("_skin")){
+                    newResouceName = resEntryName.split("_skin")[0];
                 }
                 break;
             case skin_type_blue:
-                if(resEntryName.contains("_skip")){
-                    newResouceName = resEntryName.replace(resEntryName.split("_skip")[1],"_"+currentSkin);
+                if(resEntryName.contains("_skin")){
+                    newResouceName = resEntryName.replace(resEntryName.split("_skin")[1],"_"+currentSkin);
                 }else{
-                    newResouceName = resEntryName +"_skip_"+currentSkin;
+                    newResouceName = resEntryName +"_skin_"+currentSkin;
                 }
 
                 break;
             case skin_type_red:
-                if(resEntryName.contains("_skip")){
-                    newResouceName = resEntryName.replace(resEntryName.split("_skip")[1],"_"+currentSkin);
+                if(resEntryName.contains("_skin")){
+                    newResouceName = resEntryName.replace(resEntryName.split("_skin")[1],"_"+currentSkin);
                 }else{
-                    newResouceName = resEntryName +"_skip_"+currentSkin;
+                    newResouceName = resEntryName +"_skin_"+currentSkin;
                 }
                 break;
 
 
         }
         skinResouceId = MyApplication.getContext().getResources().getIdentifier(newResouceName, resTypeName, MyApplication.getContext().getPackageName());
+        skinResouceId = skinResouceId == 0 ? resouceId : skinResouceId;
         return skinResouceId;
     }
 

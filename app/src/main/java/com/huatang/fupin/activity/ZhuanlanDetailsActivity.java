@@ -27,7 +27,7 @@ public class ZhuanlanDetailsActivity extends BaseActivity {
 
 
 
-    @BindView(R.id.right_menu)
+    @BindView(R.id.right_tx_menu)
     TextView rightMenu;
     @BindView(R.id.left_menu)
     ImageView leftMenu;

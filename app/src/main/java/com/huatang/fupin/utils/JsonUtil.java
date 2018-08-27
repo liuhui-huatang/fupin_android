@@ -25,6 +25,7 @@ public class JsonUtil {
         } catch (JsonSyntaxException exception) {
             exception.printStackTrace();
             Log.w("GSON Util", exception.toString());
+            MLog.e(exception.getMessage());
         }
         return null;
     }
@@ -83,6 +84,7 @@ public class JsonUtil {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            MLog.e(e.getMessage());
         }
         return (T) list;
     }

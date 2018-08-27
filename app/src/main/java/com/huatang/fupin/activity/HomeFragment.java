@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huatang.fupin.R;
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
 
     GridView gridview;
     Banner banner;
+    private RelativeLayout title_bar;
 
     @Nullable
     @Override
@@ -104,11 +106,13 @@ public class HomeFragment extends Fragment {
         startActivityForResult(intent, CaptureActivity.REQ_CODE);
     }
     private void initView(View view) {
+        title_bar = (RelativeLayout)view.findViewById(R.id.title_bar);
+        title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
         banner = (Banner) view.findViewById(R.id.banner_main);
         gridview = (GridView) view.findViewById(R.id.gridview);
 
         RefreshLayout refreshLayout = (RefreshLayout) view.findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this.getContext()).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
@@ -129,6 +133,7 @@ public class HomeFragment extends Fragment {
                 refreshlayout.finishLoadmore(2000);
             }
         });
+        refreshLayout.setEnableFooterTranslationContent(false);
         initBanner();
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -147,11 +152,11 @@ public class HomeFragment extends Fragment {
                                     break;
                                 case Config.PENKUNHU_TYPE:
 
-                                    DanganXinxiActivity.startIntent(getActivity());
+                                    DanganDetailActivity.startIntent(getActivity());
                                     break;
                                 case Config.GANBU_TYPE:
                                 case Config.ADMIN_TYPE:
-                                    DanganListActivity.startIntent(getActivity());
+                                    DanganListNewActivity.startIntent(getActivity());
                                     break;
                                 case Config.FUZEREN_TYPE:
                                     break;
@@ -173,10 +178,12 @@ public class HomeFragment extends Fragment {
                         case Config.qunzonghudong://群众互动
                             UniteNewsActivity.startIntent(getActivity(),Config.qunzonghudong_type);
                             break;
-                        case Config.zuzhilingdao://组织领导
-                            break;
-                        case Config.fupenzhengce://扶贫政策
 
+                        case Config.fupenzhengce://扶贫政策
+                            //UniteNewsActivity.startIntent(getActivity(),Config.fupenzhengce_type);
+                            FupinPolicyActivity.startIntent(getActivity());
+                            break;
+                        case Config.zuzhilingdao://组织领导
                             break;
                         default:
                             break;

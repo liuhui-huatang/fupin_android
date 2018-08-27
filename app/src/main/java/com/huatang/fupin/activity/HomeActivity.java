@@ -111,7 +111,7 @@ public class HomeActivity extends BaseActivity {
 
     public void initView() {
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲

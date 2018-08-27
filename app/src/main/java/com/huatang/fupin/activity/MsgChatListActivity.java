@@ -89,6 +89,8 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
                     list = JsonUtil.toList(json, NewChat.class);
                     if(list.size() > 0){
                         myAdapter.notifyDataSetChanged();
+                        listview.setVisibility(View.VISIBLE);
+                        tv_empty.setVisibility(View.GONE);
                     }else{
                         listview.setVisibility(View.GONE);
                         tv_empty.setVisibility(View.VISIBLE);
@@ -197,7 +199,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             item_name.setText(chat.getPush_leader_name());
             item_title.setText(chat.getTitle());
             item_content.setText(chat.getContent());
-            item_number.setText(chat.getLeader_num());
+            item_number.setText(chat.getLeader_num()+"人");
             item_createTime.setText(chat.getCreate_time());
             deleteGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,7 +226,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                NewHttpRequest.deleteGroup( (Activity)mContext,leader.getId(),chat.getId(),new NewHttpRequest.MyCallBack(){
+                NewHttpRequest.deleteGroup( (Activity)mContext,leader.getLeader_phone(),chat.getId(),new NewHttpRequest.MyCallBack(){
 
                     @Override
                     public void ok(String json) {

@@ -71,7 +71,7 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeGreen"
+        android:theme="@style/AppThemeBlue"
         tools:replace="icon,label,theme">
 
         <activity android:name="com.huatang.fupin.activity.WelcomeActivity">
@@ -90,6 +90,17 @@
         <activity android:name=".activity.MemberListActivity"/>
         <activity android:name=".activity.UniteNewsActivity"/>
         <activity android:name=".activity.UnitNewsInfoActivity"/>
+        <activity android:name=".activity.DanganListNewActivity"/>
+        <activity android:name=".activity.DanganBasciActivity"/>
+        <activity android:name=".activity.DanganInfoActivity"/>
+        <activity android:name=".activity.DanganPolicyActivity"/>
+        <activity android:name=".activity.DanganDetailActivity"/>
+        <activity android:name=".activity.ImageViewPageActivity"/>
+        <activity android:name=".activity.DanganFundActivity"/>
+        <activity android:name=".activity.FupinPolicyActivity"/>
+        <activity android:name=".activity.FupinPolicyTabActivity"/>
+        <activity android:name=".activity.PingJiaActivity"/>
+
 
 
         <activity android:name="com.huatang.fupin.activity.HomeActivity" />

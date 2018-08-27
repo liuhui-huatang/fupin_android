@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#00000000"
-                    android:hint="用户名"
+                    android:hint="手机号码"
                     android:inputType="phone"
                     android:padding="10dp"
                     android:singleLine="true"
@@ -120,6 +120,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@null"
                 android:text="注 册"
+                android:visibility="gone"
                 android:textSize="@dimen/text_size_normal" />
 
         </LinearLayout>

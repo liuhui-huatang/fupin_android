@@ -4,9 +4,12 @@ package com.huatang.fupin.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.huatang.fupin.R;
 import com.huatang.fupin.galleryfinal.UILImageLoader;
 import com.huatang.fupin.galleryfinal.UILPauseOnScrollListener;
 
+import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.SkinUtil;
 import com.huatang.fupin.utils.SystemLogHelper;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.mob.MobSDK;
@@ -37,6 +40,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        initTheme(this);
+
 
         OkHttpUtils.init(this);
 
@@ -75,7 +80,6 @@ public class MyApplication extends Application {
     }
 
 
-
     private void initImageLoader(Context context) {
 
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
@@ -89,6 +93,18 @@ public class MyApplication extends Application {
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config.build());
     }
+    public static void initTheme(MyApplication myApplication) {
+        switch (SPUtil.getString(SkinUtil.CURSKINTYPEKEY)){
+            case SkinUtil.skin_type_blue:
+                myApplication.setTheme(R.style.AppThemeBlue);
+                break;
+            case SkinUtil.skin_type_default:
+                //myApplication.setTheme(R.style.AppThemeTransparent);
+                break;
 
+        }
+
+
+    }
 
 }

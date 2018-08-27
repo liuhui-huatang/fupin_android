@@ -14,7 +14,7 @@ public class Info implements Serializable {
     private String is_have_house;
     private String house_structure;
     private String house_area;
-    private List<String> house_photo;
+
     private String house_security;
     private String effective_irrigation_area;
     private String woodland_area;
@@ -23,15 +23,16 @@ public class Info implements Serializable {
     private String fruit_area;
     private String grass_area;
     private String water_surface_area;
+    //private String transport;
+  //  private String vehicle;
+  //  private String electric;
+  //  private String breeding;
+    private List<String> house_photo;
     private List<String> resource_photo;
-    private List<String> transport;
     private List<String> transport_photo;
-    private List<String> vehicle;
     private List<String> vehicle_photo;
-    private List<String> electric;
     private List<String> electric_photo;
-    private String breeding;
-    private String breeding_photo;
+    private List<String> breeding_photo;
     private String create_time;
     private String update_time;
     private boolean ishave;
@@ -206,13 +207,8 @@ public class Info implements Serializable {
         this.resource_photo = resource_photo;
     }
 
-    public List<String> getTransport() {
-        return transport;
-    }
 
-    public void setTransport(List<String> transport) {
-        this.transport = transport;
-    }
+
 
     public List<String> getTransport_photo() {
         return transport_photo;
@@ -220,14 +216,6 @@ public class Info implements Serializable {
 
     public void setTransport_photo(List<String> transport_photo) {
         this.transport_photo = transport_photo;
-    }
-
-    public List<String> getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(List<String> vehicle) {
-        this.vehicle = vehicle;
     }
 
     public List<String> getVehicle_photo() {
@@ -238,15 +226,6 @@ public class Info implements Serializable {
         this.vehicle_photo = vehicle_photo;
     }
 
-
-    public List<String> getElectric() {
-        return electric;
-    }
-
-    public void setElectric(List<String> electric) {
-        this.electric = electric;
-    }
-
     public List<String> getElectric_photo() {
         return electric_photo;
     }
@@ -255,19 +234,13 @@ public class Info implements Serializable {
         this.electric_photo = electric_photo;
     }
 
-    public String getBreeding() {
-        return breeding;
-    }
 
-    public void setBreeding(String breeding) {
-        this.breeding = breeding;
-    }
 
-    public String getBreeding_photo() {
+    public List<String> getBreeding_photo() {
         return breeding_photo;
     }
 
-    public void setBreeding_photo(String breeding_photo) {
+    public void setBreeding_photo(List<String> breeding_photo) {
         this.breeding_photo = breeding_photo;
     }
 

@@ -17,8 +17,7 @@ public class NewBasic implements Serializable {
     private String    main_pcause                ;
     private String    main_pcause_two            ;
     private String    main_pcause_three          ;
-    private List<String>    main_path                  ;
-    private List<String>    secondary_pcause           ;
+   // private List<String>    secondary_pcause           ;
     private String    main_pcause_info           ;
     private String    secondary_pcause_info      ;
     private String    is_water_security          ;
@@ -28,24 +27,25 @@ public class NewBasic implements Serializable {
     private String    fuel_type                  ;
     private String    distance                   ;
     private String    is_poor_cooperation        ;
-    private List<String>    is_member                  ;
+    //private String    is_member                  ;
     private String    is_relocation              ;
     private String    mine_state                 ;
     private String    placement_state            ;
     private String    settlement                 ;
-    private List<String> mine_difficulty            ;
+   // private String    mine_difficulty            ;
     private String    is_outschool               ;
     private String    town                       ;
     private String    town_name                  ;
     private String    village                    ;
     private String    village_name               ;
-    private String    way_water_file             ;
     private String    way_water                  ;
     private String    determine_time             ;
     private String    create_time                ;
     private String    update_time                ;
     private String    pcauseName                 ;
-    private boolean    ishave                    ;
+    private boolean   ishave                     ;
+    private List<String>    main_path            ;
+  //  private List<String>    way_water_file       ;
 
     public String getId() {
         return id;
@@ -55,13 +55,7 @@ public class NewBasic implements Serializable {
         this.id = id;
     }
 
-    public List<String> getIs_member() {
-        return is_member;
-    }
 
-    public List<String> getMine_difficulty() {
-        return mine_difficulty;
-    }
 
     public boolean isIshave() {
         return ishave;
@@ -175,21 +169,6 @@ public class NewBasic implements Serializable {
         this.main_path = main_path;
     }
 
-    public List<String> getSecondary_pcause() {
-        return secondary_pcause;
-    }
-
-    public void setSecondary_pcause(List<String> secondary_pcause) {
-        this.secondary_pcause = secondary_pcause;
-    }
-
-    public void setIs_member(List<String> is_member) {
-        this.is_member = is_member;
-    }
-
-    public void setMine_difficulty(List<String> mine_difficulty) {
-        this.mine_difficulty = mine_difficulty;
-    }
 
     public String getMain_pcause_info() {
         return main_pcause_info;
@@ -339,13 +318,6 @@ public class NewBasic implements Serializable {
         this.village_name = village_name;
     }
 
-    public String getWay_water_file() {
-        return way_water_file;
-    }
-
-    public void setWay_water_file(String way_water_file) {
-        this.way_water_file = way_water_file;
-    }
 
     public String getWay_water() {
         return way_water;
@@ -386,4 +358,7 @@ public class NewBasic implements Serializable {
     public void setPcauseName(String pcauseName) {
         this.pcauseName = pcauseName;
     }
+
+
+
 }

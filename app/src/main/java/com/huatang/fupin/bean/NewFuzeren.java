@@ -15,6 +15,7 @@ public class NewFuzeren implements Serializable {
     public String      chief_duty;
     public String      chief_phone;
     public String      password;
+    public String      photo;
 
     public String getToken() {
         return token;
@@ -96,5 +97,13 @@ public class NewFuzeren implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

@@ -22,6 +22,7 @@ import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -108,6 +109,7 @@ public class BangFuInfoActivity extends BaseActivity {
         tvTitle.setText(bean.getSign_title());
         tvText.setText(bean.getSign_content());
         tvLocation.setText(bean.getSign_address());
+        /*
         tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,29 +121,37 @@ public class BangFuInfoActivity extends BaseActivity {
                     }
                 });
             }
-        });
+        });*/
         long time = Long.parseLong(bean.getSign_time());
         tvTime.setText(DateUtil.getStandardTime(time));
 
         String images = bean.getSign_imgs();
         if (!TextUtils.isEmpty(images)) {
-            String[] strings = images.split("##");
+            final String[] photos = images.split("##");
             for (int i = 0; i < 8; i++) {
-                if (i < strings.length) {
-                    if (!TextUtils.isEmpty(strings[i])) {
+                if (i < photos.length) {
+                    if (!TextUtils.isEmpty(photos[i])) {
                         imageViewList.get(i).setVisibility(View.VISIBLE);
-                        GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + strings[i]);
+                        GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + photos[i]);
                     }
                 } else {
                     imageViewList.get(i).setVisibility(View.GONE);
                 }
             }
+
+            layoutImages.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageViewPageActivity.startIntent(BangFuInfoActivity.this,Arrays.asList(photos),"BangFuInfoActivity");
+                }
+            });
         } else {
             for (int i = 0; i < 8; i++) {
                 imageViewList.get(i).setVisibility(View.GONE);
             }
             layoutImages.setVisibility(View.GONE);
         }
+
     }
 
 

@@ -24,6 +24,7 @@ import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewFuzeren;
 import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.bean.NewPoor;
+import com.huatang.fupin.bean.YouKe;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.SkinUtil;
@@ -48,10 +49,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private TextView tv_phone;
     private TextView tv_town;
     private TextView tv_naimanqi;
-    private LinearLayout ll_phone;
     private LinearLayout ll_town;
-    private LinearLayout ll_zhiwu;
-    private LinearLayout ll_naiman;
+    private View line_view;
+    private Button change_skill;
+    private RelativeLayout title_bar;
 
     @Nullable
     @Override
@@ -68,30 +69,42 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case Config.YOUKU_TYPE:
 
                 String phone = SPUtil.getString(Config.PHONE);//phone代表已经注册的游客
-                if(TextUtils.isEmpty(phone)){//phone代表已经注册的游客
+                if(TextUtils.isEmpty(phone)){
                     nameView.setVisibility(View.INVISIBLE);
                     register_layout.setVisibility(View.VISIBLE);
-                    ll_phone.setVisibility(View.INVISIBLE);
-
-                }else{
-                    nameView.setText(SPUtil.getString(Config.NAME));
+                    line_view.setVisibility(View.VISIBLE);
+                    tv_phone.setVisibility(View.INVISIBLE);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+                }else {//phone代表已经注册的游客
+                    nameView.setVisibility(View.VISIBLE);
+                    tv_phone.setVisibility(View.VISIBLE);
+                    YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
+                    String youke_photo = TextUtils.isEmpty(youKe.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) :youKe.getPhoto();
+                    GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),youke_photo,iv_photo);
+                    SPUtil.saveString(Config.NAME,youKe.getName());
+                    if(!TextUtils.isEmpty(youke_photo)){
+                        SPUtil.saveString(Config.HEAD_PHOTO,youke_photo);
+                    }
+                    nameView.setText(TextUtils.isEmpty(youKe.getName()) ? SPUtil.getString(Config.NAME):youKe.getName());
                 }
                 ll_town.setVisibility(View.INVISIBLE);
-                ll_zhiwu.setVisibility(View.INVISIBLE);
-                ll_naiman.setVisibility(View.INVISIBLE);
-                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+                zhiWuView.setVisibility(View.INVISIBLE);
+                tv_naimanqi.setVisibility(View.INVISIBLE);
+
+
                 break;
             case Config.ADMIN_KEY:
                 NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
                 nameView.setText(admin.leader_name);
                 String admin_photo = TextUtils.isEmpty(admin.getLeader_photo()) ? SPUtil.getString(Config.HEAD_PHOTO) : admin.getLeader_photo();
+                SPUtil.saveString(Config.NAME,admin.getLeader_name());
                 if(!TextUtils.isEmpty(admin_photo)){
                     SPUtil.saveString(Config.HEAD_PHOTO,admin_photo);
                 }
                 GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),admin_photo ,iv_photo);
-                zhiWuView.setText(admin.getLeader_unit());
+                zhiWuView.setText(admin.getLeader_duty());
+                tv_naimanqi.setText(admin.getLeader_unit());
                 tv_town.setText(admin.getHelp_town());
-                SPUtil.saveString(Config.NAME,admin.getLeader_name());
                 break;
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
@@ -101,20 +114,32 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     SPUtil.saveString(Config.HEAD_PHOTO,leader_photo);
                 }
                 GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),leader_photo ,iv_photo);
-                zhiWuView.setText(leader.getLeader_unit());
+                zhiWuView.setText(leader.getLeader_duty());
+                tv_naimanqi.setText(leader.getLeader_unit());
                 tv_town.setText(leader.getHelp_town());
                 SPUtil.saveString(Config.NAME,leader.getLeader_name());
                 break;
             case Config.PENKUNHU_TYPE:
-                NewPoor poor = (NewPoor) SPUtil.getObject(Config.GANBU_KEY);
+                NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
                 nameView.setText(poor.getFname());
                 SPUtil.saveString(Config.NAME,poor.getFname());
-                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+                String poor_photo = TextUtils.isEmpty(poor.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) : poor.getPhoto();
+                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),poor_photo,iv_photo);
+                if(TextUtils.isEmpty(poor_photo)){
+                    SPUtil.saveString(Config.HEAD_PHOTO,poor_photo);
+                }
+                ll_town.setVisibility(View.INVISIBLE);
+                zhiWuView.setVisibility(View.INVISIBLE);
+                tv_naimanqi.setVisibility(View.INVISIBLE);
                 break;
             case Config.FUZEREN_TYPE:
                 NewFuzeren fuzeren = (NewFuzeren)SPUtil.getObject(Config.FUZEREN_KEY);
                 nameView.setText(fuzeren.getVillage_chief());
-                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+                String chief_photo = TextUtils.isEmpty(fuzeren.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) : fuzeren.getPhoto();
+                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),chief_photo,iv_photo);
+                if(TextUtils.isEmpty(chief_photo)){
+                    SPUtil.saveString(Config.HEAD_PHOTO,chief_photo);
+                }
                 zhiWuView.setText(fuzeren.getChief_duty());
                 tv_town.setText(fuzeren.getVillage());
                 SPUtil.saveString(Config.NAME,fuzeren.getVillage_chief());
@@ -141,9 +166,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         tv_town = (TextView)view.findViewById(R.id.tv_town);
         tv_naimanqi =  (TextView)view.findViewById(R.id.tv_naimanqi);
         ll_town = (LinearLayout)view.findViewById(R.id.ll_town);
-        ll_phone = (LinearLayout)view.findViewById(R.id.ll_phone);
-        ll_zhiwu = (LinearLayout)view.findViewById(R.id.ll_zhiwu);
-        ll_naiman = (LinearLayout)view.findViewById(R.id.ll_naiman);
+        line_view = (View)view.findViewById(R.id.line_view);
+        change_skill = (Button)view.findViewById(R.id.change_skill);
+        change_skill.setOnClickListener(this);
     }
 
     private void initHeadView(View view) {
@@ -168,7 +193,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         titleText = (TextView)view.findViewById(R.id.title_tx);
         titleText.setText("个人中心");
         rightMenu.setVisibility(View.VISIBLE);
-
+        title_bar = (RelativeLayout)view.findViewById(R.id.title_bar);
+        title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
     }
     private void startCaptureActivityForResult() {
         Intent intent = new Intent(getActivity(), CaptureActivity.class);
@@ -186,11 +212,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.logout_btn:
-                if(SPUtil.getString(Config.Type).equals(Config.YOUKU_TYPE) && TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){
-                    ToastUtil.show("请先完成注册");
-                }else{
+
                     exitDialog();
-                }
+
 
                 break;
             case R.id.youke_register_layout:
@@ -211,8 +235,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 if(SPUtil.getString(Config.Type).equals(Config.YOUKU_TYPE) && TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){
                     ToastUtil.show("请先完成注册");
                 }else{
-                    MyInfoActivity.startIntent(getActivity());
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(),MyInfoActivity.class);
+                    startActivityForResult(intent,MyInfoActivity.UPDATE_HEAD_PHOTO);
                 }
+
+                break;
+            case R.id.change_skill:
+                SPUtil.saveString(SkinUtil.CURSKINTYPEKEY,SkinUtil.skin_type_blue);
 
                 break;
 
@@ -260,9 +290,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             if(requestCode == ToursitsRegisterActivity.REGISTER_SUCCESS){
-                   tv_phone.setText(SPUtil.getString(Config.PHONE));
-                   nameView.setText(SPUtil.getString(Config.NAME));
+                nameView.setVisibility(View.VISIBLE);
+                tv_phone.setVisibility(View.VISIBLE);
+                tv_phone.setText(SPUtil.getString(Config.PHONE));
+                nameView.setText(SPUtil.getString(Config.NAME));
+            }else if(requestCode == MyInfoActivity.UPDATE_HEAD_PHOTO){
+                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
             }
+
+        }
+    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        }else{  // 在最前端显示 相当于调用了onResume();
+           // initData();
 
         }
     }

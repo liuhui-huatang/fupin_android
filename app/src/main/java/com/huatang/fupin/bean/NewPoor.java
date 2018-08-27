@@ -13,32 +13,33 @@ import java.util.Map;
 
 public class NewPoor implements Serializable {
     private static final long serialVersionUID = -3531350798739171329L;
-    public String  id;
-    public String  fname;
-    public String  sex;
-    public String  age;
-    public String  fcard;
-    public String  fphone;
-    public String  city;
-    public String  village;
-    public String  town;
-    public String  village_name;
-    public String  town_name;
-    public String  home_number;
-    public String  longitude;
-    public String  dimension;
-    public String  password;
-    public String  war_zone;
-    public String  bank_name;
-    public String  bank_car;
-    public String  is_trong_family;
-    public String  village_group;
-    public String  is_mine;
-    public String  qr_code;
-    public String  create_time;
-    public String  update_time;
-    public String token;
-    public boolean ishave;
+    private String  id;
+    private String  fname;
+    private String  sex;
+    private String  age;
+    private String  fcard;
+    private String  fphone;
+    private String  city;
+    private String  village;
+    private String  town;
+    private String  village_name;
+    private String  town_name;
+    private String  home_number;
+    private String  longitude;
+    private String  dimension;
+    private String  password;
+    private String  war_zone;
+    private String  bank_name;
+    private String  bank_car;
+    private String  is_trong_family;
+    private String  village_group;
+    private String  is_mine;
+    private String  qr_code;
+    private String  create_time;
+    private String  update_time;
+    private String  token;
+    private boolean ishave;
+    private String  photo;
 
     public boolean isIshave() {
         return ishave;
@@ -248,4 +249,11 @@ public class NewPoor implements Serializable {
         this.update_time = update_time;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }

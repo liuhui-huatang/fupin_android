@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.huatang.fupin.R;
@@ -27,8 +28,8 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
 
     private LinearLayout mTabHome;
     private LinearLayout mTabAccount;
-    private ImageButton mHomeImg;
-    private ImageButton mAccountImg;
+    private ImageView mHomeImg;
+    private ImageView mAccountImg;
     private HomeFragment homeFragment;
     private AccountFragment accountFragment;
 
@@ -55,12 +56,13 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
     }
 
     private void initView() {
+
         mTabHome = (LinearLayout) findViewById(R.id.tab_home);
         mTabAccount = (LinearLayout) findViewById(R.id.tab_account);
 
 
-        mHomeImg = (ImageButton) findViewById(R.id.tab_home_img);
-        mAccountImg = (ImageButton) findViewById(R.id.tab_account_img);
+        mHomeImg = (ImageView) findViewById(R.id.tab_home_img);
+        mAccountImg = (ImageView) findViewById(R.id.tab_account_img);
 
     }
     public static void startIntent(Activity activity) {

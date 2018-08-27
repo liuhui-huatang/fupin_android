@@ -42,7 +42,7 @@ public class UnitNewsInfoActivity extends BaseActivity {
      *
      */
     public static void startIntent(Activity activity, NewColumn column) {
-        Intent it = new Intent(activity, ZhuanlanDetailsActivity.class);
+        Intent it = new Intent(activity, UnitNewsInfoActivity.class);
         it.putExtra(COLUMN, column);
         activity.startActivity(it);
     }

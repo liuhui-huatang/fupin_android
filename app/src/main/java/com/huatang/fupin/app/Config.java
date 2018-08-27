@@ -12,7 +12,7 @@ public class Config {
     public static final String NAME = "name" ;
     public static final String TOKEN = "token";
     public static final String YEAR = "year";
-    public static final String HEAD_PHOTO = "photo_"+ SPUtil.getString(TOKEN);
+    public static final String HEAD_PHOTO = "photo";
     public static final String PHONE = "phone";
     public static final String PASSWORD = "password";
     public static final String BAI_DU_MAP_DISTANCE = "2000";
@@ -40,6 +40,7 @@ public class Config {
     public final static String GANBU_KEY = "leader" ;
     public final static String ADMIN_KEY = "admin" ;
     public final static String FUZEREN_KEY = "fuzeren" ;
+    public final static String YOUKE ="youke";
     public final static Map<String,Integer> menuMap = new HashMap<String,Integer>(){
         {
               put(bangfuriji, SkinUtil.getResouceId( R.mipmap.bangfuriji));
@@ -59,6 +60,7 @@ public class Config {
     public final static String dianxingyinlu_type = "3";
     public final static String fupenxingdong_type = "4";
     public final static String qunzonghudong_type = "5";
+    public final static String fupenzhengce_type = "6";
     public final static Map<String,String> typeMap = new HashMap<String,String >(){
         {
             put(fupenyaowen_type,fupenyaowen);
@@ -67,6 +69,7 @@ public class Config {
             put(fupenxingdong_type,fupenxingdong);
             put(qunzonghudong_type,qunzonghudong);
 
+            put(fupenzhengce_type,fupenzhengce);
 
         }
 

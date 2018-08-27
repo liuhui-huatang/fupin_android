@@ -80,37 +80,6 @@
                     android:textSize="13sp" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="出生日期"
-                    android:textColor="@color/color_666"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/color_dcdcdc" />
-
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="未录入"
-                    android:textColor="@color/color_333"
-                    android:textSize="13sp" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -181,10 +150,11 @@
                 android:layout_marginRight="10dp">
 
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="家庭人口"
+                    android:text="是否军烈家属"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -195,7 +165,37 @@
                     android:background="@color/color_dcdcdc" />
 
                 <TextView
-                    android:id="@+id/tv_family"
+                    android:id="@+id/tv_jiashu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="未录入"
+                    android:textColor="@color/color_333"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="户编号"
+                    android:textColor="@color/color_666"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/color_dcdcdc" />
+
+                <TextView
+                    android:id="@+id/tv_hubianhao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -215,7 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="家庭住址"
+                    android:text="所属旗镇村"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -246,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="贫困户属性"
+                    android:text="所属组"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -257,7 +257,7 @@
                     android:background="@color/color_dcdcdc" />
 
                 <TextView
-                    android:id="@+id/tv_shuxing"
+                    android:id="@+id/tv_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -277,7 +277,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="脱贫状态"
+                    android:text="开户行名称"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -288,7 +288,7 @@
                     android:background="@color/color_dcdcdc" />
 
                 <TextView
-                    android:id="@+id/tv_tuopin"
+                    android:id="@+id/tv_bank_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -298,38 +298,7 @@
                     android:textSize="13sp" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="帮扶措施"
-                    android:textColor="@color/color_666"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/color_dcdcdc" />
-
-                <TextView
-                    android:id="@+id/tv_cuoshi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="未录入"
-
-                    android:textColor="@color/color_333"
-                    android:textSize="13sp" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -341,7 +310,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="建档立卡年度"
+                    android:text="银行卡号"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -352,7 +321,7 @@
                     android:background="@color/color_dcdcdc" />
 
                 <TextView
-                    android:id="@+id/tv_year"
+                    android:id="@+id/tv_bank_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -373,7 +342,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="主要致贫原因"
+                    android:text="是否搬迁户"
                     android:textColor="@color/color_666"
                     android:textSize="13sp" />
 
@@ -384,7 +353,7 @@
                     android:background="@color/color_dcdcdc" />
 
                 <TextView
-                    android:id="@+id/tv_zhipin"
+                    android:id="@+id/tv_bianqian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -393,103 +362,6 @@
                     android:textColor="@color/color_333"
                     android:textSize="13sp" />
             </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="致贫原因附件"
-                    android:textColor="@color/color_666"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/color_dcdcdc" />
-
-                <TextView
-                    android:id="@+id/tv_open"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="查看 >"
-                    android:textColor="@color/color_333"
-                    android:textSize="13sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="主要致贫原因描述"
-                    android:textColor="@color/color_666"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/color_dcdcdc" />
-
-                <TextView
-                    android:id="@+id/tv_main"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:text="未录入"
-                    android:textColor="@color/color_333"
-                    android:textSize="13sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="其它致贫原因描述"
-                    android:textColor="@color/color_666"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/color_dcdcdc" />
-
-                <TextView
-                    android:id="@+id/tv_outh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:text="未录入"
-                    android:textColor="@color/color_333"
-                    android:textSize="13sp" />
-            </RelativeLayout>
-
 
         </LinearLayout>
     </ScrollView>

@@ -373,6 +373,11 @@ public class NewHttpRequest {
         httpParams = getHttpParams();
         httpParams.put("phone", phone);
         httpParams.put("pwd", pwd);
-        executePost(context, "archives/getLeaderByPoor",httpParams, callBack);
+        executePost(context, "archives/updatePwd",httpParams, callBack);
+    }
+    public static void getchatById(Activity context,String chat_id,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("chat_id", chat_id);
+        executePost(context, "msg/getchatById",httpParams, callBack);
     }
 }

@@ -100,30 +100,6 @@ public class DanganShouruActivity extends BaseActivity {
         keys.add("养老保险金(元)");
         keys.add("生态补偿金(元)");
 
-        lvRevenue.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if("收入年份(年)".equals(keys.get(position))){
-                    String[] words2 = new String[5];
-                    words2[0] = "2016";
-                    words2[1] = "2017";
-                    words2[2] = "2018";
-                    words2[3] = "2019";
-                    words2[4] = "2020";
-
-                    DialogUIUtils.showSingleChoose(DanganShouruActivity.this, "请选择年度", -1, words2, new DialogUIItemListener() {
-                        @Override
-                        public void onItemClick(CharSequence text, int position) {
-                            if (TextUtils.isEmpty(text)) {
-                                return;
-                            }
-                            year=text.toString();
-                            getData(year);
-                        }
-                    }).show();
-                }
-            }
-        });
 
         getData(year);
 

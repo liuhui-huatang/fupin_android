@@ -269,12 +269,12 @@ public class BangFuSignActivity extends BaseActivity {
     }
 
     public void selectPoor() {
-       // if(leader.isHasbasic()){
-          //  selectBasic();
-        //}else{
+        if(leader.isHasbasic()){
+            selectBasic();
+        }else{
             ToastUtil.show("没有帮扶户");
              selectArea();
-      //  }
+        }
 
     }
     public void selectBasic() {

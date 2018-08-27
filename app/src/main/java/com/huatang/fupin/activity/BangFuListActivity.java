@@ -95,7 +95,7 @@ public class BangFuListActivity extends BaseActivity {
         initHeadView();
         leader = SPUtil.getLeaderFromSharePref();
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
@@ -139,7 +139,7 @@ public class BangFuListActivity extends BaseActivity {
 
         rightMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.img_add));
         rightMenu.setVisibility(View.VISIBLE);
-        tvTitle.setText("成员列表");
+        tvTitle.setText("帮扶日志");
     }
 
 
@@ -242,7 +242,9 @@ public class BangFuListActivity extends BaseActivity {
 
 
             if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-               GlideUtils.displayHome(iv_photo, BaseConfig.ImageUrl + SPUtil.getString(Config.HEAD_PHOTO));
+               GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+            }else{
+                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, leader.getLeader_photo(),iv_photo);
             }
 
             tv_title.setText(list.get(position).getSign_title());
@@ -258,6 +260,7 @@ public class BangFuListActivity extends BaseActivity {
                     if (i < strings.length) {
                         if (!TextUtils.isEmpty(strings[i])) {
                             imageViewList.get(i).setVisibility(View.VISIBLE);
+
                             GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + strings[i]);
                         }
                     } else {

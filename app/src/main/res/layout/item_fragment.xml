@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="@color/color_white">
 
     <RelativeLayout
@@ -17,7 +17,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/logo" />
+            android:src="@mipmap/news_default_img" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:drawableLeft="@mipmap/img_time"
-                    android:text="  2017年12月06日 10:00:00"
+                    android:text="  2017年12月06日 "
                     android:textSize="13sp" />
                 <TextView
                     android:layout_width="wrap_content"

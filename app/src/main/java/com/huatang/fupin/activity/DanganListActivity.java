@@ -26,6 +26,7 @@ import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.http.NewHttpRequest;
+import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.SPUtil;
@@ -63,9 +64,10 @@ public class DanganListActivity extends BaseActivity {
     TextView tvEmpty;
     @BindView(R.id.title_tx)
     TextView tvTitle;
-    @BindView(R.id.right_menu)
-    ImageView rightMenu;
+    @BindView(R.id.right_tx_menu)
+    TextView rightMenu;
     private NewLeader leader;
+    private String year;
 
     /*
      * @ forever 在 17/5/17 下午2:28 创建
@@ -93,7 +95,7 @@ public class DanganListActivity extends BaseActivity {
         initHeadView();
         getLeaderInfo();
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setPrimaryColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
@@ -103,7 +105,7 @@ public class DanganListActivity extends BaseActivity {
             @Override
             public void onRefresh(final RefreshLayout freshlayout) {
                 freshlayout.finishRefresh(true);
-                getData(SPUtil.getString(Config.YEAR));
+                getData();
 
             }
         });
@@ -132,7 +134,7 @@ public class DanganListActivity extends BaseActivity {
                 MyActivity.startIntent(DanganListActivity.this);
             }
         });
-        getData(SPUtil.getString(Config.YEAR));
+        getData();
 
     }
 
@@ -146,12 +148,15 @@ public class DanganListActivity extends BaseActivity {
     }
 
     private void initHeadView() {
+
         tvTitle.setText("档案信息");
+        rightMenu.setText("切换年限");
+        rightMenu.setVisibility(View.VISIBLE);
     }
 
 
     List<Archive> list = new ArrayList<>();
-    public void getData(String year) {
+    public void getData() {
         NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(){
 
             @Override
@@ -176,14 +181,32 @@ public class DanganListActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.left_menu, R.id.right_menu})
+    @OnClick({R.id.left_menu, R.id.right_tx_menu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:
                 finish();
                 break;
-            case R.id.right_menu:
+            case R.id.right_tx_menu:
+                String[] words2 = new String[5];
+                words2[0] = "2016";
+                words2[1] = "2017";
+                words2[2] = "2018";
+                words2[3] = "2019";
+                words2[4] = "2020";
 
+                DialogUIUtils.showSingleChoose(DanganListActivity.this, "请选择年度", -1, words2, new DialogUIItemListener() {
+                    @Override
+                    public void onItemClick(CharSequence text, int position) {
+
+                        if (TextUtils.isEmpty(text)) {
+                            return;
+                        }
+                        year = text.toString();
+                        getData();
+
+                    }
+                }).show();
                 break;
         }
     }
@@ -228,7 +251,7 @@ public class DanganListActivity extends BaseActivity {
 
             Archive archive = list.get(position);
             NewPoor poor = archive.getPoor();
-
+            GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, poor.getPhoto(),iv_photo);
             NewBasic basic = archive.getBasic().isIshave() ?  archive.getBasic() : new NewBasic();
             if (TextUtils.isEmpty(poor.getFname())) {
                 tv_name.setText("户主：" + "");
