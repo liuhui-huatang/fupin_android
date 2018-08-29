@@ -12,8 +12,8 @@ public class BaseConfig {
     public static String downloadApp = apiUrl + "android/apkinfo.txt";
     public static String token = "1f71a242da5e86309b2b154b4c38335e";
     public static String banner_url = apiUrl +"index/message.cloumn/appdetails";
-    public static String ImageUrl = "http://192.168.1.6:88";
-    public static String uploadURl = ImageUrl + "/Resourceuploadimg.php"; ///Photouploadimg.php
+    public static String ImageUrl = "http://61.138.108.34:85";  //
+    public static String uploadURl = ImageUrl + "/Photouploadimg.php"; ///Resourceuploadimg.php
 
 
 }

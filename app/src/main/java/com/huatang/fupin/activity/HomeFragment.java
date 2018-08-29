@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
@@ -107,7 +108,7 @@ public class HomeFragment extends Fragment {
     }
     private void initView(View view) {
         title_bar = (RelativeLayout)view.findViewById(R.id.title_bar);
-        title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
+        //title_bar.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
         banner = (Banner) view.findViewById(R.id.banner_main);
         gridview = (GridView) view.findViewById(R.id.gridview);
 
@@ -200,13 +201,12 @@ public class HomeFragment extends Fragment {
     List<BannerColumn> bannerColumnList =new ArrayList<BannerColumn>();
     public void initBanner() {
         bannerColumnList.clear();
+        DialogUIUtils.showTie(getActivity(), "加载中...");
         NewHttpRequest.getHome(getActivity(), SPUtil.getString(Config.Type),new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
-
-
                 newBanner = JsonUtil.json2Bean(json, NewBanner.class);
-
+                DialogUIUtils.dismssTie();
                 bannerColumnList = newBanner.getShuffling_img();
                 List<String> images = new ArrayList<>();
                 List<String> titles = new ArrayList<>();
@@ -232,6 +232,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });

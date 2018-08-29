@@ -17,7 +17,7 @@ public class NewBasic implements Serializable {
     private String    main_pcause                ;
     private String    main_pcause_two            ;
     private String    main_pcause_three          ;
-   // private List<String>    secondary_pcause           ;
+    private String    secondary_pcause           ;
     private String    main_pcause_info           ;
     private String    secondary_pcause_info      ;
     private String    is_water_security          ;
@@ -27,12 +27,12 @@ public class NewBasic implements Serializable {
     private String    fuel_type                  ;
     private String    distance                   ;
     private String    is_poor_cooperation        ;
-    //private String    is_member                  ;
+    private String    is_member                  ;
     private String    is_relocation              ;
     private String    mine_state                 ;
     private String    placement_state            ;
     private String    settlement                 ;
-   // private String    mine_difficulty            ;
+    private String    mine_difficulty            ;
     private String    is_outschool               ;
     private String    town                       ;
     private String    town_name                  ;
@@ -45,7 +45,7 @@ public class NewBasic implements Serializable {
     private String    pcauseName                 ;
     private boolean   ishave                     ;
     private List<String>    main_path            ;
-  //  private List<String>    way_water_file       ;
+    private List<String>    way_water_file       ;
 
     public String getId() {
         return id;
@@ -360,5 +360,35 @@ public class NewBasic implements Serializable {
     }
 
 
+    public String getSecondary_pcause() {
+        return secondary_pcause;
+    }
 
+    public void setSecondary_pcause(String secondary_pcause) {
+        this.secondary_pcause = secondary_pcause;
+    }
+
+    public String getIs_member() {
+        return is_member;
+    }
+
+    public void setIs_member(String is_member) {
+        this.is_member = is_member;
+    }
+
+    public String getMine_difficulty() {
+        return mine_difficulty;
+    }
+
+    public void setMine_difficulty(String mine_difficulty) {
+        this.mine_difficulty = mine_difficulty;
+    }
+
+    public List<String> getWay_water_file() {
+        return way_water_file;
+    }
+
+    public void setWay_water_file(List<String> way_water_file) {
+        this.way_water_file = way_water_file;
+    }
 }

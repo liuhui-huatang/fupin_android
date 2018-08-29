@@ -3,8 +3,7 @@ package com.huatang.fupin.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.alibaba.fastjson.JSON;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,15 +18,8 @@ import java.util.List;
 public class JsonUtil {
 
     public static <T> T json2Bean(String result, Class<T> clz) {
-        Gson gson = new Gson();
-        try {
-            return gson.fromJson(result, clz);
-        } catch (JsonSyntaxException exception) {
-            exception.printStackTrace();
-            Log.w("GSON Util", exception.toString());
-            MLog.e(exception.getMessage());
-        }
-        return null;
+
+        return JSON.parseObject(result, clz);
     }
 
 
@@ -75,17 +67,7 @@ public class JsonUtil {
      * @return
      */
     public static <T extends Object> T toList(String json, Class<?> clazz) {
-        List<Object> list = new ArrayList<>();
-        JSONArray array;
-        try {
-            array = new JSONArray(json);
-            for (int i = 0; i < array.length(); i++) {
-                list.add(json2Bean(array.getString(i), clazz));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            MLog.e(e.getMessage());
-        }
+        List<T> list = (List<T>) JSON.parseArray(json,clazz);
         return (T) list;
     }
     public static JSONObject arrayToJsonObject(String json){

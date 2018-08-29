@@ -3,6 +3,7 @@ package com.huatang.fupin.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -28,6 +30,7 @@ import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.SkinUtil;
+import com.huatang.fupin.utils.StringUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
@@ -36,6 +39,7 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +69,7 @@ public class BangFuListActivity extends BaseActivity {
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
     private int pageNo = 1;
+
 
 
     /*
@@ -131,12 +136,11 @@ public class BangFuListActivity extends BaseActivity {
                 BangFuInfoActivity.startIntent(BangFuListActivity.this, list.get(position));
             }
         });
-
         getData();
+
     }
 
     private void initHeadView() {
-
         rightMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.img_add));
         rightMenu.setVisibility(View.VISIBLE);
         tvTitle.setText("帮扶日志");
@@ -146,11 +150,14 @@ public class BangFuListActivity extends BaseActivity {
     List<NewSign> list = new ArrayList<>();
 
     public void getData() {
+
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getSignList(this,leader.getId(),String.valueOf(pageNo),new NewHttpRequest.MyCallBack(){
             @Override
             public void ok(String json) {
                 List<NewSign> signList = JsonUtil.toList(json, NewSign.class);
                 list.addAll(signList);
+                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
 
                     tvEmpty.setVisibility(View.GONE);
@@ -164,6 +171,7 @@ public class BangFuListActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -245,6 +253,7 @@ public class BangFuListActivity extends BaseActivity {
                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
             }else{
                 GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, leader.getLeader_photo(),iv_photo);
+                SPUtil.saveString(Config.HEAD_PHOTO,leader.getLeader_photo());
             }
 
             tv_title.setText(list.get(position).getSign_title());
@@ -255,7 +264,7 @@ public class BangFuListActivity extends BaseActivity {
 
             String images = list.get(position).getSign_imgs();
             if (!TextUtils.isEmpty(images)) {
-                String[] strings = images.split("##");
+                String[] strings = images.split(StringUtil.separator);
                 for (int i = 0; i < 8; i++) {
                     if (i < strings.length) {
                         if (!TextUtils.isEmpty(strings[i])) {

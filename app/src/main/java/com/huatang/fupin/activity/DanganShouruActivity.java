@@ -76,6 +76,9 @@ public class DanganShouruActivity extends BaseActivity {
         setContentView(R.layout.activity_dangansouru);
         ButterKnife.bind(this);
         archive = (Archive)getIntent().getSerializableExtra("archive");
+        if(archive == null){
+            return;
+        }
         tvTitle.setText("收支情况");
         initData();
     }
@@ -108,7 +111,7 @@ public class DanganShouruActivity extends BaseActivity {
     String year= SPUtil.getString(Config.YEAR);
     private void getData(String year) {
         values.clear();
-        MLog.d("getBasicRevenue==", getIntent().getStringExtra("basic_id"));
+//        MLog.d("getBasicRevenue==", getIntent().getStringExtra("basic_id"));
 
         NewRevenue revenue = archive.getReve();
                 if(revenue==null){

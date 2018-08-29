@@ -278,10 +278,12 @@ public class BangFuSignActivity extends BaseActivity {
 
     }
     public void selectBasic() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 poorList = JsonUtil.toList(json,NewPoor.class);
+                DialogUIUtils.dismssTie();
                 if (poorList == null || poorList.size() == 0) {
                     ToastUtil.show("没有帮扶户");
                     selectArea();
@@ -327,6 +329,7 @@ public class BangFuSignActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });
@@ -334,11 +337,12 @@ public class BangFuSignActivity extends BaseActivity {
 
 
     public void selectArea() {
-
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getVillageList(this, leader.getHelp_town_id(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 arealist = JsonUtil.toList(json, NewArea.class);
+                DialogUIUtils.dismssTie();
                 if (arealist == null || arealist.size() == 0) {
                     ToastUtil.show("没有查到村");
                     return;
@@ -380,16 +384,20 @@ public class BangFuSignActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-
+                DialogUIUtils.dismssTie();
+                ToastUtil.show(msg);
             }
         });
     }
 
 
     public void uploadSign(String title,String content) {
-        NewHttpRequest.addSign(this, leader, title, content, signType, signAddress, signVillage, signVillageId, signTown, signTownId, StringUtil.listToString(imagePathList,"##"),  String.valueOf(longitude), String.valueOf(latitude),poor, new NewHttpRequest.MyCallBack() {
+        DialogUIUtils.showTie(this, "加载中...");
+        NewHttpRequest.addSign(this, leader, title, content, signType, signAddress, signVillage, signVillageId, signTown, signTownId, StringUtil.listToString(imagePathList,StringUtil.separator),  String.valueOf(longitude), String.valueOf(latitude),poor, new NewHttpRequest.MyCallBack() {
+
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                 img = "";
                 imagePathList.clear();
                 ToastUtil.show("签到成功");
@@ -398,6 +406,7 @@ public class BangFuSignActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
 
@@ -563,12 +572,15 @@ public class BangFuSignActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show("上传成功");
-                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
-                imagePathList.add(photoUrl);
+                String url = JsonUtil.getStringFromArray(json,"url");
+                String photoUrl = BaseConfig.ImageUrl + url;
+                imagePathList.add(url);
                 setImageShow();
 
             }
@@ -595,7 +607,7 @@ public class BangFuSignActivity extends BaseActivity {
         }
         for (int i = 0; i < imagePathList.size(); i++) {
 
-            GlideUtils.displayHome(imageViewList.get(i), imagePathList.get(i));
+            GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl+imagePathList.get(i));
             imageViewList.get(i).setVisibility(View.VISIBLE);
         }
     }

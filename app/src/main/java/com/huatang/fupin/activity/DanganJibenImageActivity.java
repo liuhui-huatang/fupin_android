@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -211,9 +212,11 @@ public class DanganJibenImageActivity extends BaseActivity {
 
 
     public void delImg(final int index){
+        DialogUIUtils.showTie(this, "加载中...");
         HttpRequest.delMainPathImg(this, bean.getId(), imagePathList.get(index), new HttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show("删除成功");
                 imagePathList.remove(index);
                 setImageShow();
@@ -244,12 +247,15 @@ public class DanganJibenImageActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
+        DialogUIUtils.showTie(this, "加载中...");
         HttpRequest.upLoadImg(this, path, new HttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
+
                 HttpRequest.uploadFupinImg(DanganJibenImageActivity.this, bean.getId(), BaseConfig.apiUrl + json, new HttpRequest.MyCallBack() {
                     @Override
                     public void ok(String json) {
+                        DialogUIUtils.dismssTie();
                         ToastUtil.show("上传成功");
                         MLog.e("上传成功：" + json);
                         imagePathList.add(json);

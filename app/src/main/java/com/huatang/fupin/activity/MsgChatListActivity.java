@@ -15,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewChat;
 import com.huatang.fupin.bean.NewLeader;
@@ -81,12 +83,13 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
         }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
             leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
         }
-
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getChatMsgList(this, leader.leader_phone , new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
 
                     list = JsonUtil.toList(json, NewChat.class);
+                    DialogUIUtils.dismssTie();
                     if(list.size() > 0){
                         myAdapter.notifyDataSetChanged();
                         listview.setVisibility(View.VISIBLE);
@@ -208,8 +211,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
 
                 }
             });
-            String path = chat.getPush_photo();
-                    //BaseConfig.ImageUrl + chat.getPush_leader_photo();
+            String path = BaseConfig.ImageUrl + chat.getPush_photo();
 
             GlideUtils.LoadCircleImageWithoutBorderColor(this.mContext,path,item_photo);
             return convertView;
@@ -226,15 +228,19 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                DialogUIUtils.showTie(mContext, "加载中...");
                 NewHttpRequest.deleteGroup( (Activity)mContext,leader.getLeader_phone(),chat.getId(),new NewHttpRequest.MyCallBack(){
 
                     @Override
                     public void ok(String json) {
+                        DialogUIUtils.dismssTie();
                         ToastUtil.show("删除成功");
                         initData();
                     }
                     @Override
                     public void no(String msg) {
+
+                        DialogUIUtils.dismssTie();
                         ToastUtil.show(msg);
                     }
                 });

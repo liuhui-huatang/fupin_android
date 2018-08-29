@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <include layout="@layout/new_top"/>
 
@@ -26,6 +27,10 @@
 
     </ListView>
 
+
+
+    </LinearLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     <TextView
         android:id="@+id/tv_empty"
         android:layout_width="250dp"
@@ -36,8 +41,6 @@
         android:background="@mipmap/img_empty"
         android:gravity="center"
         android:visibility="gone" />
-    </LinearLayout>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
 </RelativeLayout>

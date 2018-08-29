@@ -23,10 +23,10 @@ public class Info implements Serializable {
     private String fruit_area;
     private String grass_area;
     private String water_surface_area;
-    //private String transport;
-  //  private String vehicle;
-  //  private String electric;
-  //  private String breeding;
+    private String transport;
+    private String vehicle;
+    private String electric;
+    private String breeding;
     private List<String> house_photo;
     private List<String> resource_photo;
     private List<String> transport_photo;
@@ -234,7 +234,37 @@ public class Info implements Serializable {
         this.electric_photo = electric_photo;
     }
 
+    public String getTransport() {
+        return transport;
+    }
 
+    public void setTransport(String transport) {
+        this.transport = transport;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getElectric() {
+        return electric;
+    }
+
+    public void setElectric(String electric) {
+        this.electric = electric;
+    }
+
+    public String getBreeding() {
+        return breeding;
+    }
+
+    public void setBreeding(String breeding) {
+        this.breeding = breeding;
+    }
 
     public List<String> getBreeding_photo() {
         return breeding_photo;

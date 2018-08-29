@@ -30,6 +30,7 @@ import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.ToastUtil;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,9 +98,8 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData() {
+        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR))?   String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
         getArchive();
-
-
     }
 
     private void initHeadView() {
@@ -112,36 +112,35 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
         rightMenu.setOnClickListener(this);
     }
     private void getArchive(){
-       // year = SPUtil.getString(Config.YEAR);
         NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
         if(poor != null ){
+            DialogUIUtils.showTie(this, "加载中...");
             NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(){
-
                 @Override
                 public void ok(String json) {
 
                     archive = JsonUtil.json2Bean(json,Archive.class);
+                    DialogUIUtils.dismssTie();
                     if(archive == null){
                         return;
                     }
                     initView();
                 }
-
                 @Override
                 public void no(String msg) {
+                    DialogUIUtils.dismssTie();
                     ToastUtil.show(msg);
-
                 }
             });
         }else{
             ToastUtil.show("系统出错了，请重新登录");
         }
-
     }
 
     private void initView() {
         poor = archive.getPoor();
         pingjia_layout.setVisibility(View.VISIBLE);
+        pingjia_layout.setOnClickListener(this);
         GlideUtils.LoadCircleImageWithoutBorderColor(this, poor.getPhoto(),iv_photo);
         poor_dangan_fcard.setText(poor.getFcard());
         poor_dangan_name.setText(poor.getFname());
@@ -149,7 +148,6 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
         if(archive.getBasic() != null && archive.getBasic().isIshave()){
             poor_dangan_year.setText(archive.getBasic().getYear());
         }
-
         jiben_layout.setOnClickListener(this);
         List<NewFamily> families = archive.getFamily();
         if(families != null && families.size()>0){
@@ -236,7 +234,7 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
                             return;
                         }
                         year = text.toString();
-                       // SPUtil.saveString("year",year);
+                        SPUtil.saveString("year",year);
                         getArchive();
 
                     }
@@ -265,6 +263,7 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.pingjia_layout:
                 DanganGanbuActivity.startIntent(this, archive);
+                break;
         }
     }
     public static void startIntent(Activity activity) {

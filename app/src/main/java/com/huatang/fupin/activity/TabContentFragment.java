@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.bean.NewColumn;
@@ -111,11 +112,13 @@ public class TabContentFragment extends Fragment {
             ToastUtil.show("没有更多数据了");
             return;
         }
+        DialogUIUtils.showTie(getActivity(), "加载中...");
         NewHttpRequest.getNewsWithType(getActivity(),type,String.valueOf(load),new NewHttpRequest.MyCallBack(){
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
+                DialogUIUtils.dismssTie();
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
                     load=-1;
@@ -136,6 +139,7 @@ public class TabContentFragment extends Fragment {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
@@ -296,11 +297,13 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
      * @param type
      */
     private void login(final String phone, final String pwd,final String type) {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.login(NewLoginActivity.this, phone, pwd,type, new NewHttpRequest.MyCallBack() {
 
 
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show("登录成功！");
                 SPUtil.saveString(Config.Type,type);
                 SPUtil.saveString(Config.PHONE,phone);
@@ -318,6 +321,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
 
                     NewPoor poor = JsonUtil.json2Bean(json, NewPoor.class);
                     SPUtil.saveString(Config.TOKEN,poor.getToken());
+                    SPUtil.saveString(Config.FCARD,poor.getFcard());
                     try {
 
                         SPUtil.saveObject(Config.PENKUNHU_KEY,poor);
@@ -361,6 +365,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });

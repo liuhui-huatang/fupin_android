@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.AsyncListUtil;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -29,6 +31,7 @@ import com.huatang.fupin.utils.ImageUtil;
 import com.huatang.fupin.utils.JsonUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.StringUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.UploadUtils;
 import com.huatang.fupin.view.PhotoViewPager;
@@ -38,6 +41,7 @@ import com.youth.banner.listener.OnBannerListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,11 +67,13 @@ public class ImageViewPageActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.right_tx_menu)
     TextView rightMenu;
-    private List photoList;
+    private List<String> photoList;
     private int currentPosition = 0;
     private int size =0;
     private MyImageAdapter myImageAdapter;
     private String from;
+    private String fcard;
+    private String year;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +82,8 @@ public class ImageViewPageActivity extends BaseActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         from = intent.getStringExtra("from");
+        fcard = intent.getStringExtra("fcard");
+        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR))?   String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
         photoList = (List<String>)intent.getSerializableExtra("photos");
         initHeadView();
         size = photoList.size();
@@ -118,9 +126,7 @@ public class ImageViewPageActivity extends BaseActivity {
                 break;
             case R.id.delete_photo:
                 photoList.remove(currentPosition);
-                myImageAdapter.notifyDataSetChanged();
-                size = photoList.size();
-                mTvImageCount.setText(currentPosition+1 + "/" + size);
+                saveImage();
                 break;
         }
     }
@@ -153,16 +159,40 @@ public class ImageViewPageActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                ToastUtil.show("修改成功");
+                DialogUIUtils.dismssTie();
+                ToastUtil.show("图片上传成功");
                 String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
                 //调用一个更新到数据库的接口
-                photoList.add(photoUrl);
-                myImageAdapter.notifyDataSetChanged();
-                size = photoList.size();
-                mTvImageCount.setText(currentPosition+1 + "/" + size);
+                photoList.add(JsonUtil.getStringFromArray(json,"url"));
+                saveImage();
+
+
+            }
+        });
+    }
+    public void  saveImage(){
+        myImageAdapter.notifyDataSetChanged();
+        size = photoList.size();
+        mTvImageCount.setText(currentPosition+1 + "/" + size);
+        DialogUIUtils.showTie(this, "加载中...");
+        NewHttpRequest.editPoorPhotoWithFcard(this, fcard, year, from, StringUtil.listToString(photoList, "###"), new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                DialogUIUtils.dismssTie();
+                ToastUtil.show("图片编辑成功");
+                Intent intent = new Intent();
+                intent.putExtra("photoList", (Serializable) photoList);
+                setResult(RESULT_OK,intent);
+            }
+
+            @Override
+            public void no(String msg) {
+                DialogUIUtils.dismssTie();
+                ToastUtil.show(msg);
 
             }
         });
@@ -185,16 +215,17 @@ public class ImageViewPageActivity extends BaseActivity {
     public class MyImageAdapter extends PagerAdapter {
         private List<String> imageUrls;
         private AppCompatActivity activity;
-        private List<View>viewList;
+        private List<View>viewList ;
 
         public MyImageAdapter(List<String> imageUrls, AppCompatActivity activity) {
             this.imageUrls = imageUrls;
             this.activity = activity;
+
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            String url = imageUrls.get(position);
+            String url = BaseConfig.ImageUrl + imageUrls.get(position);
             PhotoView photoView = new PhotoView(activity);
             GlideUtils.displayUrl(photoView,url,R.mipmap.news_default_img);
             container.addView(photoView);
@@ -204,7 +235,10 @@ public class ImageViewPageActivity extends BaseActivity {
                     activity.finish();
                 }
             });
-            viewList = new ArrayList<>() ;
+            if(viewList == null ){
+                viewList = new ArrayList<>() ;
+            }
+           //
             viewList.add(photoView);
             return photoView;
         }
@@ -226,22 +260,16 @@ public class ImageViewPageActivity extends BaseActivity {
 
         @Override
         public int getItemPosition(Object object) {
-            if (viewList.contains((View) object)) {
-                // 如果当前 item 未被 remove，则返回 item 的真实 position
-                Log.e("view is contains", true + "");
-                return viewList.indexOf((View) object);
-            } else {
-                // 否则返回状态值 POSITION_NONE
-                Log.e("view is contains", false + "");
+
                 return POSITION_NONE;
-            }
+
         }
     }
-    public static void startIntent(Activity activity,List<String> photoList,String from) {
+    public static void startIntent(Activity activity,List<String> photoList,int from,String fcard) {
         Intent it = new Intent(activity, ImageViewPageActivity.class);
-        it.putExtra("from",from);
-        //it.putStringArrayListExtra("photos",  (ArrayList<String>) photoList);
+        it.putExtra("from",String.valueOf(from));
         it.putExtra("photos", (Serializable) photoList);
-        activity.startActivity(it);
+        it.putExtra("fcard",fcard);
+        activity.startActivityForResult(it,Integer.valueOf(from));
     }
 }

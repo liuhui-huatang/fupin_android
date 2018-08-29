@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
@@ -139,11 +140,12 @@ public class MsgPushActivity extends BaseActivity {
     List<NewPushMsg> list = new ArrayList<>();
 
     public void getData() {
-
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getSystemMsg(this, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 list = JsonUtil.toList(json, NewPushMsg.class);
+                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
                     listview.setVisibility(View.VISIBLE);
                     tvEmpty.setVisibility(View.GONE);

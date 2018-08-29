@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.NewBasic;
 import com.huatang.fupin.bean.NewPoor;
@@ -77,6 +78,7 @@ public class DanganBasciActivity extends BaseActivity implements View.OnClickLis
     TextView	tv_other ;
     private Archive archive;
     private NewBasic basic;
+    private String fcard;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +86,11 @@ public class DanganBasciActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_dangan_basic);
         ButterKnife.bind(this);
         archive = (Archive) getIntent().getSerializableExtra("archive");
+        if(archive == null){
+            return;
+        }
         basic = archive.getBasic()!= null ? archive.getBasic() : new NewBasic();
+        fcard = archive !=null ? archive.getPoor().getFcard() : "" ;
         tvTitle.setText("基本信息");
         initData();
     }
@@ -134,15 +140,15 @@ public class DanganBasciActivity extends BaseActivity implements View.OnClickLis
         tv_anzhi_place.setText(basic.getPlacement_state());
         tv_join_hezuoshe.setText(basic.getIs_poor_cooperation());
         tv_chuoxue.setText(basic.getIs_outschool());
-       // tv_banqian_question.setText(basic.getMine_difficulty());
+        tv_banqian_question.setText(basic.getMine_difficulty());
         tv_family_num.setText(basic.getFamily_num());
         tv_family_cunzai.setText(basic.getFamily_state());
         tv_water_way.setText(basic.getWay_water());
-        //tv_water_photo.setText(basic.getWay_water_file().size() >0 ? "查看>>" :"未录入");
-        tv_water_photo.setOnClickListener(this);
+        tv_water_photo.setText(basic.getWay_water_file().size() >0 ? "查看>>" :"未录入");
+        //tv_water_photo.setOnClickListener(this);
         tv_main_info.setText(basic.getMain_pcause_info());
         tv_zhipin_imgs .setText(basic.getMain_path().size() > 0 ? "查看>>" :"未录入");
-        tv_main_info.setOnClickListener(this);
+       // tv_main_info.setOnClickListener(this);
         tv_other.setText(basic.getSecondary_pcause_info());
 
 
@@ -229,17 +235,39 @@ public class DanganBasciActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.tv_water_photo:
-               // List photos = basic.getWay_water_file();
+                List photos = basic.getWay_water_file();
+                if(photos!=null && photos.size()>0){
+                    ImageViewPageActivity.startIntent(this,photos,Config.DANGAN_WATER,fcard);
+                }
                 break;
             case R.id.tv_zhipin_imgs:
                 List<String> imgs = basic.getMain_path();
                 if(imgs!=null && imgs.size()>0){
-                    ImageViewPageActivity.startIntent(this,imgs,"");
+                    ImageViewPageActivity.startIntent(this,imgs, Config.DANGAN_POOR_CAUSE,fcard);
                 }
                 break;
 
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            List<String> photolist = (List<String>) data.getSerializableExtra("photoList");
+            if(requestCode == Config.DANGAN_WATER ){
+                basic.setWay_water_file(photolist);
+
+            }else if(requestCode == Config.DANGAN_POOR_CAUSE){
+                basic.setMain_path(photolist);
+
+            }
+
+        }
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

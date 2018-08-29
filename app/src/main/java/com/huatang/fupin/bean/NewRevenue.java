@@ -27,7 +27,7 @@ public class NewRevenue implements Serializable {
     private String allyear_income;
     private String net_income;
     private String per_capita;
-    private List<String> onetwo;
+    private String onetwo;
     private String enterprise;
     private String enterprise_fund;
     private String enterprise_time;
@@ -232,11 +232,11 @@ public class NewRevenue implements Serializable {
         this.per_capita = per_capita;
     }
 
-    public List<String> getOnetwo() {
+    public String getOnetwo() {
         return onetwo;
     }
 
-    public void setOnetwo(List<String> onetwo) {
+    public void setOnetwo(String onetwo) {
         this.onetwo = onetwo;
     }
 

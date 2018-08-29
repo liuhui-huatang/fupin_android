@@ -3,6 +3,7 @@ package com.huatang.fupin.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.Fund;
@@ -44,6 +46,8 @@ import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -117,7 +121,7 @@ public class DanganListNewActivity extends BaseActivity {
 
         adapter= new Adapter(this);
         listview.setAdapter(adapter);
-
+        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR))?   String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
 
         //条目点击事件
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -135,7 +139,8 @@ public class DanganListNewActivity extends BaseActivity {
                 MyActivity.startIntent(DanganListNewActivity.this);
             }
         });
-        getData();
+    getData();
+
 
     }
 
@@ -158,28 +163,43 @@ public class DanganListNewActivity extends BaseActivity {
 
     List<Archive> list = new ArrayList<>();
     public void getData() {
-        NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(){
+                DialogUIUtils.showTie(this, "加载中...");
+                NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(){
 
-            @Override
-            public void ok(String json) {
-                list = JsonUtil.toList(json, Archive.class);
-                if (list.size() > 0) {
-                    tvEmpty.setVisibility(View.GONE);
-                    listview.setVisibility(View.VISIBLE);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    tvEmpty.setVisibility(View.VISIBLE);
-                    listview.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void ok(String json) {
+                        //  System.out.println("---------------------"+new Date()+"-----------------------");
+                        list = JsonUtil.toList(json, Archive.class);
+                        //   System.out.println("---------------------"+new Date()+"-----------------------");
+                        DialogUIUtils.dismssTie();
+                        if (list.size() > 0) {
+                            tvEmpty.setVisibility(View.GONE);
+                            listview.setVisibility(View.VISIBLE);
+                            adapter.notifyDataSetChanged();
 
+                        } else {
+                            tvEmpty.setVisibility(View.VISIBLE);
+                            listview.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    @Override
+                    public void no(String msg) {
+                        DialogUIUtils.dismssTie();
+                        ToastUtil.show(msg);
+
+                    }
+                });
             }
 
-            @Override
-            public void no(String msg) {
-                ToastUtil.show(msg);
 
-            }
-        });
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+       // list.clear();
+        //getData();
     }
 
     @OnClick({R.id.left_menu, R.id.right_tx_menu})
@@ -204,6 +224,7 @@ public class DanganListNewActivity extends BaseActivity {
                             return;
                         }
                         year = text.toString();
+                        SPUtil.saveString(Config.YEAR,year);
                         getData();
 
                     }
@@ -239,6 +260,7 @@ public class DanganListNewActivity extends BaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final ViewHolder holder;
+            //System.out.println("---------------------"+new Date()+"-----------------------");
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = View.inflate(mContext, R.layout.item_new_dangan, null);
@@ -247,9 +269,9 @@ public class DanganListNewActivity extends BaseActivity {
                 holder.tv_name = convertView.findViewById(R.id.tv_name);
                 holder.tv_phone = convertView.findViewById(R.id.tv_phone);
                 holder.iv_show_detail = convertView.findViewById(R.id.iv_show_detail);
-                holder.dangan_detail_layout = convertView.findViewById(R.id.dangan_detail_layout);
                 holder.dangan_info_layout = convertView.findViewById(R.id.dangan_info_layout);
 
+                holder.dangan_detail_layout = convertView.findViewById(R.id.dangan_detail_layout);
                 holder.jiben_layout = convertView.findViewById(R.id.jiben_layout);
                 holder.family_layout = convertView.findViewById(R.id.family_layout);
                 holder.shenghuo_layout = convertView.findViewById(R.id.shenghuo_layout);
@@ -267,7 +289,7 @@ public class DanganListNewActivity extends BaseActivity {
             Archive archive = list.get(position);
             if(archive !=null ){
                 NewPoor poor = archive.getPoor();
-                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, poor.getPhoto(),holder.iv_photo);
+                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, BaseConfig.ImageUrl+poor.getPhoto(),holder.iv_photo);
                 holder.tv_name.setText(  poor.getFname());
                 holder.tv_address.setText(  poor.getVillage_name());
                 holder.tv_phone.setText(poor.getFphone());
@@ -278,11 +300,13 @@ public class DanganListNewActivity extends BaseActivity {
                             holder.dangan_detail_layout.setVisibility(View.GONE);
                             holder.iv_show_detail.setImageResource(R.mipmap.icon_common_right);
                         }else{
+
                             holder.dangan_detail_layout.setVisibility(View.VISIBLE);
                             holder.iv_show_detail.setImageResource(R.mipmap.icon_common_down);
                         }
                     }
                 });
+
                 holder.jiben_layout.setOnClickListener(this);
                 List<NewFamily> families = archive.getFamily();
                 if(families != null && families.size()>0){
@@ -329,7 +353,7 @@ public class DanganListNewActivity extends BaseActivity {
                 }
                 holder.zijin_layout.setOnClickListener(this);
             }
-            holder.pingjia_layout.setOnClickListener(this);
+           // System.out.println("---------------------"+new Date()+"-----------------------");
             return convertView;
         }
 

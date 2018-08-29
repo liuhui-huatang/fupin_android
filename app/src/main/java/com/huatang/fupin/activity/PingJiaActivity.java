@@ -16,6 +16,7 @@ import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.http.NewHttpRequest;
+import com.huatang.fupin.utils.GlideUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,7 +78,7 @@ public class PingJiaActivity extends BaseActivity {
         tv_phone.setText(leader.getLeader_phone());
         tv_town.setText(TextUtils.isEmpty(leader.getHelp_town()) ? "" :"包连乡镇:"+leader.getHelp_town());
         //tv_poor_num.setText(leader.get);
-        // GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getPhoto(),iv_photo);
+         GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getLeader_phone(),ivPhoto);
 
     }
 

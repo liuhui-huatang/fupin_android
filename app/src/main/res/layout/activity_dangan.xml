@@ -26,7 +26,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:visibility="gone" />
+                 />
 
             <TextView
                 android:id="@+id/tv_empty"
@@ -35,6 +35,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="当前年度没有帮扶户信息，请切换其他年度，再查看户信息。【去切换年度】" />
         </LinearLayout>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

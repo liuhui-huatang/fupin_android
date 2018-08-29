@@ -46,6 +46,9 @@ public class DanganPolicyActivity extends BaseActivity {
         setContentView(R.layout.activity_dangan_policy);
         ButterKnife.bind(this);
         archive = (Archive) getIntent().getSerializableExtra("archive");
+        if(archive == null){
+            return;
+        }
         tvTitle.setText("帮扶政策信息");
         policyList = archive.getPolicy()==null ? new ArrayList<Policy>() :  archive.getPolicy();
         initData();

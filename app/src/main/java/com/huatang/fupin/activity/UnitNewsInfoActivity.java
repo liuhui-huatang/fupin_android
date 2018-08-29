@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.bean.Cloumn;
@@ -65,10 +66,12 @@ public class UnitNewsInfoActivity extends BaseActivity {
     }
 
     private void initData() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getNewsInfoWithId(this, column.getId(), new NewHttpRequest.HtmlCallBack() {
 
             @Override
             public void callback(String json) {
+                DialogUIUtils.dismssTie();
                 webview.loadDataWithBaseURL(null,json,"text/html","utf-8",null);
             }
         });

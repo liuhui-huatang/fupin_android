@@ -284,7 +284,7 @@ public class GlideUtils {
                                                          ImageView imageview){
         Glide.with(mContext).load(path).centerCrop().placeholder(R.mipmap.header_default)
                 .transform(new GlideCircleTransform(mContext))
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageview);
+                .into(imageview);
     }
 
 

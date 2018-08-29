@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
@@ -78,6 +79,9 @@ public class DanganGanbuActivity extends BaseActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         Archive archive = (Archive)intent.getSerializableExtra("archive");
+        if(archive == null){
+            return;
+        }
         poor = archive == null ? (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY): archive.getPoor();
         initHeadView();
         getData();
@@ -91,11 +95,12 @@ public class DanganGanbuActivity extends BaseActivity {
     List<NewLeader> list = new ArrayList<>();
 
     public void getData() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getLeaderByPoorFcard(this,poor.getFcard(),new NewHttpRequest.MyCallBack(){
             @Override
             public void ok(String json) {
                 list = JsonUtil.toList(json, NewLeader.class);
-
+                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     lvLeader.setVisibility(View.VISIBLE);
@@ -108,6 +113,7 @@ public class DanganGanbuActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -143,7 +149,7 @@ public class DanganGanbuActivity extends BaseActivity {
                 TextView tv_pingjia = ViewHolderUtil.get(convertView,R.id.pingjia_btn);
 
                 final NewLeader leader = list.get(position);
-               // GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getPhoto(),iv_photo);
+                GlideUtils.LoadCircleImageWithoutBorderColor(DanganGanbuActivity.this, leader.getLeader_photo(),iv_photo);
                 tv_name.setText(leader.getLeader_name());
 
                 tv_zhiwu.setText(leader.getLeader_unit());

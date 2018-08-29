@@ -21,7 +21,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100dp"
-        android:background="@mipmap/img_empty"
+       android:text="当前年度没有帮扶户信息，请切换其他年度，再查看户信息。【去切换年度】"
         android:gravity="center"
         android:visibility="gone" />
 </LinearLayout>

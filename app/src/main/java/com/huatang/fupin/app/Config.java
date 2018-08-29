@@ -76,5 +76,16 @@ public class Config {
     };
 
     //1扶贫要闻 2公示公告 / 三务公开 3典型引路 4扶贫行动 5群众活动
+//0 致贫原因1 饮水方式2 房屋佐证图片3 资源资产佐证图片4运输车辆图片5 交通工具图片6 家用电器图片7 养殖图片
 
+    public final static int DANGAN_POOR_CAUSE = 0;
+    public final static int DANGAN_WATER = 1;
+    public final static int DANGAN_HOUSE = 2;
+    public final static int DANGAN_RESOUCE = 3;
+    public final static int DANGAN_TRANSPORT = 4;
+    public final static int DANGAN_VERICH = 5;
+    public final static int DANGAN_ELECTOR = 6;
+    public final static int DANGAN_BLEED = 7;
+
+    public static final String FCARD = "fcard";
 }

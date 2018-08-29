@@ -39,7 +39,7 @@ public class NewHttpRequest {
         return httpParams;
     }
     private static void executePost(Activity context, String url, HttpParams params, NewHttpRequest.MyCallBack callback){
-        DialogUIUtils.showTie(context, "加载中...");
+
         OkHttpUtils.post(BaseConfig.apiUrl+url)
                 .headers(Config.TOKEN, SPUtil.getString(Config.TOKEN))
                 .tag(context)
@@ -74,7 +74,7 @@ public class NewHttpRequest {
 
         @Override
         public void onResponse(boolean isFromCache, String s, Request request, @Nullable Response response) {
-            DialogUIUtils.dismssTie();
+
             String code = JsonUtil.getString(s, "code");
             String data = JsonUtil.getString(s, "data");
             String msg = JsonUtil.getString(s, "info");
@@ -352,7 +352,7 @@ public class NewHttpRequest {
         httpParams = getHttpParams();
         httpParams.put("fcard", fcard);
         httpParams.put("year",year);
-        executePost(context, "archives/getArchivesWithFcard",httpParams, callback);
+        executePost(context, "archives/getArchivesWithPoorFcard",httpParams, callback);
 
     }
     //通过Poor查找帮扶干部信息
@@ -379,5 +379,24 @@ public class NewHttpRequest {
         httpParams = getHttpParams();
         httpParams.put("chat_id", chat_id);
         executePost(context, "msg/getchatById",httpParams, callBack);
+    }
+    public static void editPoorPhotoWithFcard(Activity context,String fcard,String year,String type,String imgPath,MyCallBack callback){
+        httpParams = getHttpParams();
+        httpParams.put("fcard", fcard);
+        httpParams.put("year", year);
+        httpParams.put("type", type);
+        httpParams.put("imgPath", imgPath);
+        executePost(context, "archives/editPoorPhotoWithFcard",httpParams, callback);
+
+    }
+    public static void uploadUserPhoto(Activity context,String fcard ,String phone,String type,String imgPath,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("fcard",fcard);
+        httpParams.put("phone",phone);
+        httpParams.put("type",type);
+        httpParams.put("imgPath",imgPath);
+        executePost(context,"archives/uploadUserPhoto",httpParams,callBack);
+
+
     }
 }

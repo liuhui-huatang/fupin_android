@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -226,14 +227,17 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
     }
 
     private void refreshChat() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getchatById(this, chat.getId(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 chat = JsonUtil.json2Bean(json,NewChat.class);
+                DialogUIUtils.dismssTie();
                 tile.setText(chat.getTitle() + "(" + chat.getLeader_num() + "人)");
             }
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -257,9 +261,11 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
     }
 
     public void sendMsg() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.sendChatMsg(this, chat.getId(), chat.getTitle(), content, leader, sendPhoto, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                 etMsg.setText("");
                 btSend.setText("图片");
                 bt_send_type = "photo";
@@ -272,6 +278,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -282,10 +289,12 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
     public void getData() {
         getInitLeader();
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getChatMsg(this, chat.getId(), String.valueOf(pageNo), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 List<NewChat> result = JsonUtil.toList(json, NewChat.class);
+                DialogUIUtils.dismssTie();
                 if(result ==null || result.size() == 0){
                     ToastUtil.show("没有更多数据了");
                     return;
@@ -298,6 +307,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -474,13 +484,16 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         /**
          * 图片上传服务器
          */
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show("发送成功");
                 SPUtil.saveString("photo", JsonUtil.getStringFromArray(json,"url"));
-                sendPhoto = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
-                //GlideUtils.displayHome(ivPhoto, photoUrl);
+                sendPhoto = JsonUtil.getStringFromArray(json,"url");
+                String photoUrl = BaseConfig.ImageUrl +sendPhoto;
+                        //GlideUtils.displayHome(ivPhoto, photoUrl);
                 sendMsg();
 
             }

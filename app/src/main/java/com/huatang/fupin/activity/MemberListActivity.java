@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
@@ -75,10 +76,12 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
         leader_list = new ArrayList<>();
         leaderAdapter = new Adapter(this);
         listview.setAdapter(leaderAdapter);
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getChatMember(this, chat.getId(), new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
                 leader_list = JsonUtil.toList(json,NewLeader.class);
+                DialogUIUtils.dismssTie();
                 if (leader_list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
@@ -92,6 +95,7 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -126,9 +130,11 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
     }
 
     private void updateChatMember() {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.addChatMember(this, chat.getId(), phones, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show("添加成功");
                 finish();
 
@@ -137,7 +143,8 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void no(String msg) {
-               ToastUtil.show(msg);
+                DialogUIUtils.dismssTie();
+                ToastUtil.show(msg);
             }
         });
     }

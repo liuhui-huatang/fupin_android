@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -114,17 +115,20 @@ public class UniteNewsActivity extends BaseActivity {
             ToastUtil.show("没有更多数据了");
             return;
         }
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getNewsWithType(this,type,String.valueOf(load),new NewHttpRequest.MyCallBack(){
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
+                DialogUIUtils.dismssTie();
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
                     load=-1;
                     return;
                 }
                 list.addAll(cloumns);
+                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     ggListview.setVisibility(View.VISIBLE);
@@ -139,6 +143,7 @@ public class UniteNewsActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
+import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewFuzeren;
 import com.huatang.fupin.bean.NewLeader;
@@ -79,7 +80,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     nameView.setVisibility(View.VISIBLE);
                     tv_phone.setVisibility(View.VISIBLE);
                     YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
-                    String youke_photo = TextUtils.isEmpty(youKe.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) :youKe.getPhoto();
+                    String youke_photo = TextUtils.isEmpty(youKe.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) :BaseConfig.ImageUrl+youKe.getPhoto();
                     GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),youke_photo,iv_photo);
                     SPUtil.saveString(Config.NAME,youKe.getName());
                     if(!TextUtils.isEmpty(youke_photo)){
@@ -96,7 +97,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case Config.ADMIN_KEY:
                 NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
                 nameView.setText(admin.leader_name);
-                String admin_photo = TextUtils.isEmpty(admin.getLeader_photo()) ? SPUtil.getString(Config.HEAD_PHOTO) : admin.getLeader_photo();
+                String admin_photo = TextUtils.isEmpty(admin.getLeader_photo()) ? SPUtil.getString(Config.HEAD_PHOTO) : BaseConfig.ImageUrl+admin.getLeader_photo();
                 SPUtil.saveString(Config.NAME,admin.getLeader_name());
                 if(!TextUtils.isEmpty(admin_photo)){
                     SPUtil.saveString(Config.HEAD_PHOTO,admin_photo);
@@ -109,11 +110,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
                 nameView.setText(leader.leader_name);
-                String leader_photo = TextUtils.isEmpty(leader.getLeader_photo()) ? SPUtil.getString(Config.HEAD_PHOTO) : leader.getLeader_photo();
+                String leader_photo = TextUtils.isEmpty(leader.getLeader_photo()) ? SPUtil.getString(Config.HEAD_PHOTO) : BaseConfig.ImageUrl+leader.getLeader_photo();
                 if(!TextUtils.isEmpty(leader_photo)){
                     SPUtil.saveString(Config.HEAD_PHOTO,leader_photo);
                 }
-                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),leader_photo ,iv_photo);
+                GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(), leader_photo ,iv_photo);
                 zhiWuView.setText(leader.getLeader_duty());
                 tv_naimanqi.setText(leader.getLeader_unit());
                 tv_town.setText(leader.getHelp_town());
@@ -123,7 +124,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
                 nameView.setText(poor.getFname());
                 SPUtil.saveString(Config.NAME,poor.getFname());
-                String poor_photo = TextUtils.isEmpty(poor.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) : poor.getPhoto();
+                String poor_photo = TextUtils.isEmpty(poor.getPhoto()) ? SPUtil.getString(Config.HEAD_PHOTO) :BaseConfig.ImageUrl+ poor.getPhoto();
                 GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),poor_photo,iv_photo);
                 if(TextUtils.isEmpty(poor_photo)){
                     SPUtil.saveString(Config.HEAD_PHOTO,poor_photo);

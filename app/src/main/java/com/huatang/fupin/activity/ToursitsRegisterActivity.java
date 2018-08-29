@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
@@ -123,9 +124,11 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
 
     }
     private void registerUser(final String phone, String password, String name) {
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.registerToursits(this, phone, password, name, new NewHttpRequest.MyCallBack() {
             @Override
             public void ok(String json) {
+                DialogUIUtils.dismssTie();
                  ToastUtil.show("注册成功");
                  String token = JsonUtil.getString(json,Config.TOKEN);
                  SPUtil.saveString(Config.TOKEN,token);
@@ -143,6 +146,7 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void no(String msg) {
+                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }

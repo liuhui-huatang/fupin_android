@@ -21,6 +21,7 @@ import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.ToastUtil;
 import com.huatang.fupin.utils.ViewHolderUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -142,7 +143,11 @@ public class BangFuInfoActivity extends BaseActivity {
             layoutImages.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageViewPageActivity.startIntent(BangFuInfoActivity.this,Arrays.asList(photos),"BangFuInfoActivity");
+                    Intent it = new Intent(BangFuInfoActivity.this, ImageViewPageActivity.class);
+                    it.putExtra("from","BangFuInfoActivity");
+                    it.putExtra("photos", (Serializable) Arrays.asList(photos));
+                    startActivity(it);
+
                 }
             });
         } else {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
@@ -110,7 +112,7 @@ public class MyInfoActivity extends BaseActivity {
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
                 }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,poor.getPhoto(),ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+poor.getPhoto(),ivPhoto);
                 }
                 rlZhiwu.setVisibility(View.GONE);
                 rlDanwei.setVisibility(View.GONE);
@@ -121,7 +123,7 @@ public class MyInfoActivity extends BaseActivity {
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
                 }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,admin.getLeader_photo(),ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+admin.getLeader_photo(),ivPhoto);
                 }
                 tvName.setText(admin.getLeader_name());
                 tvZhiwu.setText(admin.getLeader_duty());
@@ -134,7 +136,7 @@ public class MyInfoActivity extends BaseActivity {
                 if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
                 }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,leader.getLeader_photo(),ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+leader.getLeader_photo(),ivPhoto);
                 }
                 tvName.setText(leader.getLeader_name());
                 tvZhiwu.setText(leader.getLeader_duty());
@@ -161,7 +163,7 @@ public class MyInfoActivity extends BaseActivity {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
                 }else{
                     //tvName.setText(TextUtils.isEmpty(youKe.getName()) ? SPUtil.getString(Config.NAME):youKe.getName());
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,youKe.getPhoto(),ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+youKe.getPhoto(),ivPhoto);
                 }
 
                 rlZhiwu.setVisibility(View.GONE);
@@ -255,19 +257,61 @@ public class MyInfoActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-
+        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                ToastUtil.show("修改成功");
-                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
+                DialogUIUtils.dismssTie();
+                String url = JsonUtil.getStringFromArray(json,"url");
+                String photoUrl = BaseConfig.ImageUrl + url;
                 SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
                 GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
+                savePhoto(url);
             }
         });
 
 
     }
 
+    private void savePhoto(String url) {
+        String  type = "";
+        switch (SPUtil.getString(Config.Type)){
+            case Config.YOUKU_TYPE:
+                type = "0";
+                break;
+            case Config.PENKUNHU_TYPE:
+                type = "1";
+                break;
+            case Config.GANBU_TYPE:
+                type = "2";
+                break;
+            case Config.ADMIN_TYPE:
+                type = "3";
+                break;
 
+        }
+        NewHttpRequest.uploadUserPhoto(this, SPUtil.getString(Config.FCARD), SPUtil.getString(Config.PHONE), type, url, new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                DialogUIUtils.dismssTie();
+                ToastUtil.show("修改成功");
+
+            }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(RESULT_OK);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

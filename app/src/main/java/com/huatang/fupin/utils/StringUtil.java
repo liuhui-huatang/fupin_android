@@ -3,7 +3,7 @@ package com.huatang.fupin.utils;
 import java.util.List;
 
 public class StringUtil {
-
+      public final static String separator = "###";
 
     public static String listToString(List list, String separator) {
         StringBuilder sb = new StringBuilder();
