@@ -15,6 +15,7 @@ import com.dou361.dialogui.DialogUIUtils;
 import com.dou361.dialogui.listener.DialogUIItemListener;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.Fund;
@@ -44,8 +45,6 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
 
     @BindView(R.id.title_tx)
     TextView tvTitle;
-    @BindView(R.id.dangan_info_layout)
-    RelativeLayout dangan_info_layout;
 
     @BindView(R.id.dangan_detail_layout)
     LinearLayout dangan_detail_layout;
@@ -104,7 +103,6 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
 
     private void initHeadView() {
         tvTitle.setText("贫困户信息");
-        dangan_info_layout.setVisibility(View.GONE);
         dangan_detail_layout.setVisibility(View.VISIBLE);
         leftMenu.setOnClickListener(this);
         rightMenu.setText("切换年限");
@@ -114,13 +112,10 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
     private void getArchive(){
         NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
         if(poor != null ){
-            DialogUIUtils.showTie(this, "加载中...");
-            NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(){
+            NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(this){
                 @Override
                 public void ok(String json) {
-
                     archive = JsonUtil.json2Bean(json,Archive.class);
-                    DialogUIUtils.dismssTie();
                     if(archive == null){
                         return;
                     }
@@ -128,7 +123,6 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
                 }
                 @Override
                 public void no(String msg) {
-                    DialogUIUtils.dismssTie();
                     ToastUtil.show(msg);
                 }
             });
@@ -141,7 +135,12 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
         poor = archive.getPoor();
         pingjia_layout.setVisibility(View.VISIBLE);
         pingjia_layout.setOnClickListener(this);
-        GlideUtils.LoadCircleImageWithoutBorderColor(this, poor.getPhoto(),iv_photo);
+        if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
+            GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+        }else{
+            GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl+ poor.getPhoto(),iv_photo);
+        }
+
         poor_dangan_fcard.setText(poor.getFcard());
         poor_dangan_name.setText(poor.getFname());
         poor_dangan_address.setText(poor.getCity() +poor.getVillage_name());

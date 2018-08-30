@@ -221,18 +221,15 @@ public class PwdUpdateActivity extends BaseActivity implements View.OnClickListe
 
     }
     public void updatePwd(){
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.updatePwd(this, phone, pwd, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.updatePwd(this, phone, pwd, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("设置密码成功");
                 finish();
             }
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });

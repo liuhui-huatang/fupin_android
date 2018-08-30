@@ -159,11 +159,9 @@ public class ImageViewPageActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("图片上传成功");
                 String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
                 //调用一个更新到数据库的接口
@@ -178,20 +176,18 @@ public class ImageViewPageActivity extends BaseActivity {
         myImageAdapter.notifyDataSetChanged();
         size = photoList.size();
         mTvImageCount.setText(currentPosition+1 + "/" + size);
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.editPoorPhotoWithFcard(this, fcard, year, from, StringUtil.listToString(photoList, "###"), new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.editPoorPhotoWithFcard(this, fcard, year, from, StringUtil.listToString(photoList, "###"), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("图片编辑成功");
                 Intent intent = new Intent();
                 intent.putExtra("photoList", (Serializable) photoList);
+
                 setResult(RESULT_OK,intent);
             }
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }

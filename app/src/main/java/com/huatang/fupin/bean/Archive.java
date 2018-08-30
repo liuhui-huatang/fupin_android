@@ -1,5 +1,7 @@
 package com.huatang.fupin.bean;
 
+import android.view.View;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -67,5 +69,55 @@ public class Archive implements Serializable {
 
     public void setFamily(List<NewFamily> family) {
         this.family = family;
+    }
+
+
+    public int getFamilyVisible(){
+        if(family != null && family.size() >0){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+    public int getFundVisible(){
+        if(funds != null && funds.size() >0){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+    public int getPolicyVisible(){
+        if(policy != null && policy.size() >0){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+    public int getBasciVisible(){
+        if(basic != null && basic.isIshave() ){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+    public int getInfoVisible(){
+        if(info != null && info.isIshave() ){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
+    }
+    public int getReveVisible(){
+        if(reve != null && reve.isIshave()){
+            return View.VISIBLE;
+        }else{
+            return View.GONE;
+        }
+
     }
 }

@@ -76,12 +76,10 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
         leader_list = new ArrayList<>();
         leaderAdapter = new Adapter(this);
         listview.setAdapter(leaderAdapter);
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getChatMember(this, chat.getId(), new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.getChatMember(this, chat.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 leader_list = JsonUtil.toList(json,NewLeader.class);
-                DialogUIUtils.dismssTie();
                 if (leader_list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
@@ -95,7 +93,6 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -130,20 +127,19 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
     }
 
     private void updateChatMember() {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.addChatMember(this, chat.getId(), phones, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.addChatMember(this, chat.getId(), phones, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("添加成功");
                 finish();
+                Intent intent = new Intent();
+                intent.putExtra("num",leader_list.size());
+                setResult(RESULT_OK,intent);
 
-                setResult(RESULT_OK);
             }
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });

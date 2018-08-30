@@ -1,12 +1,14 @@
 package com.huatang.fupin.http;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.activity.DanganGanbuActivity;
+import com.huatang.fupin.activity.NewLoginActivity;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.NewLeader;
@@ -39,7 +41,7 @@ public class NewHttpRequest {
         return httpParams;
     }
     private static void executePost(Activity context, String url, HttpParams params, NewHttpRequest.MyCallBack callback){
-
+        DialogUIUtils.showTie(context, "加载中...");
         OkHttpUtils.post(BaseConfig.apiUrl+url)
                 .headers(Config.TOKEN, SPUtil.getString(Config.TOKEN))
                 .tag(context)
@@ -58,14 +60,29 @@ public class NewHttpRequest {
         params.clear();
 
     }
+    private static void executePost(Activity context, String url, HttpParams params, NewHttpRequest.UploadCallBack callback){
+        DialogUIUtils.showTie(context, "加载中...");
+        OkHttpUtils.post(url)
+                .headers(Config.TOKEN, SPUtil.getString(Config.TOKEN))
+                .tag(context)
+                .params(httpParams)
+                .execute(callback);
+        httpParams.clear();
 
+    }
 
 
 
     public static abstract class MyCallBack extends AbsCallback<String> {
-        public abstract void ok(String json);
+        public abstract void ok(String json) ;
 
         public abstract void no(String msg) ;
+
+        private Context mcontext;
+        public MyCallBack(){}
+        public MyCallBack(Context context ){
+            this.mcontext = context;
+        }
 
         @Override
         public String parseNetworkResponse(Response response) throws Exception {
@@ -74,7 +91,7 @@ public class NewHttpRequest {
 
         @Override
         public void onResponse(boolean isFromCache, String s, Request request, @Nullable Response response) {
-
+            DialogUIUtils.dismssTie();
             String code = JsonUtil.getString(s, "code");
             String data = JsonUtil.getString(s, "data");
             String msg = JsonUtil.getString(s, "info");
@@ -83,11 +100,10 @@ public class NewHttpRequest {
                 ok(data);
             } else {
                 if("30003".equals(code)){//token过期
-                    SPUtil.saveString(Config.TOKEN,"");
-                    SPUtil.saveString(Config.Type,"");
-
+                    SPUtil.logout();
+                    msg = "身份已失效，请重新登录";
+                    NewLoginActivity.startIntent((Activity) mcontext);
                 }
-                //ToastUtil.show(msg);
                 no(msg);
             }
 
@@ -118,8 +134,6 @@ public class NewHttpRequest {
         @Override
         public void onResponse(boolean isFromCache, String s, Request request, @Nullable Response response) {
             DialogUIUtils.dismssTie();
-
-
             MLog.e("onResponse_" +  s);
             callback(s);
         }
@@ -250,12 +264,7 @@ public class NewHttpRequest {
     public static void   uploadImage(Activity context,String file,UploadCallBack callback){
         httpParams = getHttpParams();
         httpParams.put("file",new File(file));
-        OkHttpUtils.post(BaseConfig.uploadURl)
-                .headers(Config.TOKEN, SPUtil.getString(Config.TOKEN))
-                .tag(context)
-                .params(httpParams)
-                .execute(callback);
-        httpParams.clear();
+        executePost(context,BaseConfig.uploadURl,httpParams,callback);
 
     }
     public static void deleteGroup(Activity context ,String leader_phone, String group_id, MyCallBack callback) {

@@ -141,13 +141,11 @@ public class MsgSendSearchActivity extends BaseActivity {
 
 
     public void getLeaderList(String text) {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.searchGanbuList(this,text,new NewHttpRequest.MyCallBack(){
+        NewHttpRequest.searchGanbuList(this,text,new NewHttpRequest.MyCallBack(this){
 
             @Override
             public void ok(String json) {
                 leader_list = JsonUtil.toList(json,NewLeader.class);
-                DialogUIUtils.dismssTie();
                     if(leader_list.size() > 0){
                         tvEmpty.setVisibility(View.GONE);
                         listview.setVisibility(View.VISIBLE);
@@ -193,7 +191,6 @@ public class MsgSendSearchActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -203,7 +200,7 @@ public class MsgSendSearchActivity extends BaseActivity {
 
 
     public void getPoorList() {
-        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 poorList = JsonUtil.toList(json,NewPoor.class);

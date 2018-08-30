@@ -83,13 +83,11 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
         }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
             leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
         }
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getChatMsgList(this, leader.leader_phone , new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.getChatMsgList(this, leader.leader_phone , new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
 
                     list = JsonUtil.toList(json, NewChat.class);
-                    DialogUIUtils.dismssTie();
                     if(list.size() > 0){
                         myAdapter.notifyDataSetChanged();
                         listview.setVisibility(View.VISIBLE);
@@ -228,19 +226,16 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                DialogUIUtils.showTie(mContext, "加载中...");
-                NewHttpRequest.deleteGroup( (Activity)mContext,leader.getLeader_phone(),chat.getId(),new NewHttpRequest.MyCallBack(){
+                NewHttpRequest.deleteGroup( (Activity)mContext,leader.getLeader_phone(),chat.getId(),new NewHttpRequest.MyCallBack(mContext){
 
                     @Override
                     public void ok(String json) {
-                        DialogUIUtils.dismssTie();
                         ToastUtil.show("删除成功");
                         initData();
                     }
                     @Override
                     public void no(String msg) {
 
-                        DialogUIUtils.dismssTie();
                         ToastUtil.show(msg);
                     }
                 });

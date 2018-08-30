@@ -112,13 +112,11 @@ public class TabContentFragment extends Fragment {
             ToastUtil.show("没有更多数据了");
             return;
         }
-        DialogUIUtils.showTie(getActivity(), "加载中...");
-        NewHttpRequest.getNewsWithType(getActivity(),type,String.valueOf(load),new NewHttpRequest.MyCallBack(){
+        NewHttpRequest.getNewsWithType(getActivity(),type,String.valueOf(load),new NewHttpRequest.MyCallBack(getActivity()){
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
-                DialogUIUtils.dismssTie();
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
                     load=-1;
@@ -139,7 +137,6 @@ public class TabContentFragment extends Fragment {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -177,8 +174,6 @@ public class TabContentFragment extends Fragment {
 
             ImageView iv_item_photo = ViewHolderUtil.get(convertView, R.id.iv_item_photo);
             TextView tv_item_title = ViewHolderUtil.get(convertView, R.id.tv_item_title);
-            TextView tv_item_text = ViewHolderUtil.get(convertView, R.id.tv_item_text);
-            TextView tv_item_ren = ViewHolderUtil.get(convertView, R.id.tv_item_ren);
             TextView tv_item_time = ViewHolderUtil.get(convertView, R.id.tv_item_time);
 
             NewColumn bean = list.get(position);
@@ -186,7 +181,6 @@ public class TabContentFragment extends Fragment {
                 GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(),R.mipmap.news_default_img);
             }
             tv_item_title.setText(bean.getTitle());
-            tv_item_ren.setText("  " + bean.getOrigin());
             tv_item_time.setText("  " + bean.getUpdate_time());
             return convertView;
         }

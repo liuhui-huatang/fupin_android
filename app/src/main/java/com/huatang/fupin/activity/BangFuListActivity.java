@@ -150,14 +150,11 @@ public class BangFuListActivity extends BaseActivity {
     List<NewSign> list = new ArrayList<>();
 
     public void getData() {
-
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getSignList(this,leader.getId(),String.valueOf(pageNo),new NewHttpRequest.MyCallBack(){
+        NewHttpRequest.getSignList( this,leader.getId(),String.valueOf(pageNo),new NewHttpRequest.MyCallBack(this){
             @Override
             public void ok(String json) {
                 List<NewSign> signList = JsonUtil.toList(json, NewSign.class);
                 list.addAll(signList);
-                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
 
                     tvEmpty.setVisibility(View.GONE);
@@ -171,21 +168,15 @@ public class BangFuListActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
-
             }
         });
-
-
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        list.clear();
-        pageNo = 1;
-        getData();
+
     }
 
     @OnClick({R.id.left_menu, R.id.right_menu})
@@ -195,11 +186,23 @@ public class BangFuListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.right_menu:
-                BangFuSignActivity.startIntent(this);
+                BangFuSignActivity.startIntentForResult(this,BangFuSignActivity.REQUEST_CODE);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == BangFuSignActivity.REQUEST_CODE ){
+                list.clear();
+                pageNo = 1;
+                getData();
+
+            }
+        }
+    }
 
     class Adapter extends BaseAdapter {
 
@@ -252,8 +255,8 @@ public class BangFuListActivity extends BaseActivity {
             if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
             }else{
-                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, leader.getLeader_photo(),iv_photo);
-                SPUtil.saveString(Config.HEAD_PHOTO,leader.getLeader_photo());
+                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, BaseConfig.ImageUrl+leader.getLeader_photo(),iv_photo);
+                SPUtil.saveString(Config.HEAD_PHOTO,BaseConfig.ImageUrl+leader.getLeader_photo());
             }
 
             tv_title.setText(list.get(position).getSign_title());
@@ -269,8 +272,7 @@ public class BangFuListActivity extends BaseActivity {
                     if (i < strings.length) {
                         if (!TextUtils.isEmpty(strings[i])) {
                             imageViewList.get(i).setVisibility(View.VISIBLE);
-
-                            GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + strings[i]);
+                            GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + strings[i],R.mipmap.news_default_img);
                         }
                     } else {
                         imageViewList.get(i).setVisibility(View.GONE);

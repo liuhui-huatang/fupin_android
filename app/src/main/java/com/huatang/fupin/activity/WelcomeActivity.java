@@ -13,6 +13,7 @@ import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.Config;
 import com.huatang.fupin.utils.AndroidInfoUtils;
 import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.SkinUtil;
 
 import butterknife.ButterKnife;
 
@@ -31,6 +32,7 @@ public class WelcomeActivity extends BaseActivity {
 
         TextView tvVersion=findViewById(R.id.tv_version);
         tvVersion.setText("V"+ AndroidInfoUtils.versionName());
+        SPUtil.saveString(SkinUtil.CURSKINTYPEKEY,SkinUtil.skin_type_blue);
 
         /**
          * 界面延时俩秒，进行下一步操作

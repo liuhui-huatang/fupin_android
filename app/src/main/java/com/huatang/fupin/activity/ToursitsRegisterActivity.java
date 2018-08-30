@@ -124,11 +124,9 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
 
     }
     private void registerUser(final String phone, String password, String name) {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.registerToursits(this, phone, password, name, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.registerToursits(this, phone, password, name, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                  ToastUtil.show("注册成功");
                  String token = JsonUtil.getString(json,Config.TOKEN);
                  SPUtil.saveString(Config.TOKEN,token);
@@ -146,7 +144,6 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }

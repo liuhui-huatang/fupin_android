@@ -115,20 +115,17 @@ public class UniteNewsActivity extends BaseActivity {
             ToastUtil.show("没有更多数据了");
             return;
         }
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getNewsWithType(this,type,String.valueOf(load),new NewHttpRequest.MyCallBack(){
+        NewHttpRequest.getNewsWithType(this,type,String.valueOf(load),new NewHttpRequest.MyCallBack(this){
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
-                DialogUIUtils.dismssTie();
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
                     load=-1;
                     return;
                 }
                 list.addAll(cloumns);
-                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     ggListview.setVisibility(View.VISIBLE);
@@ -143,7 +140,6 @@ public class UniteNewsActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -191,8 +187,6 @@ public class UniteNewsActivity extends BaseActivity {
 
             ImageView iv_item_photo = ViewHolderUtil.get(convertView, R.id.iv_item_photo);
             TextView tv_item_title = ViewHolderUtil.get(convertView, R.id.tv_item_title);
-            TextView tv_item_text = ViewHolderUtil.get(convertView, R.id.tv_item_text);
-            TextView tv_item_ren = ViewHolderUtil.get(convertView, R.id.tv_item_ren);
             TextView tv_item_time = ViewHolderUtil.get(convertView, R.id.tv_item_time);
 
             NewColumn bean = list.get(position);
@@ -200,7 +194,6 @@ public class UniteNewsActivity extends BaseActivity {
                 GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(),R.mipmap.news_default_img);
             }
             tv_item_title.setText(bean.getTitle());
-            tv_item_ren.setText("  " + bean.getOrigin());
             tv_item_time.setText("  " + bean.getUpdate_time());
             return convertView;
         }

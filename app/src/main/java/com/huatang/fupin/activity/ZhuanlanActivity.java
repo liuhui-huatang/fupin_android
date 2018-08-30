@@ -188,8 +188,6 @@ public class ZhuanlanActivity extends BaseActivity {
 
             ImageView iv_item_photo = ViewHolderUtil.get(convertView, R.id.iv_item_photo);
             TextView tv_item_title = ViewHolderUtil.get(convertView, R.id.tv_item_title);
-            TextView tv_item_text = ViewHolderUtil.get(convertView, R.id.tv_item_text);
-            TextView tv_item_ren = ViewHolderUtil.get(convertView, R.id.tv_item_ren);
             TextView tv_item_time = ViewHolderUtil.get(convertView, R.id.tv_item_time);
 
             Cloumn bean = list.get(position);
@@ -198,7 +196,6 @@ public class ZhuanlanActivity extends BaseActivity {
             }
             tv_item_title.setText(bean.getClo_title());
 //                           tv_item_text.setText(bean.getClo_content());
-            tv_item_ren.setText("  " + bean.getPub_person());
             tv_item_time.setText("  " + bean.getUpdate_time());
             return convertView;
         }

@@ -95,8 +95,8 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
         login_submit.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.login_submit));
         //test
-        SkinUtil.setCurSkinType(SkinUtil.skin_type_default);
-       // youkelogin_btn.setBackgroundResource(SkinUtil.getResouceId(this,R.mipmap.youke_login));
+        //SkinUtil.setCurSkinType(SkinUtil.skin_type_default);
+        youkelogin_btn.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.youke_login));
 
     }
 
@@ -297,13 +297,11 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
      * @param type
      */
     private void login(final String phone, final String pwd,final String type) {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.login(NewLoginActivity.this, phone, pwd,type, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.login(NewLoginActivity.this, phone, pwd,type, new NewHttpRequest.MyCallBack(this) {
 
 
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("登录成功！");
                 SPUtil.saveString(Config.Type,type);
                 SPUtil.saveString(Config.PHONE,phone);
@@ -321,7 +319,6 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
 
                     NewPoor poor = JsonUtil.json2Bean(json, NewPoor.class);
                     SPUtil.saveString(Config.TOKEN,poor.getToken());
-                    SPUtil.saveString(Config.FCARD,poor.getFcard());
                     try {
 
                         SPUtil.saveObject(Config.PENKUNHU_KEY,poor);
@@ -365,7 +362,6 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });

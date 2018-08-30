@@ -163,15 +163,12 @@ public class DanganListNewActivity extends BaseActivity {
 
     List<Archive> list = new ArrayList<>();
     public void getData() {
-                DialogUIUtils.showTie(this, "加载中...");
-                NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(){
-
+                NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(this){
                     @Override
                     public void ok(String json) {
                         //  System.out.println("---------------------"+new Date()+"-----------------------");
                         list = JsonUtil.toList(json, Archive.class);
                         //   System.out.println("---------------------"+new Date()+"-----------------------");
-                        DialogUIUtils.dismssTie();
                         if (list.size() > 0) {
                             tvEmpty.setVisibility(View.GONE);
                             listview.setVisibility(View.VISIBLE);
@@ -186,7 +183,6 @@ public class DanganListNewActivity extends BaseActivity {
 
                     @Override
                     public void no(String msg) {
-                        DialogUIUtils.dismssTie();
                         ToastUtil.show(msg);
 
                     }
@@ -198,8 +194,8 @@ public class DanganListNewActivity extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-       // list.clear();
-        //getData();
+        list.clear();
+        getData();
     }
 
     @OnClick({R.id.left_menu, R.id.right_tx_menu})
@@ -308,52 +304,19 @@ public class DanganListNewActivity extends BaseActivity {
                 });
 
                 holder.jiben_layout.setOnClickListener(this);
-                List<NewFamily> families = archive.getFamily();
-                if(families != null && families.size()>0){
-                    holder.family_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.family_layout.setVisibility(View.GONE);
-                }
+                holder.family_layout.setVisibility(archive.getFamilyVisible());
                 holder.family_layout.setOnClickListener(this);
-                NewBasic newBasic = archive.getBasic();
-                if(newBasic.isIshave()){
-                    holder.shenghuo_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.shenghuo_layout.setVisibility(View.GONE);
-                }
+                holder.shenghuo_layout.setVisibility(archive.getBasciVisible());
                 holder.shenghuo_layout.setOnClickListener(this);
-                NewRevenue revenue = archive.getReve();
-                if(revenue.isIshave()){
-                    holder.shouru_layout.setVisibility(View.VISIBLE);
-
-                }else{
-                    holder.shouru_layout.setVisibility(View.GONE);
-                }
+                holder.shouru_layout.setVisibility(archive.getReveVisible());
                 holder.shouru_layout.setOnClickListener(this);
-                Info info = archive.getInfo();
-                if(info.isIshave()){
-                    holder.ziyuan_layout.setVisibility(View.VISIBLE);
-
-                }else{
-                    holder.ziyuan_layout.setVisibility(View.GONE);
-                }
+                holder.ziyuan_layout.setVisibility(archive.getInfoVisible());
                 holder.ziyuan_layout.setOnClickListener(this);
-                List<Policy> policy = archive.getPolicy();
-                if(policy != null && policy.size() >0){
-                    holder.cuoshi_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.cuoshi_layout.setVisibility(View.GONE);
-                }
+                holder.cuoshi_layout.setVisibility(archive.getPolicyVisible());
                 holder.cuoshi_layout.setOnClickListener(this);
-                List<Fund> fund = archive.getFunds();
-                if(fund != null && fund.size() >0 ){
-                    holder.zijin_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.zijin_layout.setVisibility(View.GONE);
-                }
+                holder.zijin_layout.setVisibility(archive.getFundVisible());
                 holder.zijin_layout.setOnClickListener(this);
             }
-           // System.out.println("---------------------"+new Date()+"-----------------------");
             return convertView;
         }
 
@@ -403,5 +366,6 @@ public class DanganListNewActivity extends BaseActivity {
         RelativeLayout cuoshi_layout;
         RelativeLayout zijin_layout;
         RelativeLayout pingjia_layout;
+
     }
 }

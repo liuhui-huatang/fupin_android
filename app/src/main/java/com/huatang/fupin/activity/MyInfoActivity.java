@@ -257,15 +257,12 @@ public class MyInfoActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                DialogUIUtils.dismssTie();
+
                 String url = JsonUtil.getStringFromArray(json,"url");
-                String photoUrl = BaseConfig.ImageUrl + url;
-                SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
-                GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
+
                 savePhoto(url);
             }
         });
@@ -273,14 +270,17 @@ public class MyInfoActivity extends BaseActivity {
 
     }
 
-    private void savePhoto(String url) {
+    private void savePhoto(final String url) {
         String  type = "";
+        String fcard = "";
         switch (SPUtil.getString(Config.Type)){
             case Config.YOUKU_TYPE:
                 type = "0";
                 break;
             case Config.PENKUNHU_TYPE:
                 type = "1";
+                NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
+                fcard = poor.getFcard();
                 break;
             case Config.GANBU_TYPE:
                 type = "2";
@@ -290,12 +290,52 @@ public class MyInfoActivity extends BaseActivity {
                 break;
 
         }
-        NewHttpRequest.uploadUserPhoto(this, SPUtil.getString(Config.FCARD), SPUtil.getString(Config.PHONE), type, url, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.uploadUserPhoto(this, fcard, SPUtil.getString(Config.PHONE), type, url, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
-                ToastUtil.show("修改成功");
 
+                String photoUrl = BaseConfig.ImageUrl + url;
+                SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
+                GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
+                switch (SPUtil.getString(Config.Type)){
+                    case Config.YOUKU_TYPE:
+                        YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
+                        youKe.setPhoto(url);
+                        try {
+                            SPUtil.saveObject(Config.YOUKE,youKe);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case Config.ADMIN_TYPE:
+                        NewLeader admin = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+                        admin.setLeader_photo(url);
+                        try {
+                            SPUtil.saveObject(Config.ADMIN_KEY,admin);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case Config.GANBU_TYPE:
+                        NewLeader leader = (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
+                        leader.setLeader_photo(url);
+                        try {
+                            SPUtil.saveObject(Config.GANBU_KEY,leader);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case Config.PENKUNHU_TYPE:
+                        NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
+                        poor.setPhoto(url);
+                        try {
+                            SPUtil.saveObject(Config.PENKUNHU_KEY,poor);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+                ToastUtil.show("修改成功");
             }
 
             @Override

@@ -4,7 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -56,32 +64,33 @@
                 android:text="发布"
                 />
         </RelativeLayout>
-        <RelativeLayout
+        <LinearLayout
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
-            android:layout_below="@id/title_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:orientation="horizontal"
            >
-
+            <ImageView
+                android:id="@+id/iv_photo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/header_default"
+                />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/iv_photo"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/header_default"
-                    />
+
                 <LinearLayout
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
+
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/poor_dangan_name"
@@ -89,7 +98,10 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_white"
                         android:textSize="20dp"
-                        android:text="姓名"/>
+                        android:text="吴娜娜啦底"
+                        android:maxEms="4"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                     <TextView
                         android:id="@+id/poor_dangan_year"
                         android:layout_marginTop="10dp"
@@ -101,7 +113,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
-                android:layout_alignParentRight="true"
+               android:layout_marginLeft="30dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 android:layout_width="wrap_content"
@@ -112,8 +124,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_white"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:drawableLeft="@mipmap/dangan_address"
-                    android:text="奈曼旗镇治安村"/>
+                    android:text="奈曼旗镇治安村的点点滴滴对对对"/>
                 <TextView
                     android:id="@+id/poor_dangan_fcard"
                     android:layout_marginTop="15dp"
@@ -121,19 +135,20 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_white"
                     android:drawableLeft="@mipmap/dangan_fcard"
-                    android:text="41402402244222222222"/>
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="440151752412021585"/>
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
 
 
-    </RelativeLayout>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include layout="@layout/item_new_dangan"/>
+            </LinearLayout>
+            <include layout="@layout/bangfu_detail_layout"/>
+        </LinearLayout>
+
 </ScrollView>
 </LinearLayout>

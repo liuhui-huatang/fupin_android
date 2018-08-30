@@ -181,7 +181,6 @@ public class HomeFragment extends Fragment {
                             break;
 
                         case Config.fupenzhengce://扶贫政策
-                            //UniteNewsActivity.startIntent(getActivity(),Config.fupenzhengce_type);
                             FupinPolicyActivity.startIntent(getActivity());
                             break;
                         case Config.zuzhilingdao://组织领导
@@ -201,12 +200,10 @@ public class HomeFragment extends Fragment {
     List<BannerColumn> bannerColumnList =new ArrayList<BannerColumn>();
     public void initBanner() {
         bannerColumnList.clear();
-        DialogUIUtils.showTie(getActivity(), "加载中...");
-        NewHttpRequest.getHome(getActivity(), SPUtil.getString(Config.Type),new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.getHome(getActivity(), SPUtil.getString(Config.Type),new NewHttpRequest.MyCallBack(getActivity()) {
             @Override
             public void ok(String json) {
                 newBanner = JsonUtil.json2Bean(json, NewBanner.class);
-                DialogUIUtils.dismssTie();
                 bannerColumnList = newBanner.getShuffling_img();
                 List<String> images = new ArrayList<>();
                 List<String> titles = new ArrayList<>();
@@ -232,8 +229,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
+
                 ToastUtil.show(msg);
+
+
             }
         });
 

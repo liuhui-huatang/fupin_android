@@ -35,8 +35,7 @@ public class ZhuanlanDetailsActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_item_title)
     TextView tvItemTitle;
-    @BindView(R.id.tv_item_ren)
-    TextView tvItemRen;
+
     @BindView(R.id.tv_item_time)
     TextView tvItemTime;
 //    @BindView(R.id.iv_item_photo)
@@ -80,7 +79,6 @@ public class ZhuanlanDetailsActivity extends BaseActivity {
 //        tvItemText.setText("      "+bean.getClo_content());
 
         tvItemTitle.setText(bean.getClo_title());
-        tvItemRen.setText("  " + bean.getPub_person());
         tvItemTime.setText("  " + bean.getCreate_time());
 
         webview.loadDataWithBaseURL(null,bean.getClo_content(),"text/html","utf-8",null);

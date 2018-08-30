@@ -105,18 +105,15 @@ public class DanganXinxiActivity extends BaseActivity {
         String year = SPUtil.getString(Config.YEAR);
         NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
         if(poor != null ){
-            DialogUIUtils.showTie(this, "加载中...");
-            NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(){
+            NewHttpRequest.getArchivesWithFcard(this,poor.getFcard(),year,new NewHttpRequest.MyCallBack(this){
 
                 @Override
                 public void ok(String json) {
-                    DialogUIUtils.dismssTie();
                     archive = JsonUtil.json2Bean(json,Archive.class);
                 }
 
                 @Override
                 public void no(String msg) {
-                    DialogUIUtils.dismssTie();
                     ToastUtil.show(msg);
 
                 }

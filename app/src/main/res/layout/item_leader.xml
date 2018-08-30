@@ -45,6 +45,9 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="姓名"
+                        android:maxEms="6"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/color_333"
                         android:textSize="18sp" />
                     <TextView

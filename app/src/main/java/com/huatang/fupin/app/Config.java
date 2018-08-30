@@ -15,10 +15,16 @@ public class Config {
     public static final String HEAD_PHOTO = "photo";
     public static final String PHONE = "phone";
     public static final String PASSWORD = "password";
+
+    public static final String FCARD = "fcard";
+
+
     public static final String BAI_DU_MAP_DISTANCE = "2000";
     public static final boolean IS_OPEN_TEST_DISTANCE = false;
+
     //用户类型:1: 游客2: 贫困户3: 帮扶干部4: 管理员5: 村负责人
     public final static String Type = "type";
+
     public final static String YOUKU_TYPE = "1" ;
     public final static String PENKUNHU_TYPE = "2" ;
     public final static String GANBU_TYPE = "3" ;
@@ -87,5 +93,4 @@ public class Config {
     public final static int DANGAN_ELECTOR = 6;
     public final static int DANGAN_BLEED = 7;
 
-    public static final String FCARD = "fcard";
 }

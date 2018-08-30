@@ -13,10 +13,15 @@ import android.widget.TextView;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.BaseConfig;
+import com.huatang.fupin.app.Config;
 import com.huatang.fupin.bean.Archive;
 import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.GlideUtils;
+import com.huatang.fupin.utils.SPUtil;
+import com.huatang.fupin.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +61,7 @@ public class PingJiaActivity extends BaseActivity {
     @BindView(R.id.iv_photo)
     ImageView ivPhoto;
     private NewLeader leader;
+    private NewPoor poor;
 
 
     @Override
@@ -78,7 +84,12 @@ public class PingJiaActivity extends BaseActivity {
         tv_phone.setText(leader.getLeader_phone());
         tv_town.setText(TextUtils.isEmpty(leader.getHelp_town()) ? "" :"包连乡镇:"+leader.getHelp_town());
         //tv_poor_num.setText(leader.get);
-         GlideUtils.LoadCircleImageWithoutBorderColor(this, leader.getLeader_phone(),ivPhoto);
+         GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl+leader.getLeader_phone(),ivPhoto);
+         poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
+         if(poor == null){
+             ToastUtil.show("身份失效，请重新登录");
+             return;
+         }
 
     }
 

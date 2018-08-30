@@ -36,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
-    private Button logout_layout;
+    private Button logout_btn;
     private LinearLayout register_layout;
     private ImageView leftMenu;
     private ImageView rightMenu;
@@ -65,7 +65,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initData() {
-        tv_phone.setText(SPUtil.getString(Config.PHONE));
+        if(TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){
+            tv_phone.setVisibility(View.INVISIBLE);
+        }else{
+            tv_phone.setText(SPUtil.getString(Config.PHONE));
+        }
+
+        iv_photo.setImageResource(SkinUtil.getResouceId(R.mipmap.header_default));
+        logout_btn.setBackgroundResource(SkinUtil.getResouceId(R.mipmap.logout_btn));
         switch (SPUtil.getString(Config.Type)){
             case Config.YOUKU_TYPE:
 
@@ -75,7 +82,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     register_layout.setVisibility(View.VISIBLE);
                     line_view.setVisibility(View.VISIBLE);
                     tv_phone.setVisibility(View.INVISIBLE);
-                    GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+                   // GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),BaseConfig.ImageUrl+SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
                 }else {//phone代表已经注册的游客
                     nameView.setVisibility(View.VISIBLE);
                     tv_phone.setVisibility(View.VISIBLE);
@@ -103,9 +110,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     SPUtil.saveString(Config.HEAD_PHOTO,admin_photo);
                 }
                 GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(),admin_photo ,iv_photo);
-                zhiWuView.setText(admin.getLeader_duty());
-                tv_naimanqi.setText(admin.getLeader_unit());
-                tv_town.setText(admin.getHelp_town());
+                if(TextUtils.isEmpty(admin.getLeader_duty())){
+                    zhiWuView.setVisibility(View.INVISIBLE);
+                }else{
+                    zhiWuView.setText(admin.getLeader_duty());
+                }
+                if(TextUtils.isEmpty(admin.getLeader_unit())){
+
+                    tv_naimanqi.setVisibility(View.INVISIBLE);
+                }else{
+                    tv_naimanqi.setText(admin.getLeader_unit());
+                }
+                if(TextUtils.isEmpty(admin.getHelp_town())){
+                    ll_town.setVisibility(View.INVISIBLE);
+                }else{
+                    tv_town.setText(admin.getHelp_town());
+                }
+
+
                 break;
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
@@ -115,9 +137,23 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                     SPUtil.saveString(Config.HEAD_PHOTO,leader_photo);
                 }
                 GlideUtils.LoadCircleImageWithoutBorderColor(getActivity(), leader_photo ,iv_photo);
-                zhiWuView.setText(leader.getLeader_duty());
-                tv_naimanqi.setText(leader.getLeader_unit());
-                tv_town.setText(leader.getHelp_town());
+                if(TextUtils.isEmpty(leader.getLeader_duty())){
+                    zhiWuView.setVisibility(View.INVISIBLE);
+                }else{
+                    zhiWuView.setText(leader.getLeader_duty());
+                }
+                if(TextUtils.isEmpty(leader.getLeader_unit())){
+
+                    tv_naimanqi.setVisibility(View.INVISIBLE);
+                }else{
+                    tv_naimanqi.setText(leader.getLeader_unit());
+                }
+                if(TextUtils.isEmpty(leader.getHelp_town())){
+                    tv_town.setText("无");
+                }else{
+                    tv_town.setText(leader.getHelp_town());
+                }
+
                 SPUtil.saveString(Config.NAME,leader.getLeader_name());
                 break;
             case Config.PENKUNHU_TYPE:
@@ -150,9 +186,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private void initView(View view) {
         initHeadView(view);
-        logout_layout = (Button)view.findViewById(R.id.logout_btn);
+        logout_btn = (Button)view.findViewById(R.id.logout_btn);
         register_layout = (LinearLayout)view.findViewById(R.id.youke_register_layout);
-        logout_layout.setOnClickListener(this);
+        logout_btn.setOnClickListener(this);
         register_layout.setOnClickListener(this);
         rl_gengxin = (LinearLayout)view.findViewById(R.id.rl_gengxin);
         rl_gengxin.setOnClickListener(this);

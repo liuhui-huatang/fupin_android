@@ -169,11 +169,9 @@ public class MsgCreateChatActivity extends BaseActivity {
      * 创建群聊
      */
     public void createGroup(String title, String content ) {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.createChatMsg(this, title, content, leader, photoUrl,String.valueOf(leader_list.size()), phones, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.createChatMsg(this, title, content, leader, photoUrl,String.valueOf(leader_list.size()), phones, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 MLog.e("createGroup", json);
                 ToastUtil.show("创建成功");
                 finish();
@@ -181,7 +179,6 @@ public class MsgCreateChatActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
 
             }
@@ -312,11 +309,9 @@ public class MsgCreateChatActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("修改成功");
                 photoUrl =  JsonUtil.getStringFromArray(json,"url");
                 GlideUtils.displayHome(ivPhoto, BaseConfig.ImageUrl +photoUrl);

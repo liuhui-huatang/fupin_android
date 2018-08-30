@@ -65,6 +65,7 @@ import static com.huatang.fupin.app.Config.IS_OPEN_TEST_DISTANCE;
 public class BangFuSignActivity extends BaseActivity {
 
 
+    public static final int REQUEST_CODE = 1000;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
     @BindView(R.id.title_tx)
@@ -130,7 +131,10 @@ public class BangFuSignActivity extends BaseActivity {
         Intent it = new Intent(activity, BangFuSignActivity.class);
         activity.startActivity(it);
     }
-
+    public static void startIntentForResult(Activity activity,int requestCode) {
+        Intent it = new Intent(activity, BangFuSignActivity.class);
+        activity.startActivityForResult(it,requestCode);
+    }
     /*
     * @ forever 在 17/5/17 下午2:28 创建
     *
@@ -278,12 +282,11 @@ public class BangFuSignActivity extends BaseActivity {
 
     }
     public void selectBasic() {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack() {
+
+        NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 poorList = JsonUtil.toList(json,NewPoor.class);
-                DialogUIUtils.dismssTie();
                 if (poorList == null || poorList.size() == 0) {
                     ToastUtil.show("没有帮扶户");
                     selectArea();
@@ -329,7 +332,6 @@ public class BangFuSignActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });
@@ -337,12 +339,10 @@ public class BangFuSignActivity extends BaseActivity {
 
 
     public void selectArea() {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getVillageList(this, leader.getHelp_town_id(), new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.getVillageList(this, leader.getHelp_town_id(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 arealist = JsonUtil.toList(json, NewArea.class);
-                DialogUIUtils.dismssTie();
                 if (arealist == null || arealist.size() == 0) {
                     ToastUtil.show("没有查到村");
                     return;
@@ -384,7 +384,6 @@ public class BangFuSignActivity extends BaseActivity {
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
         });
@@ -392,21 +391,20 @@ public class BangFuSignActivity extends BaseActivity {
 
 
     public void uploadSign(String title,String content) {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.addSign(this, leader, title, content, signType, signAddress, signVillage, signVillageId, signTown, signTownId, StringUtil.listToString(imagePathList,StringUtil.separator),  String.valueOf(longitude), String.valueOf(latitude),poor, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.addSign(this, leader, title, content, signType, signAddress, signVillage, signVillageId, signTown, signTownId, StringUtil.listToString(imagePathList,StringUtil.separator),  String.valueOf(longitude), String.valueOf(latitude),poor, new NewHttpRequest.MyCallBack(this) {
 
             @Override
             public void ok(String json) {
-                DialogUIUtils.dismssTie();
                 img = "";
                 imagePathList.clear();
                 ToastUtil.show("签到成功");
+                setResult(RESULT_OK);
                 finish();
+
             }
 
             @Override
             public void no(String msg) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show(msg);
             }
 
@@ -572,11 +570,9 @@ public class BangFuSignActivity extends BaseActivity {
         /**
          * 图片上传服务器
          */
-        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
             @Override
             public void callback(String json) {
-                DialogUIUtils.dismssTie();
                 ToastUtil.show("上传成功");
                 String url = JsonUtil.getStringFromArray(json,"url");
                 String photoUrl = BaseConfig.ImageUrl + url;

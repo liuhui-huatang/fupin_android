@@ -33,13 +33,6 @@
         android:background="@color/color_white">
 
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone"
-            android:src="@mipmap/img_ren" />
 
         <TextView
             android:id="@+id/tv_basic"
@@ -57,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:visibility="gone"
+
             android:background="@mipmap/icon_common_right" />
 
         <View
@@ -208,15 +201,6 @@
             android:textSize="12sp" />
 
 
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@mipmap/icon_common_right"
-            android:visibility="gone" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -224,21 +208,4 @@
             android:background="@color/color_dcdcdc" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:background="@mipmap/login_submit_red"
-            android:text="提交日志"
-            android:textColor="@color/color_white" />
-
-
-    </RelativeLayout>
 </LinearLayout>

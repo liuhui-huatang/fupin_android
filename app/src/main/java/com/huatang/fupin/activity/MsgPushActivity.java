@@ -140,12 +140,10 @@ public class MsgPushActivity extends BaseActivity {
     List<NewPushMsg> list = new ArrayList<>();
 
     public void getData() {
-        DialogUIUtils.showTie(this, "加载中...");
-        NewHttpRequest.getSystemMsg(this, new NewHttpRequest.MyCallBack() {
+        NewHttpRequest.getSystemMsg(this, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 list = JsonUtil.toList(json, NewPushMsg.class);
-                DialogUIUtils.dismssTie();
                 if (list.size() > 0) {
                     listview.setVisibility(View.VISIBLE);
                     tvEmpty.setVisibility(View.GONE);

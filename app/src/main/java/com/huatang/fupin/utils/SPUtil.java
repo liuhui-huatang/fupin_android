@@ -132,5 +132,15 @@ public class SPUtil {
         }
         return  leader;
     }
+    public static void logout(){
+        SPUtil.removeValue(Config.TOKEN);
+        SPUtil.removeValue(Config.Type);
+        SPUtil.removeValue(Config.PHONE);
+        SPUtil.removeValue(Config.NAME);
+        SPUtil.removeValue(Config.YEAR);
+        SPUtil.removeValue(Config.PASSWORD);
+        SPUtil.removeValue(Config.HEAD_PHOTO);
+
+    }
 
 }

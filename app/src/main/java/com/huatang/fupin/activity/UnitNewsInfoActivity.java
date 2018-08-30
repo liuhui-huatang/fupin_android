@@ -66,12 +66,10 @@ public class UnitNewsInfoActivity extends BaseActivity {
     }
 
     private void initData() {
-        DialogUIUtils.showTie(this, "加载中...");
         NewHttpRequest.getNewsInfoWithId(this, column.getId(), new NewHttpRequest.HtmlCallBack() {
 
             @Override
             public void callback(String json) {
-                DialogUIUtils.dismssTie();
                 webview.loadDataWithBaseURL(null,json,"text/html","utf-8",null);
             }
         });

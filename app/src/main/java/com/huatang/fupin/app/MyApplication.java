@@ -47,9 +47,13 @@ public class MyApplication extends Application {
         initTheme(this);
         SPUtil.saveString(SkinUtil.CURSKINTYPEKEY,SkinUtil.skin_type_blue);
 
-       // LayoutInflater.from(this).inflate(R.layout.new_top,null).setBackgroundResource(SkinUtil.getResouceId(R.mipmap.header));
 
         OkHttpUtils.init(this);
+        OkHttpUtils.getInstance()
+                //.debug("OkHttpUtils")                                              //是否打开调试
+                .setConnectTimeout(OkHttpUtils.DEFAULT_MILLISECONDS)               //全局的连接超时时间
+                .setReadTimeOut(OkHttpUtils.DEFAULT_MILLISECONDS)                  //全局的读取超时时间
+                .setWriteTimeOut(OkHttpUtils.DEFAULT_MILLISECONDS)  ;               //全局的写入超时时间
 
         //极光推送初始化
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
