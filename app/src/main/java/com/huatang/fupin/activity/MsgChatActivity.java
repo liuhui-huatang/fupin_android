@@ -159,7 +159,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
                 if (!TextUtils.isEmpty(chat.getPush_photo())) {
                     Intent intent = new Intent();
                     intent.setClass(MsgChatActivity.this, ImageUploadActivity.class);
-                    intent.putExtra(ImageUploadActivity.PHOTO_URL, chat.getPush_photo());
+                    intent.putExtra(ImageUploadActivity.PHOTO_URL, BaseConfig.ImageUrl+chat.getPush_photo());
                     startActivity(intent);
 
                 }
@@ -387,19 +387,14 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
             holder.itemName.setText(chat.getPush_leader_name());
 
             if (TextUtils.isEmpty(chat.getContent()) && !TextUtils.isEmpty(chat.getPush_photo())) {
-
-                // ImageView imageView = (ImageView) convertView.findViewWithTag(chat.getPush_photo());
-                GlideUtils.LoadImageWithSize(mContext, chat.getPush_photo(), 400, 400, holder.chat_upload_img);
-                // holder.chat_upload_img.setTag(chat.getPush_photo());
-
-                holder.chat_content_layout.setVisibility(View.GONE);
+                GlideUtils.displayHomeUrl(holder.chat_upload_img, BaseConfig.ImageUrl +chat.getPush_photo() ,R.mipmap.yifu);
+                holder.itemText.setVisibility(View.GONE);
                 holder.chat_upload_img.setVisibility(View.VISIBLE);
             } else {
                 holder.itemText.setText(chat.getContent());
-                holder.chat_content_layout.setVisibility(View.VISIBLE);
+                holder.itemText.setVisibility(View.VISIBLE);
                 holder.chat_upload_img.setVisibility(View.GONE);
             }
-            holder.itemText.setText(chat.getContent());
             holder.itemTime.setText(chat.getCreate_time());
 
             return convertView;
@@ -414,8 +409,6 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
             TextView itemText;
             @BindView(R.id.item_time)
             TextView itemTime;
-            @BindView(R.id.chat_content_layout)
-            LinearLayout chat_content_layout;
             @BindView(R.id.chat_upload_img)
             ImageView chat_upload_img;
 

@@ -202,7 +202,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             item_name.setText(chat.getPush_leader_name());
             item_title.setText(chat.getTitle());
             item_content.setText(chat.getContent());
-            item_number.setText(chat.getLeader_num() + "人");
+            item_number.setText("共"+chat.getLeader_num() + "人");
             item_createTime.setText(chat.getCreate_time());
             deleteGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
