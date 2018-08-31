@@ -47,7 +47,7 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
  * 发布消息页面
  *
  * @author forever
- *         created at 2017/1/9 11:16
+ * created at 2017/1/9 11:16
  */
 
 public class MsgCreateChatActivity extends BaseActivity {
@@ -76,31 +76,30 @@ public class MsgCreateChatActivity extends BaseActivity {
     ImageView ivPhoto;
 
 
-
-
     /*
-         * @ forever 在 17/5/17 下午2:28 创建
-         *
-         * 描述：跳转到登录页面
-         *
-         */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到登录页面
+     *
+     */
     public static void startIntent(Activity activity) {
         Intent it = new Intent(activity, MsgCreateChatActivity.class);
         activity.startActivity(it);
     }
 
     /*
-    * @ forever 在 17/5/17 下午2:28 创建
-    *
-    * 描述：页面创建时调用
-    *
-    */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：页面创建时调用
+     *
+     */
 
-    NewLeader leader ;
+    NewLeader leader;
     List<NewLeader> leader_list = new ArrayList<>();
     LeaderAdapter leaderAdapter;
     String phones = "";
     String photoUrl = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,17 +109,17 @@ public class MsgCreateChatActivity extends BaseActivity {
         initData();
         rlLeader.setVisibility(View.VISIBLE);
         rlHu.setVisibility(View.GONE);
-        leaderAdapter = new LeaderAdapter(MsgCreateChatActivity.this,leader_list);
+        leaderAdapter = new LeaderAdapter(MsgCreateChatActivity.this, leader_list);
         lvSend.setAdapter(leaderAdapter);
 
     }
 
     private void initData() {
         leader = new NewLeader();
-        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
-        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
+        } else if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
         }
     }
 
@@ -131,7 +130,8 @@ public class MsgCreateChatActivity extends BaseActivity {
 
 
     }
-    @OnClick({R.id.left_menu, R.id.right_tx_menu, R.id.rl_leader, R.id.rl_hu,R.id.iv_photo})
+
+    @OnClick({R.id.left_menu, R.id.right_tx_menu, R.id.rl_leader, R.id.rl_hu, R.id.iv_photo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:
@@ -148,7 +148,7 @@ public class MsgCreateChatActivity extends BaseActivity {
                     ToastUtil.show("请选择消息发布对象");
                     return;
                 }
-                createGroup(title,content);
+                createGroup(title, content);
                 break;
             case R.id.rl_leader:
                 Intent intent = new Intent(this, MsgSendSearchActivity.class);
@@ -164,12 +164,11 @@ public class MsgCreateChatActivity extends BaseActivity {
     }
 
 
-
     /**
      * 创建群聊
      */
-    public void createGroup(String title, String content ) {
-        NewHttpRequest.createChatMsg(this, title, content, leader, photoUrl,String.valueOf(leader_list.size()), phones, new NewHttpRequest.MyCallBack(this) {
+    public void createGroup(String title, String content) {
+        NewHttpRequest.createChatMsg(this, title, content, leader, photoUrl, String.valueOf(leader_list.size()), phones, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 MLog.e("createGroup", json);
@@ -186,7 +185,6 @@ public class MsgCreateChatActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -194,37 +192,36 @@ public class MsgCreateChatActivity extends BaseActivity {
             return;
         }
 
-            if (resultCode == MsgSendSearchActivity.LEADER_RESULT_CODE) {
-                NewLeader leader = (NewLeader) data.getSerializableExtra(Config.GANBU_KEY);
+        if (resultCode == MsgSendSearchActivity.LEADER_RESULT_CODE) {
+            NewLeader leader = (NewLeader) data.getSerializableExtra(Config.GANBU_KEY);
 
-                if (!TextUtils.isEmpty(phones) && phones.contains(leader.getLeader_phone())) {
-                    ToastUtil.show("当前用户已选择");
-                    return;
-                }
-                leader_list.add(leader);
-                phones += leader.getLeader_phone()+",";
-                leaderAdapter.setData(leader_list);
-                leaderAdapter.notifyDataSetChanged();
+            if (!TextUtils.isEmpty(phones) && phones.contains(leader.getLeader_phone())) {
+                ToastUtil.show("当前用户已选择");
+                return;
             }
+            leader_list.add(leader);
+            phones += leader.getLeader_phone() + ",";
+            leaderAdapter.setData(leader_list);
+            leaderAdapter.notifyDataSetChanged();
+        }
 
 
     }
 
 
-
     class LeaderAdapter extends BaseAdapter {
-        private Context mContext;
-        private List<NewLeader> leaderList ;
 
-        public LeaderAdapter(Context context) {
-            mContext = context;
-        }
-        public LeaderAdapter(Context context,List<NewLeader> leaderList) {
+        private Context mContext;
+
+        private List<NewLeader> leaderList;
+
+        public LeaderAdapter(Context context, List<NewLeader> leaderList) {
             mContext = context;
             this.leaderList = leaderList;
         }
-        public void setData(List<NewLeader> leaderList){
-            this.leaderList = leaderList ;
+
+        public void setData(List<NewLeader> leaderList) {
+            this.leaderList = leaderList;
 
         }
 
@@ -257,6 +254,7 @@ public class MsgCreateChatActivity extends BaseActivity {
             return convertView;
         }
     }
+
     // －－－－－－－－－－－－－－－－－－－－－－－－－－－拍照相关的方法
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
@@ -313,12 +311,11 @@ public class MsgCreateChatActivity extends BaseActivity {
             @Override
             public void callback(String json) {
                 ToastUtil.show("修改成功");
-                photoUrl =  JsonUtil.getStringFromArray(json,"url");
-                GlideUtils.displayHome(ivPhoto, BaseConfig.ImageUrl +photoUrl);
+                photoUrl = JsonUtil.getStringFromArray(json, "url");
+                GlideUtils.displayHome(ivPhoto, BaseConfig.ImageUrl + photoUrl);
 
             }
         });
-
 
 
     }

@@ -49,7 +49,7 @@ import butterknife.OnClick;
  * 系统消息列表页面
  *
  * @author forever
- *         created at 2017/1/9 11:16
+ * created at 2017/1/9 11:16
  */
 
 public class MsgPushActivity extends BaseActivity {
@@ -64,32 +64,34 @@ public class MsgPushActivity extends BaseActivity {
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
 
-    NewLeader admin ;
+    NewLeader admin;
+
     /*
-         * @ forever 在 17/5/17 下午2:28 创建
-         *
-         * 描述：跳转到登录页面
-         *
-         */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到登录页面
+     *
+     */
     public static void startIntent(Activity activity) {
         Intent it = new Intent(activity, MsgPushActivity.class);
         activity.startActivity(it);
     }
 
     /*
-    * @ forever 在 17/5/17 下午2:28 创建
-    *
-    * 描述：页面创建时调用
-    *
-    */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：页面创建时调用
+     *
+     */
     Adapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_msginfo);
         ButterKnife.bind(this);
         initHeadView();
-        SPUtil.saveInt("push",0);
+        SPUtil.saveInt("push", 0);
 
         RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setPrimaryColors(getResources().getColor(R.color.dodgerblue));
@@ -113,7 +115,7 @@ public class MsgPushActivity extends BaseActivity {
             }
         });
 
-        adapter=new Adapter(MsgPushActivity.this);
+        adapter = new Adapter(MsgPushActivity.this);
         listview.setAdapter(adapter);
         getData();
         //条目点击事件
@@ -124,19 +126,21 @@ public class MsgPushActivity extends BaseActivity {
             }
         });
     }
+
     private void initHeadView() {
-        ((TextView)findViewById(R.id.title_tx)).setText("系统消息");
+        ((TextView) findViewById(R.id.title_tx)).setText("系统消息");
         leftMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_commen_break));
         rightMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_main_select));
         rightMenu.setVisibility(View.INVISIBLE);
         String type = SPUtil.getString(Config.Type);
-        if(type.equals(Config.ADMIN_TYPE)){
+        if (type.equals(Config.ADMIN_TYPE)) {
             rightMenu.setVisibility(View.VISIBLE);
             admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
             //admin = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
 
         }
     }
+
     List<NewPushMsg> list = new ArrayList<>();
 
     public void getData() {
@@ -156,7 +160,7 @@ public class MsgPushActivity extends BaseActivity {
             }
 
             @Override
-            public void no(String msg){
+            public void no(String msg) {
                 ToastUtil.show(msg);
 
             }
@@ -219,15 +223,15 @@ public class MsgPushActivity extends BaseActivity {
 
     private void showSendMessageDialog() {
 
-        final CustomDialog dialog=new CustomDialog(this, R.style.myDialog);
-        final View view = View.inflate(this, R.layout.dialog_layout,null);
+        final CustomDialog dialog = new CustomDialog(this, R.style.myDialog);
+        final View view = View.inflate(this, R.layout.dialog_layout, null);
         dialog.setView(view);
-      //  dialog.setProperty(0,0, 600, 400);//设置坐标和宽高
+        //  dialog.setProperty(0,0, 600, 400);//设置坐标和宽高
         dialog.setCanceledOnTouchOutside(true);
-        final EditText title_v = (EditText)view.findViewById(R.id.msg_title);
-        final EditText content_v = (EditText)view.findViewById(R.id.msg_content);
-        final TextView error_v = (TextView)view.findViewById(R.id.error);
-        Button dialogCancel= (Button) view.findViewById(R.id.dialog_cancel);
+        final EditText title_v = (EditText) view.findViewById(R.id.msg_title);
+        final EditText content_v = (EditText) view.findViewById(R.id.msg_content);
+        final TextView error_v = (TextView) view.findViewById(R.id.error);
+        Button dialogCancel = (Button) view.findViewById(R.id.dialog_cancel);
 
         dialogCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +239,7 @@ public class MsgPushActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
-        Button dialogConfirm= (Button) view.findViewById(R.id.dialog_confirm);
+        Button dialogConfirm = (Button) view.findViewById(R.id.dialog_confirm);
         dialogConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,19 +247,19 @@ public class MsgPushActivity extends BaseActivity {
                 String title = title_v.getText().toString().trim();
                 String content = content_v.getText().toString().trim();
 
-                if( TextUtils.isEmpty(title)){
+                if (TextUtils.isEmpty(title)) {
                     error_v.setText("标题不能为空");
                     error_v.setVisibility(View.VISIBLE);
                     return;
 
                 }
-                if( TextUtils.isEmpty(content)){
+                if (TextUtils.isEmpty(content)) {
                     error_v.setText("内容不能为空");
                     error_v.setVisibility(View.VISIBLE);
                     return;
 
                 }
-                NewHttpRequest.sendPushMsg(MsgPushActivity.this,content,title,admin.getId(),admin.getLeader_name(),new NewHttpRequest.MyCallBack(){
+                NewHttpRequest.sendPushMsg(MsgPushActivity.this, content, title, admin.getId(), admin.getLeader_name(), new NewHttpRequest.MyCallBack() {
 
 
                     @Override
@@ -274,10 +278,7 @@ public class MsgPushActivity extends BaseActivity {
                         error_v.setVisibility(View.VISIBLE);
 
                     }
-                } );
-
-
-
+                });
 
 
             }
@@ -285,7 +286,6 @@ public class MsgPushActivity extends BaseActivity {
         dialog.show();
 
     }
-
 
 
 }

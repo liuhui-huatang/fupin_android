@@ -89,6 +89,7 @@ public class DanganListNewActivity extends BaseActivity {
      *
      */
     private Adapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,15 +120,15 @@ public class DanganListNewActivity extends BaseActivity {
             }
         });
 
-        adapter= new Adapter(this);
+        adapter = new Adapter(this);
         listview.setAdapter(adapter);
-        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR))?   String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
+        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR)) ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
 
         //条目点击事件
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // DanganXinxiActivity.startIntent(DanganListNewActivity.this, list.get(position));
+                // DanganXinxiActivity.startIntent(DanganListNewActivity.this, list.get(position));
                 view.findViewById(R.id.dangan_detail_layout).setVisibility(View.VISIBLE);
                 curentPosition = position;
             }
@@ -139,17 +140,17 @@ public class DanganListNewActivity extends BaseActivity {
                 MyActivity.startIntent(DanganListNewActivity.this);
             }
         });
-    getData();
+        getData();
 
 
     }
 
     private void getLeaderInfo() {
         leader = new NewLeader();
-        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
-        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
+        } else if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
         }
     }
 
@@ -162,33 +163,33 @@ public class DanganListNewActivity extends BaseActivity {
 
 
     List<Archive> list = new ArrayList<>();
+
     public void getData() {
-                NewHttpRequest.getArchivesWithLeader(this,String.valueOf(leader.getId()),year, new NewHttpRequest.MyCallBack(this){
-                    @Override
-                    public void ok(String json) {
-                        //  System.out.println("---------------------"+new Date()+"-----------------------");
-                        list = JsonUtil.toList(json, Archive.class);
-                        //   System.out.println("---------------------"+new Date()+"-----------------------");
-                        if (list.size() > 0) {
-                            tvEmpty.setVisibility(View.GONE);
-                            listview.setVisibility(View.VISIBLE);
-                            adapter.notifyDataSetChanged();
+        NewHttpRequest.getArchivesWithLeader(this, String.valueOf(leader.getId()), year, new NewHttpRequest.MyCallBack(this) {
+            @Override
+            public void ok(String json) {
+                //  System.out.println("---------------------"+new Date()+"-----------------------");
+                list = JsonUtil.toList(json, Archive.class);
+                //   System.out.println("---------------------"+new Date()+"-----------------------");
+                if (list.size() > 0) {
+                    tvEmpty.setVisibility(View.GONE);
+                    listview.setVisibility(View.VISIBLE);
+                    adapter.notifyDataSetChanged();
 
-                        } else {
-                            tvEmpty.setVisibility(View.VISIBLE);
-                            listview.setVisibility(View.GONE);
-                        }
+                } else {
+                    tvEmpty.setVisibility(View.VISIBLE);
+                    listview.setVisibility(View.GONE);
+                }
 
-                    }
-
-                    @Override
-                    public void no(String msg) {
-                        ToastUtil.show(msg);
-
-                    }
-                });
             }
 
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
+    }
 
 
     @Override
@@ -220,7 +221,7 @@ public class DanganListNewActivity extends BaseActivity {
                             return;
                         }
                         year = text.toString();
-                        SPUtil.saveString(Config.YEAR,year);
+                        SPUtil.saveString(Config.YEAR, year);
                         getData();
 
                     }
@@ -278,24 +279,24 @@ public class DanganListNewActivity extends BaseActivity {
                 holder.pingjia_layout = convertView.findViewById(R.id.pingjia_layout);
 
                 convertView.setTag(holder);
-            }else{
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
             Archive archive = list.get(position);
-            if(archive !=null ){
+            if (archive != null) {
                 NewPoor poor = archive.getPoor();
-                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, BaseConfig.ImageUrl+poor.getPhoto(),holder.iv_photo);
-                holder.tv_name.setText(  poor.getFname());
-                holder.tv_address.setText(  poor.getVillage_name());
+                GlideUtils.LoadCircleImageWithoutBorderColor((Activity) mContext, BaseConfig.ImageUrl + poor.getPhoto(), holder.iv_photo);
+                holder.tv_name.setText(poor.getFname());
+                holder.tv_address.setText(poor.getVillage_name());
                 holder.tv_phone.setText(poor.getFphone());
                 holder.dangan_info_layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if( holder.dangan_detail_layout.getVisibility() == View.VISIBLE){
+                        if (holder.dangan_detail_layout.getVisibility() == View.VISIBLE) {
                             holder.dangan_detail_layout.setVisibility(View.GONE);
                             holder.iv_show_detail.setImageResource(R.mipmap.icon_common_right);
-                        }else{
+                        } else {
 
                             holder.dangan_detail_layout.setVisibility(View.VISIBLE);
                             holder.iv_show_detail.setImageResource(R.mipmap.icon_common_down);
@@ -322,34 +323,35 @@ public class DanganListNewActivity extends BaseActivity {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.jiben_layout:
-                    DanganJibenActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganJibenActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.family_layout:
-                    DanganJiatingActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganJiatingActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.shenghuo_layout:
-                    DanganBasciActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganBasciActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.shouru_layout:
-                    DanganShouruActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganShouruActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.ziyuan_layout:
-                    DanganInfoActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganInfoActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.cuoshi_layout:
-                    DanganPolicyActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganPolicyActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.zijin_layout:
-                    DanganFundActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganFundActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
                 case R.id.pingjia_layout:
-                    DanganGanbuActivity.startIntent((Activity)mContext,list.get(curentPosition));
+                    DanganGanbuActivity.startIntent((Activity) mContext, list.get(curentPosition));
                     break;
             }
         }
     }
+
     private class ViewHolder {
         ImageView iv_photo;
         TextView tv_name;

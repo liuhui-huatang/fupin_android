@@ -46,8 +46,9 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
         setSelect(0);  //显示第一个Tab
 
         // 判断是否需要更新版本
-       // AppDownloadUtils.getApkInfo(this);
+        // AppDownloadUtils.getApkInfo(this);
     }
+
     private void initEvent() {
         mTabHome.setOnClickListener(this);
         mTabAccount.setOnClickListener(this);
@@ -65,17 +66,19 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
         mAccountImg = (ImageView) findViewById(R.id.tab_account_img);
 
     }
+
     public static void startIntent(Activity activity) {
         activity.startActivity(new Intent(activity, NewHomeActivity.class));
     }
+
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
-            case R.id.tab_home :
+        switch (v.getId()) {
+            case R.id.tab_home:
                 setSelect(0);
                 break;
-            case R.id.tab_account :
+            case R.id.tab_account:
                 setSelect(1);
                 break;
             case R.id.tab_account_img:
@@ -89,6 +92,7 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
 
     /**
      * 显示指定Tab，并将对应的图片设置为亮色
+     *
      * @param i
      */
     private void setSelect(int i) {
@@ -96,11 +100,11 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         hideFragment(transaction);
-        switch (i){
+        switch (i) {
             case 0:
-                if (homeFragment==null){
+                if (homeFragment == null) {
                     homeFragment = new HomeFragment();
-                    transaction.add(R.id.content,homeFragment);
+                    transaction.add(R.id.content, homeFragment);
                 }
                 //将图片设置为亮色
                 mHomeImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_home_light));
@@ -109,9 +113,9 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
                 transaction.commit();
                 break;
             case 1:
-                if (accountFragment==null){
+                if (accountFragment == null) {
                     accountFragment = new AccountFragment();
-                    transaction.add(R.id.content,accountFragment);
+                    transaction.add(R.id.content, accountFragment);
 
                 }
                 mAccountImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_account_tab_light));
@@ -125,13 +129,14 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
 
     /**
      * 将所有Fragment隐藏起来
+     *
      * @param transaction
      */
     private void hideFragment(FragmentTransaction transaction) {
-        if (accountFragment!=null){
+        if (accountFragment != null) {
             transaction.hide(accountFragment);
         }
-        if (homeFragment!=null){
+        if (homeFragment != null) {
             transaction.hide(homeFragment);
         }
     }
@@ -140,12 +145,11 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
      * 将所有图片切换成暗色
      */
     private void resetImg() {
-       // mHomeImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_home_light));
+        // mHomeImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_home_light));
         mHomeImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_home_normal));
         //mAccountImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_account_light));
         mAccountImg.setImageResource(SkinUtil.getResouceId(R.mipmap.img_account_normal));
     }
-
 
 
     @Override
@@ -169,6 +173,7 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
     protected void onStop() {
         super.onStop();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

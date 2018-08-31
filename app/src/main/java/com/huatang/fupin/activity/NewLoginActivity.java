@@ -41,7 +41,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
-public class NewLoginActivity extends BaseActivity implements View.OnClickListener{
+public class NewLoginActivity extends BaseActivity implements View.OnClickListener {
 
 
     TextView ganbuBtn;
@@ -70,8 +70,8 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     @BindView(R.id.youkelogin)
     Button youkelogin_btn;
     private String type = Config.YOUKU_TYPE;//默认为游客身份//用户类型:1: 游客2: 贫困户 3: 帮扶干部4: 管理员5: 村负责人
-    MyHandler  myHandler;
-    private String country ="86";
+    MyHandler myHandler;
+    private String country = "86";
     private String phone;
     EventHandler eh;
     private String pwd;
@@ -87,7 +87,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
         initView();
         initSMSCode();
         initBottomDialog();
-        countDownUtil =new CountDownUtil(sendCode_btn);
+        countDownUtil = new CountDownUtil(sendCode_btn);
 
 
     }
@@ -101,23 +101,22 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
-
     /***
      * 验证码倒计时
      *
      * **/
-    private void startCountDown(){
+    private void startCountDown() {
 
         countDownUtil.setCountDownMillis(60_000L)//倒计时60000ms
-                .setCountDownColor(android.R.color.holo_blue_dark,android.R.color.background_dark)//不同状态字体颜色
+                .setCountDownColor(android.R.color.holo_blue_dark, android.R.color.background_dark)//不同状态字体颜色
                 .setOnClickListener(this).start();
 
     }
-    private void initSMSCode(){
+
+    private void initSMSCode() {
         myHandler = new MyHandler();
         //注册回调监听，放到发送和验证前注册，注意这里是子线程需要传到主线程中去操作后续提示
-        eh=new EventHandler(){
+        eh = new EventHandler() {
 
             @Override
             public void afterEvent(int event, int result, Object data) {
@@ -135,7 +134,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     private void initBottomDialog() {
 
         bottomSheetDialog = new BottomSheetDialog(this);//实例化BottomSheetDialog
-        View dialogView= LayoutInflater.from(this).inflate(R.layout.indentity_dialog_layout,null);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.indentity_dialog_layout, null);
         ganbuBtn = dialogView.findViewById(R.id.ganbu);
         pinkuhuBtn = dialogView.findViewById(R.id.pinkunhu);
         fuzerenBtn = dialogView.findViewById(R.id.fuzeren);
@@ -174,21 +173,21 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         //用完回调要注销掉，否则可能会出现内存泄露
         SMSSDK.unregisterEventHandler(eh);
     }
 
 
-
     @Override
-    @OnClick({R.id.user_type_tx,R.id.sendCode, R.id.forget_password,R.id.youkelogin,R.id.login_submit})
+    @OnClick({R.id.user_type_tx, R.id.sendCode, R.id.forget_password, R.id.youkelogin, R.id.login_submit})
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.user_type_tx://选择用户类型，底部弹框显示
-                if(!bottomSheetDialog.isShowing()){
+                if (!bottomSheetDialog.isShowing()) {
                     bottomSheetDialog.show();//显示弹窗
                 }
                 break;
@@ -216,12 +215,12 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
             case R.id.sendCode://发送验证码
                 // 请求验证码，其中country表示国家代码，如“86”；phone表示手机号码，如“13800138000”
                 phone = username_edt.getText().toString().trim();
-                if(TextUtils.isEmpty(phone)){
+                if (TextUtils.isEmpty(phone)) {
                     ToastUtil.show("请输入手机号码");
                     return;
 
                 }
-                if(ValidateUtil.isPhoneNumber(phone)){
+                if (ValidateUtil.isPhoneNumber(phone)) {
                     ToastUtil.show("请输入正确的手机号码");
                     return;
                 }
@@ -235,22 +234,20 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
             case R.id.youkelogin://游客登陆
                 type = Config.YOUKU_TYPE;
 
-                login("","",type);
+                login("", "", type);
                 break;
             case R.id.login_submit://登陆
                 phone = username_edt.getText().toString().trim();
                 pwd = pwd_edt.getText().toString().trim();
                 String code = code_edt.getText().toString().trim();
 
-                boolean flag = checkEdit(phone,pwd,code);//检查是否为null
-                if(flag){
+                boolean flag = checkEdit(phone, pwd, code);//检查是否为null
+                if (flag) {
                     //SMSSDK.submitVerificationCode(country, phone, code); // 提交验证码，其中的code表示验证码，如“1357”
-                    login(phone,pwd,type);//调用登陆接口
+                    login(phone, pwd, type);//调用登陆接口
                 }
 
                 break;
-
-
 
 
         }
@@ -258,21 +255,20 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
-    private  boolean checkEdit(String phone,String pwd,String code){
-        if(TextUtils.isEmpty(phone)){
+    private boolean checkEdit(String phone, String pwd, String code) {
+        if (TextUtils.isEmpty(phone)) {
             ToastUtil.show("请输入手机号码");
             return false;
         }
-        if(phone.length()!=11 || !phone.startsWith("1")){
+        if (phone.length() != 11 || !phone.startsWith("1")) {
             ToastUtil.show("请输入正确的手机号码");
             return false;
         }
-        if(TextUtils.isEmpty(pwd)){
-           ToastUtil.show("请输入密码");
-           return false;
+        if (TextUtils.isEmpty(pwd)) {
+            ToastUtil.show("请输入密码");
+            return false;
         }
-        if(TextUtils.isEmpty(code)){
+        if (TextUtils.isEmpty(code)) {
             ToastUtil.show("请输入验证码");
             return false;
         }
@@ -289,6 +285,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
         JPushInterface.setAlias(this, phone, null);
         MLog.e("JPush==setJpushAlias==setAlias");
     }
+
     /**
      * 登录
      *
@@ -296,60 +293,60 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
      * @param pwd
      * @param type
      */
-    private void login(final String phone, final String pwd,final String type) {
-        NewHttpRequest.login(NewLoginActivity.this, phone, pwd,type, new NewHttpRequest.MyCallBack(this) {
+    private void login(final String phone, final String pwd, final String type) {
+        NewHttpRequest.login(NewLoginActivity.this, phone, pwd, type, new NewHttpRequest.MyCallBack(this) {
 
 
             @Override
             public void ok(String json) {
                 ToastUtil.show("登录成功！");
-                SPUtil.saveString(Config.Type,type);
-                SPUtil.saveString(Config.PHONE,phone);
-                SPUtil.saveString(Config.PASSWORD,pwd);
-                if(type.equals(Config.YOUKU_TYPE)){//游客
-                    SPUtil.saveString(Config.TOKEN,JsonUtil.getString(json,Config.TOKEN));
-                    SPUtil.saveString(Config.NAME,JsonUtil.getString(json,Config.NAME));
-                    YouKe youKe = JsonUtil.json2Bean(json,YouKe.class);
+                SPUtil.saveString(Config.Type, type);
+                SPUtil.saveString(Config.PHONE, phone);
+                SPUtil.saveString(Config.PASSWORD, pwd);
+                if (type.equals(Config.YOUKU_TYPE)) {//游客
+                    SPUtil.saveString(Config.TOKEN, JsonUtil.getString(json, Config.TOKEN));
+                    SPUtil.saveString(Config.NAME, JsonUtil.getString(json, Config.NAME));
+                    YouKe youKe = JsonUtil.json2Bean(json, YouKe.class);
                     try {
-                        SPUtil.saveObject(Config.YOUKE,youKe);
+                        SPUtil.saveObject(Config.YOUKE, youKe);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else if(type.equals(Config.PENKUNHU_TYPE)){
+                } else if (type.equals(Config.PENKUNHU_TYPE)) {
 
                     NewPoor poor = JsonUtil.json2Bean(json, NewPoor.class);
-                    SPUtil.saveString(Config.TOKEN,poor.getToken());
+                    SPUtil.saveString(Config.TOKEN, poor.getToken());
                     try {
 
-                        SPUtil.saveObject(Config.PENKUNHU_KEY,poor);
+                        SPUtil.saveObject(Config.PENKUNHU_KEY, poor);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                }else if(type.equals(Config.FUZEREN_TYPE)){
-                    NewFuzeren fuzeren = JsonUtil.json2Bean(json,NewFuzeren.class);
-                    SPUtil.saveString(Config.TOKEN,fuzeren.getToken());
+                } else if (type.equals(Config.FUZEREN_TYPE)) {
+                    NewFuzeren fuzeren = JsonUtil.json2Bean(json, NewFuzeren.class);
+                    SPUtil.saveString(Config.TOKEN, fuzeren.getToken());
                     try {
-                        SPUtil.saveObject(Config.FUZEREN_KEY,fuzeren);
+                        SPUtil.saveObject(Config.FUZEREN_KEY, fuzeren);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                }else if(type.equals(Config.GANBU_TYPE)){//
-                    NewLeader leader = JsonUtil.json2Bean(json,NewLeader.class);
-                    SPUtil.saveString(Config.TOKEN,leader.getToken());
+                } else if (type.equals(Config.GANBU_TYPE)) {//
+                    NewLeader leader = JsonUtil.json2Bean(json, NewLeader.class);
+                    SPUtil.saveString(Config.TOKEN, leader.getToken());
                     try {
-                        SPUtil.saveObject(Config.GANBU_KEY,leader);
+                        SPUtil.saveObject(Config.GANBU_KEY, leader);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                }else if(type.equals(Config.ADMIN_TYPE)){
-                    NewLeader admin = JsonUtil.json2Bean(json,NewLeader.class);
-                    SPUtil.saveString(Config.TOKEN,admin.getToken());
+                } else if (type.equals(Config.ADMIN_TYPE)) {
+                    NewLeader admin = JsonUtil.json2Bean(json, NewLeader.class);
+                    SPUtil.saveString(Config.TOKEN, admin.getToken());
                     try {
-                        SPUtil.saveObject(Config.ADMIN_KEY,admin);
+                        SPUtil.saveObject(Config.ADMIN_KEY, admin);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -367,20 +364,18 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
         });
 
 
-
     }
 
 
-
-    private class MyHandler extends Handler{
-        public MyHandler(){
+    private class MyHandler extends Handler {
+        public MyHandler() {
 
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.arg2 == SMSSDK.RESULT_COMPLETE){
+            if (msg.arg2 == SMSSDK.RESULT_COMPLETE) {
                 //回调完成
                 if (msg.arg1 == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
@@ -388,11 +383,11 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         public void run() {
                             ToastUtil.show("验证成功");
-                            login(phone,pwd,type);//调用登陆接口
+                            login(phone, pwd, type);//调用登陆接口
                         }
                     });
 
-                }else if (msg.arg1 == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                } else if (msg.arg1 == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
                     runOnUiThread(new Runnable() {
                         @Override
@@ -401,18 +396,17 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                             MLog.d("验证码已发送");
                         }
                     });
-                }else if (msg.arg1 ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-
+                } else if (msg.arg1 == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
 
 
                 }
-            }else{
-                ((Throwable)msg.obj).printStackTrace();
+            } else {
+                ((Throwable) msg.obj).printStackTrace();
                 Throwable throwable = (Throwable) msg.obj;
                 try {
                     JSONObject obj = new JSONObject(throwable.getMessage());
                     final String des = obj.optString("detail");
-                    if (!TextUtils.isEmpty(des)){
+                    if (!TextUtils.isEmpty(des)) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

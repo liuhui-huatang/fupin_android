@@ -75,21 +75,21 @@ public class PingJiaActivity extends BaseActivity {
 
     private void initView() {
         Intent intent = getIntent();
-        leader = (NewLeader)intent.getSerializableExtra("leader");
-        if(leader == null){
+        leader = (NewLeader) intent.getSerializableExtra("leader");
+        if (leader == null) {
             return;
         }
         tvName.setText(leader.getLeader_name());
         tv_zhiwu.setText(leader.getLeader_duty());
         tv_phone.setText(leader.getLeader_phone());
-        tv_town.setText(TextUtils.isEmpty(leader.getHelp_town()) ? "" :"包连乡镇:"+leader.getHelp_town());
+        tv_town.setText(TextUtils.isEmpty(leader.getHelp_town()) ? "" : "包连乡镇:" + leader.getHelp_town());
         //tv_poor_num.setText(leader.get);
-         GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl+leader.getLeader_phone(),ivPhoto);
-         poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
-         if(poor == null){
-             ToastUtil.show("身份失效，请重新登录");
-             return;
-         }
+        GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + leader.getLeader_phone(), ivPhoto);
+        poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
+        if (poor == null) {
+            ToastUtil.show("身份失效，请重新登录");
+            return;
+        }
 
     }
 
@@ -111,9 +111,10 @@ public class PingJiaActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-    @OnClick({R.id.left_menu,R.id.bt_submit})
+
+    @OnClick({R.id.left_menu, R.id.bt_submit})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.left_menu:
                 finish();
                 break;
@@ -124,12 +125,12 @@ public class PingJiaActivity extends BaseActivity {
         }
 
 
-
     }
 
     private void saveContent(String content) {
 
     }
+
     public static void startIntent(Activity activity, NewLeader leader) {
         Intent it = new Intent(activity, PingJiaActivity.class);
         it.putExtra("leader", leader);

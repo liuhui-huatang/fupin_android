@@ -37,7 +37,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
     private ImageView leftMenu;
     private TextView rightMenu;
     private Adapter myAdapter;
-    private List<NewChat> list ;
+    private List<NewChat> list;
     private ListView listview;
     private TextView tv_empty;
     private NewLeader leader;
@@ -49,27 +49,28 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
         initView();
         initData();
     }
-    private void initView(){
-        leftMenu = (ImageView)findViewById(R.id.left_menu);
-        rightMenu = (TextView)findViewById(R.id.right_tx_menu);
+
+    private void initView() {
+        leftMenu = (ImageView) findViewById(R.id.left_menu);
+        rightMenu = (TextView) findViewById(R.id.right_tx_menu);
         leftMenu.setImageResource(SkinUtil.getResouceId(R.mipmap.icon_commen_break));
         leftMenu.setOnClickListener(this);
         rightMenu.setOnClickListener(this);
         leftMenu.setVisibility(View.VISIBLE);
         String type = SPUtil.getString(Config.Type);
-        if(type.equals(Config.ADMIN_TYPE) || type.equals(Config.GANBU_TYPE)){
+        if (type.equals(Config.ADMIN_TYPE) || type.equals(Config.GANBU_TYPE)) {
             rightMenu.setVisibility(View.VISIBLE);
-          //  rightMenu.setOnClickListener(this);
+            //  rightMenu.setOnClickListener(this);
         }
-        tv_empty = (TextView)findViewById(R.id.tv_empty);
+        tv_empty = (TextView) findViewById(R.id.tv_empty);
         list = new ArrayList<NewChat>();
-        listview = (ListView)findViewById(R.id.listview);
+        listview = (ListView) findViewById(R.id.listview);
         myAdapter = new Adapter(this);
         listview.setAdapter(myAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MsgChatActivity.startIntent(MsgChatListActivity.this,list.get(position));
+                MsgChatActivity.startIntent(MsgChatListActivity.this, list.get(position));
             }
         });
 
@@ -77,26 +78,26 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initData() {
-         leader = new NewLeader();
-        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
-        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        leader = new NewLeader();
+        if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
+        } else if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
         }
-        NewHttpRequest.getChatMsgList(this, leader.leader_phone , new NewHttpRequest.MyCallBack(this) {
+        NewHttpRequest.getChatMsgList(this, leader.leader_phone, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
 
-                    list = JsonUtil.toList(json, NewChat.class);
-                    if(list.size() > 0){
-                        myAdapter.notifyDataSetChanged();
-                        listview.setVisibility(View.VISIBLE);
-                        tv_empty.setVisibility(View.GONE);
-                    }else{
-                        listview.setVisibility(View.GONE);
-                        tv_empty.setVisibility(View.VISIBLE);
-                    }
+                list = JsonUtil.toList(json, NewChat.class);
+                if (list.size() > 0) {
+                    myAdapter.notifyDataSetChanged();
+                    listview.setVisibility(View.VISIBLE);
+                    tv_empty.setVisibility(View.GONE);
+                } else {
+                    listview.setVisibility(View.GONE);
+                    tv_empty.setVisibility(View.VISIBLE);
                 }
+            }
 
 
             @Override
@@ -140,7 +141,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_menu:
                 finish();
                 break;
@@ -149,6 +150,7 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
     /*
      * @ forever 在 17/5/17 下午2:28 创建
      *
@@ -192,29 +194,30 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             ImageView item_photo = ViewHolderUtil.get(convertView, R.id.item_leader_photo);
             TextView item_name = ViewHolderUtil.get(convertView, R.id.item_content);
             TextView item_title = ViewHolderUtil.get(convertView, R.id.item_title);
-            TextView item_content = ViewHolderUtil.get(convertView,R.id.item_content);
+            TextView item_content = ViewHolderUtil.get(convertView, R.id.item_content);
             TextView item_number = ViewHolderUtil.get(convertView, R.id.item_number);
-            TextView item_createTime = ViewHolderUtil.get(convertView,R.id.item_createTime);
-            TextView deleteGroup = ViewHolderUtil.get(convertView,R.id.item_deleteGroup);
+            TextView item_createTime = ViewHolderUtil.get(convertView, R.id.item_createTime);
+            TextView deleteGroup = ViewHolderUtil.get(convertView, R.id.item_deleteGroup);
             final NewChat chat = list.get(position);
             item_name.setText(chat.getPush_leader_name());
             item_title.setText(chat.getTitle());
             item_content.setText(chat.getContent());
-            item_number.setText(chat.getLeader_num()+"人");
+            item_number.setText(chat.getLeader_num() + "人");
             item_createTime.setText(chat.getCreate_time());
             deleteGroup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteDialog(mContext,chat);
+                    deleteDialog(mContext, chat);
 
                 }
             });
             String path = BaseConfig.ImageUrl + chat.getPush_photo();
 
-            GlideUtils.LoadCircleImageWithoutBorderColor(this.mContext,path,item_photo);
+            GlideUtils.LoadCircleImageWithoutBorderColor(this.mContext, path, item_photo);
             return convertView;
         }
     }
+
     /**
      * 弹出退出登录对话框
      */
@@ -226,13 +229,14 @@ public class MsgChatListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                NewHttpRequest.deleteGroup( (Activity)mContext,leader.getLeader_phone(),chat.getId(),new NewHttpRequest.MyCallBack(mContext){
+                NewHttpRequest.deleteGroup((Activity) mContext, leader.getLeader_phone(), chat.getId(), new NewHttpRequest.MyCallBack(mContext) {
 
                     @Override
                     public void ok(String json) {
                         ToastUtil.show("删除成功");
                         initData();
                     }
+
                     @Override
                     public void no(String msg) {
 

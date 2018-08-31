@@ -28,15 +28,15 @@ import com.huatang.fupin.utils.ViewHolderUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberListActivity extends BaseActivity implements View.OnClickListener{
-    public static String CHAT ="chat";
+public class MemberListActivity extends BaseActivity implements View.OnClickListener {
+    public static String CHAT = "chat";
     public static final int REQUEST_CODE_ADD_LEADER = 10001;
     private ImageView leftMenu;
     private TextView rightMenu;
     private TextView title;
     private NewChat chat;
     private String phones = "";
-    private List<NewLeader> leader_list ;
+    private List<NewLeader> leader_list;
     private ListView listview;
     private Adapter leaderAdapter;
     private TextView tvEmpty;
@@ -55,31 +55,31 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initHeadView() {
-        leftMenu = (ImageView)findViewById(R.id.left_menu);
+        leftMenu = (ImageView) findViewById(R.id.left_menu);
         leftMenu.setOnClickListener(this);
-        rightMenu = (TextView)findViewById(R.id.right_tx_menu);
+        rightMenu = (TextView) findViewById(R.id.right_tx_menu);
         rightMenu.setText("添加成员");
         rightMenu.setVisibility(View.VISIBLE);
         rightMenu.setOnClickListener(this);
-        title = (TextView)findViewById(R.id.title_tx);
+        title = (TextView) findViewById(R.id.title_tx);
         title.setText("成员列表");
-        listview = (ListView)findViewById(R.id.listview);
-        tvEmpty = (TextView)findViewById(R.id.tv_empty);
-        rl_leader = (RelativeLayout)findViewById(R.id.rl_leader);
+        listview = (ListView) findViewById(R.id.listview);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
+        rl_leader = (RelativeLayout) findViewById(R.id.rl_leader);
         rl_leader.setOnClickListener(this);
 
     }
 
-    private void initData(){
+    private void initData() {
         Intent intent = getIntent();
-        chat = (NewChat)intent.getSerializableExtra(CHAT);
+        chat = (NewChat) intent.getSerializableExtra(CHAT);
         leader_list = new ArrayList<>();
         leaderAdapter = new Adapter(this);
         listview.setAdapter(leaderAdapter);
         NewHttpRequest.getChatMember(this, chat.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                leader_list = JsonUtil.toList(json,NewLeader.class);
+                leader_list = JsonUtil.toList(json, NewLeader.class);
                 if (leader_list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
@@ -103,7 +103,7 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_menu:
                 finish();
                 break;
@@ -114,7 +114,7 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.right_tx_menu:
                 //添加
-                if(TextUtils.isEmpty(phones)){
+                if (TextUtils.isEmpty(phones)) {
                     ToastUtil.show("请选择成员");
                     return;
 
@@ -133,8 +133,8 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
                 ToastUtil.show("添加成功");
                 finish();
                 Intent intent = new Intent();
-                intent.putExtra("num",leader_list.size());
-                setResult(RESULT_OK,intent);
+                intent.putExtra("num", leader_list.size());
+                setResult(RESULT_OK, intent);
 
             }
 
@@ -149,21 +149,23 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-            if ( resultCode == MsgSendSearchActivity.LEADER_RESULT_CODE) {
-                NewLeader leader = (NewLeader) data.getSerializableExtra(Config.GANBU_KEY);
-                if (!TextUtils.isEmpty(phones) && phones.contains(leader.getLeader_phone())) {
-                    ToastUtil.show("当前用户已选择");
-                    return;
-                }
-                leader_list.add(leader);
-                phones += leader.getLeader_phone()+",";
-                leaderAdapter.notifyDataSetChanged();
+        if (resultCode == MsgSendSearchActivity.LEADER_RESULT_CODE) {
+            NewLeader leader = (NewLeader) data.getSerializableExtra(Config.GANBU_KEY);
+            if (!TextUtils.isEmpty(phones) && phones.contains(leader.getLeader_phone())) {
+                ToastUtil.show("当前用户已选择");
+                return;
             }
+            leader_list.add(leader);
+            phones += leader.getLeader_phone() + ",";
+            leaderAdapter.notifyDataSetChanged();
+        }
 
     }
-    class Adapter extends BaseAdapter{
+
+    class Adapter extends BaseAdapter {
         private Context mContext;
-        public Adapter(Context context){
+
+        public Adapter(Context context) {
             this.mContext = context;
         }
 

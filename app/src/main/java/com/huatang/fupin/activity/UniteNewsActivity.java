@@ -74,7 +74,7 @@ public class UniteNewsActivity extends BaseActivity {
         ggListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UnitNewsInfoActivity.startIntent(UniteNewsActivity.this,list.get(position));
+                UnitNewsInfoActivity.startIntent(UniteNewsActivity.this, list.get(position));
             }
         });
 
@@ -99,10 +99,11 @@ public class UniteNewsActivity extends BaseActivity {
                 getCloumn();
             }
         });
-        adapter= new MyAdapter();
+        adapter = new MyAdapter();
         ggListview.setAdapter(adapter);
         getCloumn();
     }
+
     @OnClick(R.id.left_menu)
     public void onViewClicked() {
         finish();
@@ -111,18 +112,18 @@ public class UniteNewsActivity extends BaseActivity {
     int load = 1;
 
     public void getCloumn() {
-        if(load==-1){
+        if (load == -1) {
             ToastUtil.show("没有更多数据了");
             return;
         }
-        NewHttpRequest.getNewsWithType(this,type,String.valueOf(load),new NewHttpRequest.MyCallBack(this){
+        NewHttpRequest.getNewsWithType(this, type, String.valueOf(load), new NewHttpRequest.MyCallBack(this) {
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
-                    load=-1;
+                    load = -1;
                     return;
                 }
                 list.addAll(cloumns);
@@ -162,6 +163,7 @@ public class UniteNewsActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
     class MyAdapter extends BaseAdapter {
 
         @Override
@@ -191,13 +193,14 @@ public class UniteNewsActivity extends BaseActivity {
 
             NewColumn bean = list.get(position);
             if (!TextUtils.isEmpty(bean.getImg())) {
-                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(),R.mipmap.news_default_img);
+                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(), R.mipmap.news_default_img);
             }
             tv_item_title.setText(bean.getTitle());
             tv_item_time.setText("  " + bean.getUpdate_time());
             return convertView;
         }
     }
+
     public static void startIntent(Activity activity, String type) {
         Intent it = new Intent(activity, UniteNewsActivity.class);
         it.putExtra(TYPE, type);

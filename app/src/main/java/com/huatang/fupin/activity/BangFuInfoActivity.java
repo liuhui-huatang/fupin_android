@@ -133,7 +133,7 @@ public class BangFuInfoActivity extends BaseActivity {
                 if (i < photos.length) {
                     if (!TextUtils.isEmpty(photos[i])) {
                         imageViewList.get(i).setVisibility(View.VISIBLE);
-                        GlideUtils.displayHome(imageViewList.get(i), BaseConfig.ImageUrl + photos[i]);
+                        GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + photos[i],R.mipmap.news_default_img);
                     }
                 } else {
                     imageViewList.get(i).setVisibility(View.GONE);

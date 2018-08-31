@@ -69,7 +69,7 @@ public class ImageViewPageActivity extends BaseActivity {
     TextView rightMenu;
     private List<String> photoList;
     private int currentPosition = 0;
-    private int size =0;
+    private int size = 0;
     private MyImageAdapter myImageAdapter;
     private String from;
     private String fcard;
@@ -83,14 +83,14 @@ public class ImageViewPageActivity extends BaseActivity {
         Intent intent = getIntent();
         from = intent.getStringExtra("from");
         fcard = intent.getStringExtra("fcard");
-        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR))?   String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
-        photoList = (List<String>)intent.getSerializableExtra("photos");
+        year = TextUtils.isEmpty(SPUtil.getString(Config.YEAR)) ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) : SPUtil.getString(Config.YEAR);
+        photoList = (List<String>) intent.getSerializableExtra("photos");
         initHeadView();
         size = photoList.size();
-        myImageAdapter = new MyImageAdapter(photoList,this);
+        myImageAdapter = new MyImageAdapter(photoList, this);
         photoViewPager.setAdapter(myImageAdapter);
         photoViewPager.setCurrentItem(currentPosition, false);
-        mTvImageCount.setText(currentPosition+1 + "/" + size);
+        mTvImageCount.setText(currentPosition + 1 + "/" + size);
         photoViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -104,18 +104,19 @@ public class ImageViewPageActivity extends BaseActivity {
     private void initHeadView() {
         tvTitle.setText("图片浏览");
         String type = SPUtil.getString(Config.Type);
-        if(!TextUtils.isEmpty(from) && from.equals("BangFuInfoActivity")){//帮扶日子详情页面的图片浏览
+        if (!TextUtils.isEmpty(from) && from.equals("BangFuInfoActivity")) {//帮扶日子详情页面的图片浏览
             rightMenu.setVisibility(View.INVISIBLE);
             delete_photo.setVisibility(View.INVISIBLE);
-        }else{
-            if(type.equals(Config.GANBU_TYPE) || type.equals(Config.ADMIN_TYPE)){
+        } else {
+            if (type.equals(Config.GANBU_TYPE) || type.equals(Config.ADMIN_TYPE)) {
                 rightMenu.setText("添加");
                 rightMenu.setVisibility(View.VISIBLE);
                 delete_photo.setVisibility(View.VISIBLE);
             }
         }
     }
-    @OnClick({R.id.left_menu,R.id.right_tx_menu,R.id.delete_photo})
+
+    @OnClick({R.id.left_menu, R.id.right_tx_menu, R.id.delete_photo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:
@@ -132,11 +133,12 @@ public class ImageViewPageActivity extends BaseActivity {
     }
 
     private void showUploadDialog() {
-        UploadUtils uploadUtils = new UploadUtils(this,R.id.image_viewpage_layout,mOnHanlderResultCallback);
+        UploadUtils uploadUtils = new UploadUtils(this, R.id.image_viewpage_layout, mOnHanlderResultCallback);
         uploadUtils.showSelectPicture();
 
 
     }
+
     private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
         @Override
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
@@ -163,19 +165,20 @@ public class ImageViewPageActivity extends BaseActivity {
             @Override
             public void callback(String json) {
                 ToastUtil.show("图片上传成功");
-                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json,"url");
+                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json, "url");
                 //调用一个更新到数据库的接口
-                photoList.add(JsonUtil.getStringFromArray(json,"url"));
+                photoList.add(JsonUtil.getStringFromArray(json, "url"));
                 saveImage();
 
 
             }
         });
     }
-    public void  saveImage(){
+
+    public void saveImage() {
         myImageAdapter.notifyDataSetChanged();
         size = photoList.size();
-        mTvImageCount.setText(currentPosition+1 + "/" + size);
+        mTvImageCount.setText(currentPosition + 1 + "/" + size);
         NewHttpRequest.editPoorPhotoWithFcard(this, fcard, year, from, StringUtil.listToString(photoList, "###"), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
@@ -183,7 +186,7 @@ public class ImageViewPageActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("photoList", (Serializable) photoList);
 
-                setResult(RESULT_OK,intent);
+                setResult(RESULT_OK, intent);
             }
 
             @Override
@@ -193,6 +196,7 @@ public class ImageViewPageActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -211,7 +215,7 @@ public class ImageViewPageActivity extends BaseActivity {
     public class MyImageAdapter extends PagerAdapter {
         private List<String> imageUrls;
         private AppCompatActivity activity;
-        private List<View>viewList ;
+        private List<View> viewList;
 
         public MyImageAdapter(List<String> imageUrls, AppCompatActivity activity) {
             this.imageUrls = imageUrls;
@@ -223,7 +227,7 @@ public class ImageViewPageActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             String url = BaseConfig.ImageUrl + imageUrls.get(position);
             PhotoView photoView = new PhotoView(activity);
-            GlideUtils.displayUrl(photoView,url,R.mipmap.news_default_img);
+            GlideUtils.displayUrl(photoView, url, R.mipmap.news_default_img);
             container.addView(photoView);
             photoView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -231,10 +235,10 @@ public class ImageViewPageActivity extends BaseActivity {
                     activity.finish();
                 }
             });
-            if(viewList == null ){
-                viewList = new ArrayList<>() ;
+            if (viewList == null) {
+                viewList = new ArrayList<>();
             }
-           //
+            //
             viewList.add(photoView);
             return photoView;
         }
@@ -257,15 +261,16 @@ public class ImageViewPageActivity extends BaseActivity {
         @Override
         public int getItemPosition(Object object) {
 
-                return POSITION_NONE;
+            return POSITION_NONE;
 
         }
     }
-    public static void startIntent(Activity activity,List<String> photoList,int from,String fcard) {
+
+    public static void startIntent(Activity activity, List<String> photoList, int from, String fcard) {
         Intent it = new Intent(activity, ImageViewPageActivity.class);
-        it.putExtra("from",String.valueOf(from));
+        it.putExtra("from", String.valueOf(from));
         it.putExtra("photos", (Serializable) photoList);
-        it.putExtra("fcard",fcard);
-        activity.startActivityForResult(it,Integer.valueOf(from));
+        it.putExtra("fcard", fcard);
+        activity.startActivityForResult(it, Integer.valueOf(from));
     }
 }

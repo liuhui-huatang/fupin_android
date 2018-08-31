@@ -64,11 +64,10 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
  * 消息聊天页面
  *
  * @author forever
- *         created at 2017/1/9 11:16
+ * created at 2017/1/9 11:16
  */
 
-public class MsgChatActivity extends BaseActivity implements TextWatcher{
-
+public class MsgChatActivity extends BaseActivity implements TextWatcher {
 
 
     @BindView(R.id.left_menu)
@@ -95,23 +94,23 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
 
     /*
-         * @ forever 在 17/5/17 下午2:28 创建
-         *
-         * 描述：跳转到当前页面
-         *
-         */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到当前页面
+     *
+     */
     public static void startIntent(Activity activity, NewChat chat) {
         Intent it = new Intent(activity, MsgChatActivity.class);
-        it.putExtra("chat",  chat);
+        it.putExtra("chat", chat);
         activity.startActivity(it);
     }
 
     /*
-    * @ forever 在 17/5/17 下午2:28 创建
-    *
-    * 描述：页面创建时调用
-    *
-    */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：页面创建时调用
+     *
+     */
     Adapter myAdapter;
     NewChat chat;
 
@@ -136,7 +135,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             @Override
             public void onRefresh(final com.scwang.smartrefresh.layout.api.RefreshLayout freshlayout) {
                 freshlayout.finishRefresh(true);
-                pageNo ++ ;
+                pageNo++;
                 getData();
 
 
@@ -147,7 +146,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             public void onLoadmore(com.scwang.smartrefresh.layout.api.RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadmore(1000);
                 list.clear();
-                pageNo = 1 ;
+                pageNo = 1;
                 getData();
                 listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
             }
@@ -157,10 +156,10 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ToastUtil.show("点击了一下");
                 NewChat chat = list.get(position);
-                if(!TextUtils.isEmpty(chat.getPush_photo())){
+                if (!TextUtils.isEmpty(chat.getPush_photo())) {
                     Intent intent = new Intent();
-                    intent.setClass(MsgChatActivity.this,ImageUploadActivity.class);
-                    intent.putExtra(ImageUploadActivity.PHOTO_URL,chat.getPush_photo());
+                    intent.setClass(MsgChatActivity.this, ImageUploadActivity.class);
+                    intent.putExtra(ImageUploadActivity.PHOTO_URL, chat.getPush_photo());
                     startActivity(intent);
 
                 }
@@ -194,21 +193,21 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
                 break;
 
             case R.id.bt_send:
-                if(bt_send_type.equals("content")){
+                if (bt_send_type.equals("content")) {
                     sendPhoto = "";
                     sendContent();
-                }else{
-                    content ="";
+                } else {
+                    content = "";
                     showSelectPicture();
                 }
 
                 break;
             case R.id.right_tx_menu:
                 Intent intent = new Intent();
-                intent.setClass(this,MemberListActivity.class);
-                intent.putExtra(MemberListActivity.CHAT,chat);
+                intent.setClass(this, MemberListActivity.class);
+                intent.putExtra(MemberListActivity.CHAT, chat);
                 //startActivity(intent);
-                startActivityForResult(intent,MemberListActivity.REQUEST_CODE_ADD_LEADER);
+                startActivityForResult(intent, MemberListActivity.REQUEST_CODE_ADD_LEADER);
                 break;
         }
     }
@@ -216,8 +215,8 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == MemberListActivity.REQUEST_CODE_ADD_LEADER){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == MemberListActivity.REQUEST_CODE_ADD_LEADER) {
                 list.clear();
                 getData();
                 String num = data.getStringExtra("num");
@@ -231,9 +230,10 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         NewHttpRequest.getchatById(this, chat.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                chat = JsonUtil.json2Bean(json,NewChat.class);
+                chat = JsonUtil.json2Bean(json, NewChat.class);
                 tile.setText(chat.getTitle() + "(" + chat.getLeader_num() + "人)");
             }
+
             @Override
             public void no(String msg) {
                 ToastUtil.show(msg);
@@ -248,13 +248,13 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         refreshChat();
     }
 
-    public void sendContent(){
+    public void sendContent() {
         String msg = etMsg.getText().toString().trim();
         if (TextUtils.isEmpty(msg)) {
             ToastUtil.show("请输入内容");
             return;
         }
-        content = msg ;
+        content = msg;
         sendMsg();
     }
 
@@ -288,12 +288,12 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             @Override
             public void ok(String json) {
                 List<NewChat> result = JsonUtil.toList(json, NewChat.class);
-                if(result ==null || result.size() == 0){
+                if (result == null || result.size() == 0) {
                     ToastUtil.show("没有更多数据了");
                     return;
 
                 }
-                list.addAll(0,result);
+                list.addAll(0, result);
                 myAdapter.notifyDataSetChanged();
 
             }
@@ -308,10 +308,10 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
     private void getInitLeader() {
 
-        if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader= (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
-        }else if(SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)){
-            leader = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+        if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
+        } else if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
+            leader = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
         }
     }
 
@@ -328,13 +328,12 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
 
     @Override
     public void afterTextChanged(Editable s) {
-        if(s.length()==0){
+        if (s.length() == 0) {
             btSend.setText("图片");
             bt_send_type = "photo";
         }
 
     }
-
 
 
     class Adapter extends BaseAdapter {
@@ -364,38 +363,38 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             NewChat chat = list.get(position);
-            if(convertView == null){
-                if(chat.getPush_leader_id().equals(leader.getId())){
+            if (convertView == null) {
+                if (chat.getPush_leader_id().equals(leader.getId())) {
                     convertView = View.inflate(mContext, R.layout.item_chat_right, null);
                     holder = new ViewHolder(1, convertView);
 
-                }else{
+                } else {
                     convertView = View.inflate(mContext, R.layout.item_chat_left, null);
                     holder = new ViewHolder(2, convertView);
                 }
                 convertView.setTag(holder);
-            }else{
+            } else {
 
-                if(chat.getPush_leader_id().equals(leader.getId())){
-                    holder = (ViewHolder)convertView.getTag();
+                if (chat.getPush_leader_id().equals(leader.getId())) {
+                    holder = (ViewHolder) convertView.getTag();
 
-                }else{
-                    holder = (ViewHolder)convertView.getTag();
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
                 }
             }
 
-            GlideUtils.displayHomeUrl(holder.itemPhoto, BaseConfig.ImageUrl + chat.getPush_leader_photo(),R.mipmap.header_default);
+            GlideUtils.displayHomeUrl(holder.itemPhoto, BaseConfig.ImageUrl + chat.getPush_leader_photo(), R.mipmap.header_default);
             holder.itemName.setText(chat.getPush_leader_name());
 
-            if(TextUtils.isEmpty(chat.getContent()) && !TextUtils.isEmpty(chat.getPush_photo())){
+            if (TextUtils.isEmpty(chat.getContent()) && !TextUtils.isEmpty(chat.getPush_photo())) {
 
-               // ImageView imageView = (ImageView) convertView.findViewWithTag(chat.getPush_photo());
-                GlideUtils.LoadImageWithSize(mContext,chat.getPush_photo(),400,400,holder.chat_upload_img);
-               // holder.chat_upload_img.setTag(chat.getPush_photo());
+                // ImageView imageView = (ImageView) convertView.findViewWithTag(chat.getPush_photo());
+                GlideUtils.LoadImageWithSize(mContext, chat.getPush_photo(), 400, 400, holder.chat_upload_img);
+                // holder.chat_upload_img.setTag(chat.getPush_photo());
 
                 holder.chat_content_layout.setVisibility(View.GONE);
                 holder.chat_upload_img.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.itemText.setText(chat.getContent());
                 holder.chat_content_layout.setVisibility(View.VISIBLE);
                 holder.chat_upload_img.setVisibility(View.GONE);
@@ -425,6 +424,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             }
         }
     }
+
     // －－－－－－－－－－－－－－－－－－－－－－－－－－－拍照相关的方法
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
@@ -480,15 +480,14 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher{
             @Override
             public void callback(String json) {
                 ToastUtil.show("发送成功");
-                SPUtil.saveString("photo", JsonUtil.getStringFromArray(json,"url"));
-                sendPhoto = JsonUtil.getStringFromArray(json,"url");
-                String photoUrl = BaseConfig.ImageUrl +sendPhoto;
-                        //GlideUtils.displayHome(ivPhoto, photoUrl);
+                SPUtil.saveString("photo", JsonUtil.getStringFromArray(json, "url"));
+                sendPhoto = JsonUtil.getStringFromArray(json, "url");
+                String photoUrl = BaseConfig.ImageUrl + sendPhoto;
+                //GlideUtils.displayHome(ivPhoto, photoUrl);
                 sendMsg();
 
             }
         });
-
 
 
     }

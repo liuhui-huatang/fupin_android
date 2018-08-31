@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TabContentFragment extends Fragment {
-    private static final String TAB_TYPE = "type" ;
+    private static final String TAB_TYPE = "type";
     private String type;
     private ArrayList<NewColumn> list = new ArrayList<>();
     private MyAdapter adapter;
@@ -53,6 +53,7 @@ public class TabContentFragment extends Fragment {
         myFragment.setArguments(args);
         return myFragment;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,22 +61,21 @@ public class TabContentFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         super.onCreateView(inflater, container, savedInstanceState);
-         View view = inflater.inflate(R.layout.fragment_tab_content,container,false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_tab_content, container, false);
 
-         listview = view.findViewById(R.id.listview);
-         tvEmpty = view.findViewById(R.id.tv_empty);
+        listview = view.findViewById(R.id.listview);
+        tvEmpty = view.findViewById(R.id.tv_empty);
 
-        adapter = new MyAdapter(getActivity(),list);
+        adapter = new MyAdapter(getActivity(), list);
         listview.setAdapter(adapter);
         //条目点击事件
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UnitNewsInfoActivity.startIntent(getActivity(),list.get(position));
+                UnitNewsInfoActivity.startIntent(getActivity(), list.get(position));
             }
         });
         initView(view);
@@ -106,20 +106,22 @@ public class TabContentFragment extends Fragment {
             }
         });
     }
+
     int load = 1;
+
     private void getCloumn() {
-        if(load==-1){
+        if (load == -1) {
             ToastUtil.show("没有更多数据了");
             return;
         }
-        NewHttpRequest.getNewsWithType(getActivity(),type,String.valueOf(load),new NewHttpRequest.MyCallBack(getActivity()){
+        NewHttpRequest.getNewsWithType(getActivity(), type, String.valueOf(load), new NewHttpRequest.MyCallBack(getActivity()) {
 
             @Override
             public void ok(String json) {
                 List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
                 if (cloumns.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
-                    load=-1;
+                    load = -1;
                     return;
                 }
                 list.addAll(cloumns);
@@ -146,7 +148,8 @@ public class TabContentFragment extends Fragment {
     class MyAdapter extends BaseAdapter {
         private Context context;
         private List<NewColumn> columnList;
-        public MyAdapter(Context context,List<NewColumn> columnList){
+
+        public MyAdapter(Context context, List<NewColumn> columnList) {
             this.context = context;
             this.columnList = columnList;
         }
@@ -178,7 +181,7 @@ public class TabContentFragment extends Fragment {
 
             NewColumn bean = list.get(position);
             if (!TextUtils.isEmpty(bean.getImg())) {
-                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(),R.mipmap.news_default_img);
+                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(), R.mipmap.news_default_img);
             }
             tv_item_title.setText(bean.getTitle());
             tv_item_time.setText("  " + bean.getUpdate_time());

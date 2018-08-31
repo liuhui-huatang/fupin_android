@@ -45,7 +45,7 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
  * 我的信息展示页面
  *
  * @author forever
- *         created at 2017/1/9 11:16
+ * created at 2017/1/9 11:16
  */
 
 public class MyInfoActivity extends BaseActivity {
@@ -77,22 +77,22 @@ public class MyInfoActivity extends BaseActivity {
     RelativeLayout rlXiangzhen;
 
     /*
-             * @ forever 在 17/5/17 下午2:28 创建
-             *
-             * 描述：跳转到登录页面
-             *
-             */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到登录页面
+     *
+     */
     public static void startIntent(Activity activity) {
         Intent it = new Intent(activity, MyInfoActivity.class);
         activity.startActivity(it);
     }
 
     /*
-    * @ forever 在 17/5/17 下午2:28 创建
-    *
-    * 描述：页面创建时调用
-    *
-    */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：页面创建时调用
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,14 +105,14 @@ public class MyInfoActivity extends BaseActivity {
     public void initView() {
         tvName.setText(SPUtil.getString(Config.NAME));
         tvPhone.setText(SPUtil.getString(Config.PHONE));
-        switch (SPUtil.getString(Config.Type)){
+        switch (SPUtil.getString(Config.Type)) {
 
             case Config.PENKUNHU_TYPE:
                 NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
-                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
-                }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+poor.getPhoto(),ivPhoto);
+                if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                } else {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + poor.getPhoto(), ivPhoto);
                 }
                 rlZhiwu.setVisibility(View.GONE);
                 rlDanwei.setVisibility(View.GONE);
@@ -120,10 +120,10 @@ public class MyInfoActivity extends BaseActivity {
                 break;
             case Config.ADMIN_TYPE:
                 NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
-                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
-                }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+admin.getLeader_photo(),ivPhoto);
+                if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                } else {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + admin.getLeader_photo(), ivPhoto);
                 }
                 tvName.setText(admin.getLeader_name());
                 tvZhiwu.setText(admin.getLeader_duty());
@@ -133,10 +133,10 @@ public class MyInfoActivity extends BaseActivity {
                 break;
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getLeaderFromSharePref();
-                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
-                }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+leader.getLeader_photo(),ivPhoto);
+                if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                } else {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + leader.getLeader_photo(), ivPhoto);
                 }
                 tvName.setText(leader.getLeader_name());
                 tvZhiwu.setText(leader.getLeader_duty());
@@ -145,11 +145,11 @@ public class MyInfoActivity extends BaseActivity {
                 tvXiangzhen.setText(leader.getHelp_town());
                 break;
             case Config.FUZEREN_TYPE:
-                NewFuzeren fuzeren = (NewFuzeren)SPUtil.getObject(Config.FUZEREN_KEY);
-                if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
-                }else{
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,fuzeren.getPhoto(),ivPhoto);
+                NewFuzeren fuzeren = (NewFuzeren) SPUtil.getObject(Config.FUZEREN_KEY);
+                if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                } else {
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, fuzeren.getPhoto(), ivPhoto);
                 }
                 tvName.setText(fuzeren.getVillage_name());
                 tvZhiwu.setText(fuzeren.getVillage_chief());
@@ -159,11 +159,11 @@ public class MyInfoActivity extends BaseActivity {
                 break;
             case Config.YOUKU_TYPE:
                 YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
-                if(TextUtils.isEmpty(SPUtil.getString(Config.PHONE))){//photo为空表示没有注册的游客
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,SPUtil.getString(Config.HEAD_PHOTO),ivPhoto);
-                }else{
+                if (TextUtils.isEmpty(SPUtil.getString(Config.PHONE))) {//photo为空表示没有注册的游客
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                } else {
                     //tvName.setText(TextUtils.isEmpty(youKe.getName()) ? SPUtil.getString(Config.NAME):youKe.getName());
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this,BaseConfig.ImageUrl+youKe.getPhoto(),ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + youKe.getPhoto(), ivPhoto);
                 }
 
                 rlZhiwu.setVisibility(View.GONE);
@@ -171,7 +171,6 @@ public class MyInfoActivity extends BaseActivity {
                 rlXiangzhen.setVisibility(View.GONE);
                 break;
         }
-
 
 
     }
@@ -261,7 +260,7 @@ public class MyInfoActivity extends BaseActivity {
             @Override
             public void callback(String json) {
 
-                String url = JsonUtil.getStringFromArray(json,"url");
+                String url = JsonUtil.getStringFromArray(json, "url");
 
                 savePhoto(url);
             }
@@ -271,9 +270,9 @@ public class MyInfoActivity extends BaseActivity {
     }
 
     private void savePhoto(final String url) {
-        String  type = "";
+        String type = "";
         String fcard = "";
-        switch (SPUtil.getString(Config.Type)){
+        switch (SPUtil.getString(Config.Type)) {
             case Config.YOUKU_TYPE:
                 type = "0";
                 break;
@@ -295,32 +294,32 @@ public class MyInfoActivity extends BaseActivity {
             public void ok(String json) {
 
                 String photoUrl = BaseConfig.ImageUrl + url;
-                SPUtil.saveString(Config.HEAD_PHOTO,photoUrl);
-                GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this,photoUrl ,ivPhoto);
-                switch (SPUtil.getString(Config.Type)){
+                SPUtil.saveString(Config.HEAD_PHOTO, photoUrl);
+                GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this, photoUrl, ivPhoto);
+                switch (SPUtil.getString(Config.Type)) {
                     case Config.YOUKU_TYPE:
                         YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
                         youKe.setPhoto(url);
                         try {
-                            SPUtil.saveObject(Config.YOUKE,youKe);
+                            SPUtil.saveObject(Config.YOUKE, youKe);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     case Config.ADMIN_TYPE:
-                        NewLeader admin = (NewLeader)SPUtil.getObject(Config.ADMIN_KEY);
+                        NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
                         admin.setLeader_photo(url);
                         try {
-                            SPUtil.saveObject(Config.ADMIN_KEY,admin);
+                            SPUtil.saveObject(Config.ADMIN_KEY, admin);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     case Config.GANBU_TYPE:
-                        NewLeader leader = (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
+                        NewLeader leader = (NewLeader) SPUtil.getObject(Config.GANBU_KEY);
                         leader.setLeader_photo(url);
                         try {
-                            SPUtil.saveObject(Config.GANBU_KEY,leader);
+                            SPUtil.saveObject(Config.GANBU_KEY, leader);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -329,7 +328,7 @@ public class MyInfoActivity extends BaseActivity {
                         NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
                         poor.setPhoto(url);
                         try {
-                            SPUtil.saveObject(Config.PENKUNHU_KEY,poor);
+                            SPUtil.saveObject(Config.PENKUNHU_KEY, poor);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

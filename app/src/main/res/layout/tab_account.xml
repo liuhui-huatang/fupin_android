@@ -307,6 +307,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/change_skill"
             android:text="偷偷切换皮肤"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:textColor="@color/color_blue"
             android:background="@color/color_white"/>

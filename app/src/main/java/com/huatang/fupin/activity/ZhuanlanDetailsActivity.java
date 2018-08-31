@@ -38,10 +38,7 @@ public class ZhuanlanDetailsActivity extends BaseActivity {
 
     @BindView(R.id.tv_item_time)
     TextView tvItemTime;
-//    @BindView(R.id.iv_item_photo)
-//    ImageView ivItemPhoto;
-//    @BindView(R.id.tv_item_text)
-//    TextView tvItemText;
+
     @BindView(R.id.webview)
     WebView webview;
 
@@ -75,12 +72,8 @@ public class ZhuanlanDetailsActivity extends BaseActivity {
     }
 
     public void initView() {
-//        GlideUtils.displayHome(ivItemPhoto, bean.getClo_avtar());
-//        tvItemText.setText("      "+bean.getClo_content());
-
         tvItemTitle.setText(bean.getClo_title());
         tvItemTime.setText("  " + bean.getCreate_time());
-
         webview.loadDataWithBaseURL(null,bean.getClo_content(),"text/html","utf-8",null);
     }
 

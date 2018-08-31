@@ -28,6 +28,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:drawablePadding="10dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
                     android:drawableLeft="@mipmap/center_policy"
                     android:text="中央政策"/>
                 <ImageView
@@ -120,6 +122,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:drawablePadding="10dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
                     android:drawableLeft="@mipmap/zizhiqun_img"
                     android:text="自治区政策"/>
                 <ImageView
@@ -196,6 +200,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:drawablePadding="10dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
                     android:drawableLeft="@mipmap/city_img"
                     android:text="辽通市政策"/>
                 <ImageView
@@ -273,6 +279,8 @@
                     android:gravity="center_vertical"
                     android:drawableLeft="@mipmap/naiman_img"
                     android:drawablePadding="10dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
                     android:text="奈曼旗"/>
                 <ImageView
                     android:id="@+id/naiman_policy_arrow"

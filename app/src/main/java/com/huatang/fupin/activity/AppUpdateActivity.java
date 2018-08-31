@@ -55,11 +55,11 @@ public class AppUpdateActivity extends BaseActivity {
     LinearLayout rlUpdateLayout;
 
     /*
-       * @ forever 在 17/5/17 下午2:28 创建
-       *
-       * 描述：跳转到登录页面
-       *
-       */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到登录页面
+     *
+     */
     public static void startIntent(Activity activity) {
         Intent it = new Intent(activity, AppUpdateActivity.class);
         activity.startActivity(it);
@@ -70,13 +70,12 @@ public class AppUpdateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appupdate);
         ButterKnife.bind(this);
-        ((TextView)findViewById(R.id.title_tx)).setText("APP更新");
+        ((TextView) findViewById(R.id.title_tx)).setText("APP更新");
         ((TextView) findViewById(R.id.tv_code)).setText("V " + AndroidInfoUtils.versionName());
 
         initUpdata();
 
     }
-
 
 
     String apkUrl = "";

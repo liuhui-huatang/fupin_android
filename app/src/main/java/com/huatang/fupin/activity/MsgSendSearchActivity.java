@@ -41,14 +41,14 @@ import butterknife.OnClick;
  * 发布消息搜索发布对象页面
  *
  * @author forever
- *         created at 2017/1/9 11:16
+ * created at 2017/1/9 11:16
  */
 
 public class MsgSendSearchActivity extends BaseActivity {
 
-    public final static String TAG = "tag" ;
+    public final static String TAG = "tag";
     public final static int LEADER_RESULT_CODE = 100;
-    public final static int POOR_RESULT_CODE = 200 ;
+    public final static int POOR_RESULT_CODE = 200;
     @BindView(R.id.left_menu)
     ImageView leftMenu;
 
@@ -69,11 +69,11 @@ public class MsgSendSearchActivity extends BaseActivity {
     private NewLeader leader;
 
     /*
-         * @ forever 在 17/5/17 下午2:28 创建
-         *
-         * 描述：跳转到登录页面
-         *
-         */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：跳转到登录页面
+     *
+     */
     public static void startIntent(Activity activity, String tag) {
         Intent it = new Intent(activity, MsgSendSearchActivity.class);
         it.putExtra("tag", tag);
@@ -81,11 +81,11 @@ public class MsgSendSearchActivity extends BaseActivity {
     }
 
     /*
-    * @ forever 在 17/5/17 下午2:28 创建
-    *
-    * 描述：页面创建时调用
-    *
-    */
+     * @ forever 在 17/5/17 下午2:28 创建
+     *
+     * 描述：页面创建时调用
+     *
+     */
     String tag = "";
 
     @Override
@@ -130,7 +130,7 @@ public class MsgSendSearchActivity extends BaseActivity {
                 }
                 if (tag.equals(Config.GANBU_KEY)) {
                     getLeaderList(text);
-                } else if(tag.equals(Config.PENKUNHU_KEY)){
+                } else if (tag.equals(Config.PENKUNHU_KEY)) {
                     getPoorList();
                 }
 
@@ -139,54 +139,53 @@ public class MsgSendSearchActivity extends BaseActivity {
     }
 
 
-
     public void getLeaderList(String text) {
-        NewHttpRequest.searchGanbuList(this,text,new NewHttpRequest.MyCallBack(this){
+        NewHttpRequest.searchGanbuList(this, text, new NewHttpRequest.MyCallBack(this) {
 
             @Override
             public void ok(String json) {
-                leader_list = JsonUtil.toList(json,NewLeader.class);
-                    if(leader_list.size() > 0){
-                        tvEmpty.setVisibility(View.GONE);
-                        listview.setVisibility(View.VISIBLE);
-                        listview.setAdapter(new BaseAdapter() {
-                            @Override
-                            public int getCount() {
-                                return leader_list.size();
+                leader_list = JsonUtil.toList(json, NewLeader.class);
+                if (leader_list.size() > 0) {
+                    tvEmpty.setVisibility(View.GONE);
+                    listview.setVisibility(View.VISIBLE);
+                    listview.setAdapter(new BaseAdapter() {
+                        @Override
+                        public int getCount() {
+                            return leader_list.size();
+                        }
+
+                        @Override
+                        public Object getItem(int position) {
+                            return null;
+                        }
+
+                        @Override
+                        public long getItemId(int position) {
+                            return 0;
+                        }
+
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            if (convertView == null) {
+                                convertView = View.inflate(MsgSendSearchActivity.this, R.layout.item_list, null);
                             }
+                            TextView item_name = ViewHolderUtil.get(convertView, R.id.item_name);
+                            TextView item_phone = ViewHolderUtil.get(convertView, R.id.item_phone);
+                            RadioButton item_radio = ViewHolderUtil.get(convertView, R.id.item_radio);
+                            item_radio.setVisibility(View.GONE);
 
-                            @Override
-                            public Object getItem(int position) {
-                                return null;
-                            }
+                            item_name.setText(leader_list.get(position).getLeader_name());
+                            item_phone.setText(leader_list.get(position).getLeader_phone());
 
-                            @Override
-                            public long getItemId(int position) {
-                                return 0;
-                            }
-
-                            @Override
-                            public View getView(int position, View convertView, ViewGroup parent) {
-                                if (convertView == null) {
-                                    convertView = View.inflate(MsgSendSearchActivity.this, R.layout.item_list, null);
-                                }
-                                TextView item_name = ViewHolderUtil.get(convertView, R.id.item_name);
-                                TextView item_phone = ViewHolderUtil.get(convertView, R.id.item_phone);
-                                RadioButton item_radio = ViewHolderUtil.get(convertView, R.id.item_radio);
-                                item_radio.setVisibility(View.GONE);
-
-                                item_name.setText(leader_list.get(position).getLeader_name());
-                                item_phone.setText(leader_list.get(position).getLeader_phone());
-
-                                return convertView;
-                            }
-                        });
-                    }else{
-                        tvEmpty.setVisibility(View.VISIBLE);
-                        listview.setVisibility(View.GONE);
-                    }
-
+                            return convertView;
+                        }
+                    });
+                } else {
+                    tvEmpty.setVisibility(View.VISIBLE);
+                    listview.setVisibility(View.GONE);
                 }
+
+            }
 
 
             @Override
@@ -203,8 +202,8 @@ public class MsgSendSearchActivity extends BaseActivity {
         NewHttpRequest.searchPoorList(this, leader.getId(), new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                poorList = JsonUtil.toList(json,NewPoor.class);
-                if(poorList.size() > 0){
+                poorList = JsonUtil.toList(json, NewPoor.class);
+                if (poorList.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
                     listview.setAdapter(new BaseAdapter() {
@@ -241,7 +240,7 @@ public class MsgSendSearchActivity extends BaseActivity {
                     });
 
 
-                }else {
+                } else {
                     tvEmpty.setVisibility(View.VISIBLE);
                     listview.setVisibility(View.GONE);
                 }

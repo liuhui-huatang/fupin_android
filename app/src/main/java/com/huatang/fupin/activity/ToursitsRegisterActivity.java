@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 
 public class ToursitsRegisterActivity extends BaseActivity implements View.OnClickListener {
 
-    public static final int REGISTER_SUCCESS= 10001;
+    public static final int REGISTER_SUCCESS = 10001;
     private EditText register_pwd;
     private EditText register_phone;
     private EditText register_name;
@@ -40,7 +40,7 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tours_register );
+        setContentView(R.layout.activity_tours_register);
         ButterKnife.bind(this);
         initView();
     }
@@ -52,10 +52,10 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
         rightMenu.setText("注 册");
         rightMenu.setVisibility(View.VISIBLE);
         rightMenu.setOnClickListener(this);
-        register_phone = (EditText)findViewById(R.id.register_username_edt);
-        register_name = (EditText)findViewById(R.id.register_name);
-        register_pwd = (EditText)findViewById(R.id.register_pwd_edt);
-        register_btn = (Button)findViewById(R.id.register_btn);
+        register_phone = (EditText) findViewById(R.id.register_username_edt);
+        register_name = (EditText) findViewById(R.id.register_name);
+        register_pwd = (EditText) findViewById(R.id.register_pwd_edt);
+        register_btn = (Button) findViewById(R.id.register_btn);
         register_btn.setOnClickListener(this);
 
     }
@@ -87,14 +87,14 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.right_tx_menu:
                 String phone = register_phone.getText().toString().trim();
                 String pwd = register_pwd.getText().toString().trim();
                 String name = register_name.getText().toString().trim();
-                boolean flag = checkEdit(phone,pwd,name);
-                if(flag){
-                    registerUser(phone,pwd,name);
+                boolean flag = checkEdit(phone, pwd, name);
+                if (flag) {
+                    registerUser(phone, pwd, name);
                 }
 
                 break;
@@ -103,43 +103,45 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
                 break;
         }
     }
-    private  boolean checkEdit(String phone,String pwd,String name){
-        if(TextUtils.isEmpty(phone)){
+
+    private boolean checkEdit(String phone, String pwd, String name) {
+        if (TextUtils.isEmpty(phone)) {
             ToastUtil.show("请输入手机号码");
             return false;
         }
-        if(phone.length()!=11 || !phone.startsWith("1")){
+        if (phone.length() != 11 || !phone.startsWith("1")) {
             ToastUtil.show("请输入正确的手机号码");
             return false;
         }
-        if(TextUtils.isEmpty(pwd)){
+        if (TextUtils.isEmpty(pwd)) {
             ToastUtil.show("请输入密码");
             return false;
         }
-        if(TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             ToastUtil.show("请输入真实姓名");
             return false;
         }
         return true;
 
     }
+
     private void registerUser(final String phone, String password, String name) {
         NewHttpRequest.registerToursits(this, phone, password, name, new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
-                 ToastUtil.show("注册成功");
-                 String token = JsonUtil.getString(json,Config.TOKEN);
-                 SPUtil.saveString(Config.TOKEN,token);
-                 SPUtil.saveString(Config.PHONE,JsonUtil.getString(json,Config.PHONE));
-                 SPUtil.saveString(Config.NAME,JsonUtil.getString(json,Config.NAME));
+                ToastUtil.show("注册成功");
+                String token = JsonUtil.getString(json, Config.TOKEN);
+                SPUtil.saveString(Config.TOKEN, token);
+                SPUtil.saveString(Config.PHONE, JsonUtil.getString(json, Config.PHONE));
+                SPUtil.saveString(Config.NAME, JsonUtil.getString(json, Config.NAME));
                 try {
-                    SPUtil.saveObject(Config.YOUKE,JsonUtil.json2Bean(json, YouKe.class));
+                    SPUtil.saveObject(Config.YOUKE, JsonUtil.json2Bean(json, YouKe.class));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 // SPUtil.saveString(Config.Type,Config.YOUKU_TYPE);
                 setResult(RESULT_OK);
-                 finish();
+                finish();
             }
 
             @Override
@@ -149,6 +151,7 @@ public class ToursitsRegisterActivity extends BaseActivity implements View.OnCli
             }
         });
     }
+
     public static void startIntent(Activity activity, String key, String value) {
         Intent it = new Intent(activity, ToursitsRegisterActivity.class);
         activity.startActivity(it);

@@ -30,7 +30,6 @@ public class UnitNewsInfoActivity extends BaseActivity {
     TextView tvTitle;
 
 
-
     @BindView(R.id.webview)
     WebView webview;
     private NewColumn column;
@@ -70,7 +69,7 @@ public class UnitNewsInfoActivity extends BaseActivity {
 
             @Override
             public void callback(String json) {
-                webview.loadDataWithBaseURL(null,json,"text/html","utf-8",null);
+                webview.loadDataWithBaseURL(null, json, "text/html", "utf-8", null);
             }
         });
     }
