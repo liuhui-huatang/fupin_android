@@ -45,9 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="2dp"
-                android:background="@drawable/chat_reiver"
+                android:background="@drawable/chat_reiver_new"
                 android:gravity="center"
-                android:text="ddddddd"
+                android:text="d"
                 android:textColor="@color/color_333"
                 android:textSize="13sp" />
             <ImageView
