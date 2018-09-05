@@ -31,6 +31,10 @@ public class FupinPolicyActivity extends BaseActivity {
     RelativeLayout city_policy_item;
     @BindView(R.id.naiman_policy_item)
     RelativeLayout naiman_policy_item;
+    @BindView(R.id.naiman_fupin_yaodian)
+    RelativeLayout naiman_fupin_yaodian;
+
+
     @BindView(R.id.center_policy_layout)
     LinearLayout center_policy_layout;
     @BindView(R.id.zizhiqu_policy_layout)
@@ -39,6 +43,8 @@ public class FupinPolicyActivity extends BaseActivity {
     LinearLayout city_policy_layout;
     @BindView(R.id.naiman_policy_layout)
     LinearLayout naiman_policy_layout;
+
+
     @BindView(R.id.center_policy_arrow)
     ImageView center_policy_arrow;
     @BindView(R.id.zizhiqu_policy_arrow)
@@ -47,6 +53,7 @@ public class FupinPolicyActivity extends BaseActivity {
     ImageView city_policy_arrow;
     @BindView(R.id.naiman_policy_arrow)
     ImageView naiman_policy_arrow;
+
     @BindView(R.id.center_xidada_policy)
     RelativeLayout center_xidada_policy;
     @BindView(R.id.center_gelei_policy)
@@ -67,15 +74,25 @@ public class FupinPolicyActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        //习总书记关于脱贫攻坚的讲话  5
+        //中央政策 各类政策         6
+        //中央政策 相关文件         7
+        //自治区政策- 各类政策      8
+        //自治区政策  相关文件      9
+        //通辽市政策  各类政策      10
+        //通辽市政策 相关文件       11
+        //奈曼旗政策 35610脱贫机制 12
+        //奈曼旗政策 年度脱贫方案   14
+        //奈曼旗政策 扶贫政策要点   15
+        //奈曼旗政策 下发的其他相关文件 16
 
     }
     @OnClick({R.id.left_menu,
             R.id.center_policy_item,R.id.zizhiqu_policy_item,R.id.city_policy_item,R.id.naiman_policy_item,
             R.id.center_xidada_policy,R.id.center_gelei_policy,R.id.center_file_policy,
             R.id.zizhiqu_gelei_policy,R.id.zizhiqu_file_policy,
-            R.id.city_policy_layout,R.id.city_file_policy,
-            R.id.naiman_tuopin_policy,R.id.naiman_sannian_policy,R.id.naiman_niandu_policy,R.id.naiman_file_policy})
+            R.id.city_policy_layout,R.id.city_file_policy,R.id.city_gelei_policy,
+            R.id.naiman_tuopin_policy,R.id.naiman_sannian_policy,R.id.naiman_niandu_policy,R.id.naiman_file_policy,R.id.naiman_fupin_yaodian})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.left_menu:
@@ -121,28 +138,39 @@ public class FupinPolicyActivity extends BaseActivity {
                 }
 
                 break;
+
             case R.id.center_xidada_policy:
+                FupinPolicyListActivity.startIntent(this,"5");
                 break;
             case R.id.center_gelei_policy:
+                FupinPolicyListActivity.startIntent(this,"6");
                 break;
             case R.id.center_file_policy:
+                FupinPolicyListActivity.startIntent(this,"7");
                 break;
             case R.id.zizhiqu_gelei_policy:
+                FupinPolicyListActivity.startIntent(this,"8");
                 break;
             case R.id.zizhiqu_file_policy:
+                FupinPolicyListActivity.startIntent(this,"9");
                 break;
             case R.id.city_gelei_policy:
+                FupinPolicyListActivity.startIntent(this,"10");
                 break;
             case R.id.city_file_policy:
+                FupinPolicyListActivity.startIntent(this,"11");
                 break;
             case R.id.naiman_file_policy:
+                FupinPolicyListActivity.startIntent(this,"16");
                 break;
             case R.id.naiman_niandu_policy:
+                FupinPolicyListActivity.startIntent(this,"14");
                 break;
             case R.id.naiman_tuopin_policy://
-                FupinPolicyTabActivity.startIntent(this);
+                FupinPolicyListActivity.startIntent(this,"12");
                 break;
-            case R.id.naiman_sannian_policy:
+            case R.id.naiman_fupin_yaodian:
+                FupinPolicyListActivity.startIntent(this,"15");
                 break;
 
         }

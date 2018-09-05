@@ -1,5 +1,6 @@
 package com.huatang.fupin.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.huatang.fupin.app.MyApplication;
 
@@ -224,4 +226,5 @@ public final class AndroidInfoUtils {
         String appName = MyApplication.getContext().getPackageManager().getApplicationLabel(appInfo).toString();
         return appName;
     }
+
 }

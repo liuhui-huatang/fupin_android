@@ -100,6 +100,10 @@
         <activity android:name=".activity.FupinPolicyActivity"/>
         <activity android:name=".activity.FupinPolicyTabActivity"/>
         <activity android:name=".activity.PingJiaActivity" android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        <activity android:name=".activity.FupinPolicyListActivity"/>
+        <activity android:name=".activity.CreateMessageBoardActivity" android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        <activity android:name=".activity.MessageBoradDetailActivity" android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        <activity android:name=".activity.QunZhongHuDongActivity" />
 
 
 

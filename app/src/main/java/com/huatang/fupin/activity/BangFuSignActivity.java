@@ -164,7 +164,7 @@ public class BangFuSignActivity extends BaseActivity {
 
 
 
-    @OnClick({R.id.left_menu, R.id.right_tx_menu, R.id.tv_location, R.id.iv_sign_add1, R.id.iv_sign_add_2, R.id.rl_location, R.id.rl_basic})
+    @OnClick({R.id.left_menu, R.id.right_tx_menu,  R.id.iv_sign_add1, R.id.iv_sign_add_2, R.id.rl_location, R.id.rl_basic})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_menu:

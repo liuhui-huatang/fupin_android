@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:id="@+id/reply_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/et_reply"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@mipmap/activity_pingjia_et"
+            android:gravity="top"
+            android:imeOptions="actionNext"
+            android:hint="请输入工作内容"
+            android:padding="10dp"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/send_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送"
+            android:textColor="@color/color_blue"
+            android:padding="10dp"
+            android:layout_gravity="right"/>
+
+</LinearLayout>

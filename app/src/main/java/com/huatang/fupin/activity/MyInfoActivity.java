@@ -110,7 +110,7 @@ public class MyInfoActivity extends BaseActivity {
             case Config.PENKUNHU_TYPE:
                 NewPoor poor = (NewPoor) SPUtil.getObject(Config.PENKUNHU_KEY);
                 if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
                 } else {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + poor.getPhoto(), ivPhoto);
                 }
@@ -121,7 +121,7 @@ public class MyInfoActivity extends BaseActivity {
             case Config.ADMIN_TYPE:
                 NewLeader admin = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
                 if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
                 } else {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + admin.getLeader_photo(), ivPhoto);
                 }
@@ -134,7 +134,7 @@ public class MyInfoActivity extends BaseActivity {
             case Config.GANBU_TYPE:
                 NewLeader leader = (NewLeader) SPUtil.getLeaderFromSharePref();
                 if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
                 } else {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + leader.getLeader_photo(), ivPhoto);
                 }
@@ -147,7 +147,7 @@ public class MyInfoActivity extends BaseActivity {
             case Config.FUZEREN_TYPE:
                 NewFuzeren fuzeren = (NewFuzeren) SPUtil.getObject(Config.FUZEREN_KEY);
                 if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
                 } else {
                     GlideUtils.LoadCircleImageWithoutBorderColor(this, fuzeren.getPhoto(), ivPhoto);
                 }
@@ -160,7 +160,7 @@ public class MyInfoActivity extends BaseActivity {
             case Config.YOUKU_TYPE:
                 YouKe youKe = (YouKe) SPUtil.getObject(Config.YOUKE);
                 if (TextUtils.isEmpty(SPUtil.getString(Config.PHONE))) {//photo为空表示没有注册的游客
-                    GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
+                    GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO), ivPhoto);
                 } else {
                     //tvName.setText(TextUtils.isEmpty(youKe.getName()) ? SPUtil.getString(Config.NAME):youKe.getName());
                     GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl + youKe.getPhoto(), ivPhoto);
@@ -294,7 +294,7 @@ public class MyInfoActivity extends BaseActivity {
             public void ok(String json) {
 
                 String photoUrl = BaseConfig.ImageUrl + url;
-                SPUtil.saveString(Config.HEAD_PHOTO, photoUrl);
+                SPUtil.saveString(Config.HEAD_PHOTO, url);
                 GlideUtils.LoadCircleImageWithoutBorderColor(MyInfoActivity.this, photoUrl, ivPhoto);
                 switch (SPUtil.getString(Config.Type)) {
                     case Config.YOUKU_TYPE:

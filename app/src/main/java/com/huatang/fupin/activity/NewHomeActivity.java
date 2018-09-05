@@ -7,16 +7,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.huatang.fupin.R;
 import com.huatang.fupin.update.AppDownloadUtils;
 import com.huatang.fupin.utils.AppManager;
 import com.huatang.fupin.utils.SkinUtil;
+import com.huatang.fupin.utils.SystemLogHelper;
 import com.huatang.fupin.zxing.activity.CaptureActivity;
 
 import butterknife.BindView;
@@ -184,5 +187,32 @@ public class NewHomeActivity extends FragmentActivity implements View.OnClickLis
     @Override
     protected void onRestart() {
         super.onRestart();
+    }
+
+
+    /**
+     * 物理返回键监听，双击退出程序
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    Long exitTime = (long) 1000;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) { // System.currentTimeMillis()无论何时调用，肯定大于2000
+                Toast.makeText(this, "再次点击退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                //程序退出时的处理
+                SystemLogHelper.getmInstance().stop();
+                AppManager.getAppManager().finishAllActivity();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

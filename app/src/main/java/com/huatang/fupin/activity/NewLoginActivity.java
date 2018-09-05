@@ -307,6 +307,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                     SPUtil.saveString(Config.TOKEN, JsonUtil.getString(json, Config.TOKEN));
                     SPUtil.saveString(Config.NAME, JsonUtil.getString(json, Config.NAME));
                     YouKe youKe = JsonUtil.json2Bean(json, YouKe.class);
+                    SPUtil.saveString(Config.HEAD_PHOTO,youKe.getPhoto());
                     try {
                         SPUtil.saveObject(Config.YOUKE, youKe);
                     } catch (Exception e) {
@@ -316,6 +317,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
 
                     NewPoor poor = JsonUtil.json2Bean(json, NewPoor.class);
                     SPUtil.saveString(Config.TOKEN, poor.getToken());
+                    SPUtil.saveString(Config.HEAD_PHOTO,poor.getPhoto());
                     try {
 
                         SPUtil.saveObject(Config.PENKUNHU_KEY, poor);
@@ -326,6 +328,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                 } else if (type.equals(Config.FUZEREN_TYPE)) {
                     NewFuzeren fuzeren = JsonUtil.json2Bean(json, NewFuzeren.class);
                     SPUtil.saveString(Config.TOKEN, fuzeren.getToken());
+                    SPUtil.saveString(Config.HEAD_PHOTO,fuzeren.getPhoto());
                     try {
                         SPUtil.saveObject(Config.FUZEREN_KEY, fuzeren);
                     } catch (Exception e) {
@@ -335,6 +338,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                 } else if (type.equals(Config.GANBU_TYPE)) {//
                     NewLeader leader = JsonUtil.json2Bean(json, NewLeader.class);
                     SPUtil.saveString(Config.TOKEN, leader.getToken());
+                    SPUtil.saveString(Config.HEAD_PHOTO,leader.getLeader_photo());
                     try {
                         SPUtil.saveObject(Config.GANBU_KEY, leader);
                     } catch (Exception e) {
@@ -345,6 +349,7 @@ public class NewLoginActivity extends BaseActivity implements View.OnClickListen
                 } else if (type.equals(Config.ADMIN_TYPE)) {
                     NewLeader admin = JsonUtil.json2Bean(json, NewLeader.class);
                     SPUtil.saveString(Config.TOKEN, admin.getToken());
+                    SPUtil.saveString(Config.HEAD_PHOTO,admin.getLeader_photo());
                     try {
                         SPUtil.saveObject(Config.ADMIN_KEY, admin);
                     } catch (Exception e) {

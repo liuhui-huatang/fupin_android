@@ -1,7 +1,6 @@
 package com.huatang.fupin.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,14 +13,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
-import com.huatang.fupin.app.Config;
-import com.huatang.fupin.bean.Cloumn;
 import com.huatang.fupin.bean.NewColumn;
-import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.bean.PolicyNews;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.GlideUtils;
 import com.huatang.fupin.utils.JsonUtil;
@@ -43,7 +39,8 @@ import butterknife.OnClick;
 
 import static com.huatang.fupin.app.Config.typeMap;
 
-public class UniteNewsActivity extends BaseActivity {
+public class FupinPolicyListActivity extends BaseActivity {
+
     private final static String TYPE = "type";
 
     @BindView(R.id.left_menu)
@@ -54,7 +51,7 @@ public class UniteNewsActivity extends BaseActivity {
     ListView ggListview;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
-    private List<NewColumn> list;
+    private List<PolicyNews> list;
     private MyAdapter adapter;
     private String type;
 
@@ -64,7 +61,7 @@ public class UniteNewsActivity extends BaseActivity {
         setContentView(R.layout.activity_gonggao);
         ButterKnife.bind(this);
         type = getIntent().getStringExtra(TYPE);
-        tvTitle.setText(typeMap.get(type));
+        tvTitle.setText("政策保障");
         list = new ArrayList<>();
         initView();
     }
@@ -74,11 +71,10 @@ public class UniteNewsActivity extends BaseActivity {
         ggListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // UnitNewsInfoActivity.startIntent(UniteNewsActivity.this, list.get(position).getId());
-                NewColumn newColumn = list.get(position);
-                String title = newColumn.getTitle();
-                String url = BaseConfig.apiUrl +"news/getNewsInfoWithid?id="+newColumn.getId();
-                WebActivity.startIntent(UniteNewsActivity.this,url,title);
+                PolicyNews policyNews = list.get(position);
+                String title = policyNews.getTitle();
+                String url = BaseConfig.apiUrl +"news/getSafeguradInfoWithId?id="+policyNews.getNid();
+                WebActivity.startIntent(FupinPolicyListActivity.this,url,title);
             }
         });
 
@@ -120,17 +116,17 @@ public class UniteNewsActivity extends BaseActivity {
             ToastUtil.show("没有更多数据了");
             return;
         }
-        NewHttpRequest.getNewsWithType(this, type, String.valueOf(load), new NewHttpRequest.MyCallBack(this) {
+        NewHttpRequest.getSafeguradList(this, type, String.valueOf(load), new NewHttpRequest.MyCallBack(this) {
 
             @Override
             public void ok(String json) {
-                List<NewColumn> cloumns = JsonUtil.toList(json, NewColumn.class);
-                if (cloumns.size() == 0 && load != 1) {
+                List<PolicyNews> policyNewsList = JsonUtil.toList(json, PolicyNews.class);
+                if (policyNewsList.size() == 0 && load != 1) {
                     ToastUtil.show("没有更多数据了");
                     load = -1;
                     return;
                 }
-                list.addAll(cloumns);
+                list.addAll(policyNewsList);
                 if (list.size() > 0) {
                     tvEmpty.setVisibility(View.GONE);
                     ggListview.setVisibility(View.VISIBLE);
@@ -146,7 +142,6 @@ public class UniteNewsActivity extends BaseActivity {
             @Override
             public void no(String msg) {
                 ToastUtil.show(msg);
-
             }
         });
 
@@ -188,25 +183,22 @@ public class UniteNewsActivity extends BaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = View.inflate(UniteNewsActivity.this, R.layout.item_fragment, null);
+                convertView = View.inflate(FupinPolicyListActivity.this, R.layout.item_fragment, null);
             }
 
             ImageView iv_item_photo = ViewHolderUtil.get(convertView, R.id.iv_item_photo);
             TextView tv_item_title = ViewHolderUtil.get(convertView, R.id.tv_item_title);
             TextView tv_item_time = ViewHolderUtil.get(convertView, R.id.tv_item_time);
 
-            NewColumn bean = list.get(position);
-            if (!TextUtils.isEmpty(bean.getImg())) {
-                GlideUtils.displayHomeUrl(iv_item_photo, BaseConfig.ImageUrl + bean.getImg(), R.mipmap.news_default_img);
-            }
-            tv_item_title.setText(bean.getTitle());
-            tv_item_time.setText("  " + bean.getUpdate_time());
+            PolicyNews policyNews = list.get(position);
+            tv_item_title.setText(policyNews.getTitle());
+            tv_item_time.setText("  " + policyNews.getPush_time());
             return convertView;
         }
     }
 
     public static void startIntent(Activity activity, String type) {
-        Intent it = new Intent(activity, UniteNewsActivity.class);
+        Intent it = new Intent(activity, FupinPolicyListActivity.class);
         it.putExtra(TYPE, type);
         activity.startActivity(it);
     }

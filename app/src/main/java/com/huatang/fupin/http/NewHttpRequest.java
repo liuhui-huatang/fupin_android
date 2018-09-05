@@ -8,9 +8,11 @@ import android.text.TextUtils;
 
 import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.activity.DanganGanbuActivity;
+import com.huatang.fupin.activity.FupinPolicyListActivity;
 import com.huatang.fupin.activity.NewLoginActivity;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.MessageBoard;
 import com.huatang.fupin.bean.NewLeader;
 import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.utils.JsonUtil;
@@ -70,6 +72,7 @@ public class NewHttpRequest {
         httpParams.clear();
 
     }
+
 
 
 
@@ -151,7 +154,7 @@ public class NewHttpRequest {
         }
     }
     public static abstract class HtmlCallBack extends AbsCallback<String> {
-        public abstract void callback(String json);
+        public abstract void callback(String html);
 
 
         @Override
@@ -378,11 +381,14 @@ public class NewHttpRequest {
         executePost(context, "msg/addChatMember",httpParams, callback);
 
     }
-    public static void updatePwd(Activity context,String phone,String pwd,MyCallBack callBack){
+    public static void updatePwd(Activity context,String type,String phone,String pwd,String fcard,String leader_id,MyCallBack callBack){
         httpParams = getHttpParams();
         httpParams.put("phone", phone);
-        httpParams.put("pwd", pwd);
-        executePost(context, "archives/updatePwd",httpParams, callBack);
+        httpParams.put("password", pwd);
+        httpParams.put("type", type);
+        httpParams.put("fcard", fcard);
+        httpParams.put("id", leader_id);
+        executePost(context, "updatePassword",httpParams, callBack);
     }
     public static void getchatById(Activity context,String chat_id,MyCallBack callBack){
         httpParams = getHttpParams();
@@ -407,5 +413,91 @@ public class NewHttpRequest {
         executePost(context,"archives/uploadUserPhoto",httpParams,callBack);
 
 
+    }
+    public static void createLeaveMsg(Activity activity,String title,String content,String imgs,NewPoor poor,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("title",title);
+        httpParams.put("content",content);
+        httpParams.put("imgs",imgs);
+        httpParams.put("name",poor.getFname());
+        httpParams.put("fcard",poor.getFcard());
+        httpParams.put("phone",poor.getFphone());
+        httpParams.put("town",poor.getTown());
+        httpParams.put("town_name",poor.getTown_name());
+        httpParams.put("village",poor.getVillage());
+        httpParams.put("village_name",poor.getVillage_name());
+        executePost(activity,"leave/createLeaveMsg",httpParams,callBack);
+    }
+    public static void getLeaveMsgListWithTown(Activity activity,String town,String page,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("town",town);
+        httpParams.put("page",page);
+        executePost(activity,"leave/getLeaveMsgListWithTown",httpParams,callBack);
+    }
+    public static void poorGetLeaveMsgList(Activity activity,String fcard,String page,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("fcard",fcard);
+        httpParams.put("page",page);
+        executePost(activity,"leave/poorGetLeaveMsgList",httpParams,callBack);
+    }
+    public static void getSafeguradList(Activity activity, String type, String page, MyCallBack callBack) {
+        httpParams =  getHttpParams();
+        httpParams.put("type",type);
+        httpParams.put("page",page);
+        executePost(activity,"news/getSafeguradList",httpParams,callBack);
+    }
+    public static void getReplyMsgInfo(Activity activity,String group_id,MyCallBack callBack){
+        httpParams = getHttpParams();
+        httpParams.put("group_id",group_id);
+        executePost(activity,"leave/poorGetReplyMsgInfo",httpParams,callBack);
+
+    }
+    public static void poorReplyMsg(Activity activity, String reply, MessageBoard meb,NewPoor poor ,MyCallBack callBack){
+        httpParams =  getHttpParams();
+        httpParams.put("reply_content",reply);
+        httpParams.put("name",poor.getFname());
+        httpParams.put("phone",poor.getFphone());
+        httpParams.put("reply_content",reply);
+        httpParams.put("town",meb.getTown());
+        httpParams.put("town_name",meb.getTown_name());
+        httpParams.put("village",meb.getVillage());
+        httpParams.put("village_name",meb.getVillage_name());
+        httpParams.put("is_leader","0");
+        httpParams.put("group_id",meb.getId());
+        executePost(activity,"leave/poorReplyMsg",httpParams,callBack);
+    }
+    public static void leaderReplyMsg(Activity activity,String reply,MessageBoard meb ,NewLeader leader,MyCallBack callBack){
+        httpParams =  getHttpParams();
+        httpParams.put("reply_content",reply);
+        httpParams.put("name",leader.getLeader_name());
+        httpParams.put("phone",leader.getLeader_phone());
+        httpParams.put("reply_content",reply);
+        httpParams.put("town",meb.getTown());
+        httpParams.put("town_name",meb.getTown_name());
+        httpParams.put("village",meb.getVillage());
+        httpParams.put("village_name",meb.getVillage_name());
+        httpParams.put("is_leader","1");
+        httpParams.put("group_id",meb.getId());
+        executePost(activity,"leave/leaderReplyMsg",httpParams,callBack);
+    }
+    public static void  leaderEvaluation(Activity activity,String score,String content,NewPoor poor,NewLeader leader,MyCallBack callBack){
+        httpParams =  getHttpParams();
+        httpParams.put("poor_name",poor.getFname());
+        httpParams.put("poor_fcard",poor.getFcard());
+        httpParams.put("poor_phone",poor.getFphone());
+
+        httpParams.put("score",score);
+        httpParams.put("content",content);
+
+        httpParams.put("leader_id",leader.getId());
+        httpParams.put("leader_name",leader.getLeader_name());
+        httpParams.put("leader_name",leader.getLeader_name());
+        httpParams.put("leader_phone",leader.getLeader_phone());
+        executePost(activity,"leader/leaderEvaluation",httpParams,callBack);
+    }
+    public static void isUpdateApp(Activity activity ,MyCallBack callBack){
+        httpParams =  getHttpParams();
+        httpParams.put("type","android");
+        executePost(activity,"isUpdateApp",httpParams,callBack);
     }
 }

@@ -93,4 +93,5 @@ public class Config {
     public final static int DANGAN_ELECTOR = 6;
     public final static int DANGAN_BLEED = 7;
 
+
 }

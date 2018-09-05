@@ -19,6 +19,7 @@ import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.http.HttpRequest;
+import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.AndroidInfoUtils;
 import com.huatang.fupin.update.AppDownloadUtils;
 import com.huatang.fupin.utils.JsonUtil;
@@ -73,7 +74,7 @@ public class AppUpdateActivity extends BaseActivity {
         ((TextView) findViewById(R.id.title_tx)).setText("APP更新");
         ((TextView) findViewById(R.id.tv_code)).setText("V " + AndroidInfoUtils.versionName());
 
-        initUpdata();
+        initUpdate();
 
     }
 
@@ -82,30 +83,26 @@ public class AppUpdateActivity extends BaseActivity {
     String apkName = "";
     int apkCode = 0;
 
-    private void initUpdata() {
-        DialogUIUtils.showTie(this, "加载中...");
-        OkHttpUtils.get(BaseConfig.downloadApp)
-                .tag(this)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onResponse(boolean isFromCache, String json, Request request, @Nullable Response response) {
-                        MLog.e("app==", json);
-                        DialogUIUtils.dismssTie();
-                        apkCode = JsonUtil.getInt(json, "code");
-                        apkName = JsonUtil.getString(json, "name");
-                        apkUrl = JsonUtil.getString(json, "url");
-                        if (getApkNumber(AppUpdateActivity.this) < apkCode) {
-                            btUpdate.setVisibility(View.VISIBLE);
-                            rlUpdateLayout.setVisibility(View.GONE);
-                        } else {
-                            ToastUtil.show("当前版本已是最新版本！");
-                        }
-//                        else {
-//                            btUpdate.setVisibility(View.GONE);
-//                            rlUpdateLayout.setVisibility(View.VISIBLE);
-//                        }
-                    }
-                });
+    private void initUpdate() {
+        NewHttpRequest.isUpdateApp(this, new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                apkCode = JsonUtil.getInt(json, "versioncode");
+                apkName = JsonUtil.getString(json, "version");
+                apkUrl = JsonUtil.getString(json, "url");
+                if (getApkNumber(AppUpdateActivity.this) < apkCode) {
+                    btUpdate.setVisibility(View.VISIBLE);
+                    rlUpdateLayout.setVisibility(View.GONE);
+                } else {
+                    ToastUtil.show("当前版本已是最新版本！");
+                }
+            }
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
     }
 
     public static int getApkNumber(Context context) {

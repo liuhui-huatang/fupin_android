@@ -131,11 +131,11 @@ public class MemberListActivity extends BaseActivity implements View.OnClickList
             @Override
             public void ok(String json) {
                 ToastUtil.show("添加成功");
-                finish();
+
                 Intent intent = new Intent();
                 intent.putExtra("num", leader_list.size());
                 setResult(RESULT_OK, intent);
-
+                finish();
             }
 
             @Override

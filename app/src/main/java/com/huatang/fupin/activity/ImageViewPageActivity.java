@@ -41,6 +41,7 @@ import com.youth.banner.listener.OnBannerListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -104,15 +105,13 @@ public class ImageViewPageActivity extends BaseActivity {
     private void initHeadView() {
         tvTitle.setText("图片浏览");
         String type = SPUtil.getString(Config.Type);
-        if (!TextUtils.isEmpty(from) && from.equals("BangFuInfoActivity")) {//帮扶日子详情页面的图片浏览
+        if(type.equals(Config.GANBU_TYPE) || type.equals(Config.ADMIN_TYPE)){
+            rightMenu.setText("添加");
+            rightMenu.setVisibility(View.VISIBLE);
+            delete_photo.setVisibility(View.VISIBLE);
+        }else{
             rightMenu.setVisibility(View.INVISIBLE);
             delete_photo.setVisibility(View.INVISIBLE);
-        } else {
-            if (type.equals(Config.GANBU_TYPE) || type.equals(Config.ADMIN_TYPE)) {
-                rightMenu.setText("添加");
-                rightMenu.setVisibility(View.VISIBLE);
-                delete_photo.setVisibility(View.VISIBLE);
-            }
         }
     }
 
@@ -133,47 +132,20 @@ public class ImageViewPageActivity extends BaseActivity {
     }
 
     private void showUploadDialog() {
-        UploadUtils uploadUtils = new UploadUtils(this, R.id.image_viewpage_layout, mOnHanlderResultCallback);
-        uploadUtils.showSelectPicture();
 
-
-    }
-
-    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
-        @Override
-        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-            if (resultList != null) {
-                String imagePath = resultList.get(0).getPhotoPath();
-                imagePath = ImageUtil.getCompressedImgPath(imagePath);
-                MLog.e("onHanlderSuccess", imagePath);
-                imagesUpload(imagePath);
-            }
-        }
-
-        @Override
-        public void onHanlderFailure(int requestCode, String errorMsg) {
-            Toast.makeText(ImageViewPageActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-        }
-    };
-
-
-    public void imagesUpload(String filePath) {
-        /**
-         * 图片上传服务器
-         */
-        NewHttpRequest.uploadImage(this, filePath, new NewHttpRequest.UploadCallBack() {
+        UploadUtils.getmInstance().start(this,R.id.image_viewpage_layout, new UploadUtils.MyCallBack() {
             @Override
-            public void callback(String json) {
-                ToastUtil.show("图片上传成功");
-                String photoUrl = BaseConfig.ImageUrl + JsonUtil.getStringFromArray(json, "url");
+            public void success(String url) {
+                String photoUrl = BaseConfig.ImageUrl + url;
                 //调用一个更新到数据库的接口
-                photoList.add(JsonUtil.getStringFromArray(json, "url"));
+                photoList.add(url);
                 saveImage();
-
-
             }
         });
+
     }
+
+
 
     public void saveImage() {
         myImageAdapter.notifyDataSetChanged();
@@ -272,5 +244,10 @@ public class ImageViewPageActivity extends BaseActivity {
         it.putExtra("photos", (Serializable) photoList);
         it.putExtra("fcard", fcard);
         activity.startActivityForResult(it, Integer.valueOf(from));
+    }
+    public static void startIntent(Activity activity, List<String> photoList){
+        Intent it = new Intent(activity, ImageViewPageActivity.class);
+        it.putExtra("photos", (Serializable) photoList );
+        activity.startActivity(it);
     }
 }

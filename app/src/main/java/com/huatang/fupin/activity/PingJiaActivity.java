@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -26,6 +28,8 @@ import com.huatang.fupin.utils.ToastUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.techery.properratingbar.ProperRatingBar;
+import io.techery.properratingbar.RatingListener;
 
 public class PingJiaActivity extends BaseActivity {
 
@@ -60,6 +64,10 @@ public class PingJiaActivity extends BaseActivity {
     TextView tvName;
     @BindView(R.id.iv_photo)
     ImageView ivPhoto;
+
+    @BindView(R.id.lowerRatingBar)
+    ProperRatingBar lowerRatingBar;
+
     private NewLeader leader;
     private NewPoor poor;
 
@@ -71,8 +79,16 @@ public class PingJiaActivity extends BaseActivity {
         ButterKnife.bind(this);
         initHeadView();
         initView();
+        lowerRatingBar.setListener(ratingListener);
     }
 
+    private int score;
+    private RatingListener ratingListener = new RatingListener() {
+        @Override
+        public void onRatePicked(ProperRatingBar ratingBar) {
+            score = 6 - ratingBar.getRating();
+        }
+    };
     private void initView() {
         Intent intent = getIntent();
         leader = (NewLeader) intent.getSerializableExtra("leader");
@@ -120,14 +136,31 @@ public class PingJiaActivity extends BaseActivity {
                 break;
             case R.id.bt_submit:
                 String content = pingjia_et.getText().toString().trim();
-                saveContent(content);
+                if(TextUtils.isEmpty(content)){
+                    ToastUtil.show("评价内容不能为空");
+                    return;
+                }
+                saveContent(content,score);
                 break;
         }
 
 
     }
 
-    private void saveContent(String content) {
+    private void saveContent(String content,int score) {
+        NewHttpRequest.leaderEvaluation(this, String.valueOf(score), content, poor, leader, new NewHttpRequest.MyCallBack() {
+            @Override
+            public void ok(String json) {
+                ToastUtil.show("评价成功");
+                finish();
+            }
+
+            @Override
+            public void no(String msg) {
+                ToastUtil.show(msg);
+
+            }
+        });
 
     }
 

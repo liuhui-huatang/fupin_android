@@ -53,6 +53,7 @@ import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.huatang.fupin.app.BaseConfig.zuzhijiagouUrl;
 
 public class HomeFragment extends Fragment {
 
@@ -117,8 +118,8 @@ public class HomeFragment extends Fragment {
         //设置 Header 为 Material风格
         refreshLayout.setRefreshHeader(new MaterialHeader(this.getContext()).setShowBezierWave(true));
         //设置 Footer 为 球脉冲
-        refreshLayout.setRefreshFooter(new BallPulseFooter(this.getContext()).setSpinnerStyle(SpinnerStyle.Scale));
-
+       // refreshLayout.setRefreshFooter(new BallPulseFooter(this.getContext()).setSpinnerStyle(SpinnerStyle.Scale));
+        refreshLayout.setEnableLoadmore(false);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout freshlayout) {
@@ -128,12 +129,9 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadmore(2000);
-            }
-        });
+
+
+       // refreshLayout.setLoadmoreFinished(false);
         refreshLayout.setEnableFooterTranslationContent(false);
         initBanner();
 
@@ -177,13 +175,15 @@ public class HomeFragment extends Fragment {
                             UniteNewsActivity.startIntent(getActivity(),Config.fupenxingdong_type);
                             break;
                         case Config.qunzonghudong://群众互动
-                            UniteNewsActivity.startIntent(getActivity(),Config.qunzonghudong_type);
+                            QunZhongHuDongActivity.startIntent(getActivity());
                             break;
 
                         case Config.fupenzhengce://扶贫政策
                             FupinPolicyActivity.startIntent(getActivity());
                             break;
                         case Config.zuzhilingdao://组织领导
+                            String url = zuzhijiagouUrl;
+                            WebActivity.startIntent(getActivity(),url,Config.zuzhilingdao);
                             break;
                         default:
                             break;
@@ -220,7 +220,11 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void OnBannerClick(int position) {
                         if (bannerColumnList.get(position) != null) {
-                            WebActivity.startIntent(getActivity(), BaseConfig.banner_url+"?id=" + bannerColumnList.get(position).getId());
+                           // UnitNewsInfoActivity.startIntent(getActivity(),bannerColumnList.get(position).getId());
+                            BannerColumn bannerColumn =  bannerColumnList.get(position);
+                            String title = bannerColumn.getTitle();
+                            String url = BaseConfig.apiUrl +"news/getNewsInfoWithid?id="+bannerColumn.getId();
+                            WebActivity.startIntent(getActivity(),url,title);
                         }
                     }
                 });

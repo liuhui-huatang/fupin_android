@@ -323,7 +323,8 @@
                     android:id="@+id/naiman_sannian_policy"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -377,7 +378,7 @@
                         android:src="@mipmap/icon_common_right" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:id="@+id/fupin_policy"
+                    android:id="@+id/naiman_fupin_yaodian"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
                     android:layout_height="50dp">

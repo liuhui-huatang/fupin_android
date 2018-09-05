@@ -126,14 +126,13 @@ public class BangFuInfoActivity extends BaseActivity {
         long time = Long.parseLong(bean.getSign_time());
         tvTime.setText(DateUtil.getStandardTime(time));
 
-        String images = bean.getSign_imgs();
-        if (!TextUtils.isEmpty(images)) {
-            final String[] photos = images.split("##");
+        final List<String> images = bean.getSign_imgs();
+        if (images != null && images.size() > 0) {
             for (int i = 0; i < 8; i++) {
-                if (i < photos.length) {
-                    if (!TextUtils.isEmpty(photos[i])) {
+                if (i < images.size()) {
+                    if (!TextUtils.isEmpty(images.get(i))) {
                         imageViewList.get(i).setVisibility(View.VISIBLE);
-                        GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + photos[i],R.mipmap.news_default_img);
+                        GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl +images.get(i),R.mipmap.news_default_img);
                     }
                 } else {
                     imageViewList.get(i).setVisibility(View.GONE);
@@ -143,11 +142,7 @@ public class BangFuInfoActivity extends BaseActivity {
             layoutImages.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent it = new Intent(BangFuInfoActivity.this, ImageViewPageActivity.class);
-                    it.putExtra("from","BangFuInfoActivity");
-                    it.putExtra("photos", (Serializable) Arrays.asList(photos));
-                    startActivity(it);
-
+                    ImageViewPageActivity.startIntent(BangFuInfoActivity.this, images);
                 }
             });
         } else {

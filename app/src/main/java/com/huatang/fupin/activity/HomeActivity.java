@@ -161,7 +161,7 @@ public class HomeActivity extends BaseActivity {
                         break;
 
                     case "图表统计":
-                        WebActivity.startIntent(HomeActivity.this, greadViews.get(position).getUrl());
+                      //  WebActivity.startIntent(HomeActivity.this, greadViews.get(position).getUrl());
                         break;
 
                     default:
@@ -223,7 +223,7 @@ public class HomeActivity extends BaseActivity {
                     public void OnBannerClick(int position) {
                         if (beans.get(position) != null) {
 //                            ZhuanlanDetailsActivity.startIntent(HomeActivity.this, beans.get(position));
-                            WebActivity.startIntent(HomeActivity.this, "http://61.138.108.34:8088/index/message.cloumn/appdetails?id=" + beans.get(position).getId());
+                          //  WebActivity.startIntent(HomeActivity.this, "http://61.138.108.34:8088/index/message.cloumn/appdetails?id=" + beans.get(position).getId());
                         }
                     }
                 });

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_margin="10dp"
+        android:id="@+id/layout_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <ImageView
+                android:id="@+id/iv_01"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_02"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_03"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_04"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_05"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_06"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_07"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_08"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/bg_banner"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </LinearLayout>

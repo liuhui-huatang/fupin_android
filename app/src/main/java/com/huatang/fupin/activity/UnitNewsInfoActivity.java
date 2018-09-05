@@ -22,7 +22,7 @@ import butterknife.OnClick;
 
 public class UnitNewsInfoActivity extends BaseActivity {
 
-    public final static String COLUMN = "column";
+    public final static String Id = "id";
 
     @BindView(R.id.left_menu)
     ImageView leftMenu;
@@ -32,7 +32,7 @@ public class UnitNewsInfoActivity extends BaseActivity {
 
     @BindView(R.id.webview)
     WebView webview;
-    private NewColumn column;
+    private String id;
 
 
     /*
@@ -41,9 +41,9 @@ public class UnitNewsInfoActivity extends BaseActivity {
      * 描述：跳转到登录页面
      *
      */
-    public static void startIntent(Activity activity, NewColumn column) {
+    public static void startIntent(Activity activity, String  id) {
         Intent it = new Intent(activity, UnitNewsInfoActivity.class);
-        it.putExtra(COLUMN, column);
+        it.putExtra(Id, id);
         activity.startActivity(it);
     }
 
@@ -59,19 +59,20 @@ public class UnitNewsInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-        column = (NewColumn) getIntent().getSerializableExtra(COLUMN);
+        id =  getIntent().getStringExtra(Id);
         initView();
         initData();
     }
 
     private void initData() {
-        NewHttpRequest.getNewsInfoWithId(this, column.getId(), new NewHttpRequest.HtmlCallBack() {
+       /*
+        NewHttpRequest.getNewsInfoWithId(this, id, new NewHttpRequest.HtmlCallBack() {
 
             @Override
-            public void callback(String json) {
-                webview.loadDataWithBaseURL(null, json, "text/html", "utf-8", null);
+            public void callback(String html) {
+                webview.loadDataWithBaseURL(null,html,"text/html","utf-8",null);
             }
-        });
+        });*/
     }
 
     public void initView() {

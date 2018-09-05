@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.huatang.fupin.R;
+import com.huatang.fupin.activity.CreateMessageBoardActivity;
 import com.huatang.fupin.activity.MsgCreateChatActivity;
 import com.huatang.fupin.app.BaseConfig;
 import com.huatang.fupin.bean.Archive;
@@ -23,13 +25,24 @@ public class UploadUtils {
 
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
+    private static UploadUtils mInstance;
     private Context mcontext;
     private  Integer layout;
-    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback;
-    public UploadUtils(Context context, Integer layout,GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback){
+    private MyCallBack myCallBack;
+    public UploadUtils(){
+
+    }
+    public static UploadUtils getmInstance(){
+        if (mInstance==null){
+            mInstance=new UploadUtils();
+        }
+        return mInstance;
+    }
+    public void start(Context context, Integer layout,MyCallBack myCallBack){
         this.mcontext = context;
         this.layout = layout;
-        this.mOnHanlderResultCallback = mOnHanlderResultCallback;
+        this.myCallBack = myCallBack;
+        showSelectPicture();
     }
 
 
@@ -55,4 +68,40 @@ public class UploadUtils {
     }
 
 
+    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+        @Override
+        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+            if (resultList != null) {
+                String imagePath = resultList.get(0).getPhotoPath();
+                imagePath = ImageUtil.getCompressedImgPath(imagePath);
+                MLog.e("onHanlderSuccess", imagePath);
+                imagesUpload(imagePath);
+
+            }
+        }
+
+        @Override
+        public void onHanlderFailure(int requestCode, String errorMsg) {
+            Toast.makeText(mcontext, errorMsg, Toast.LENGTH_SHORT).show();
+        }
+    };
+    public void imagesUpload(String filePath) {
+        /**
+         * 图片上传服务器
+         */
+        NewHttpRequest.uploadImage((Activity) mcontext, filePath, new NewHttpRequest.UploadCallBack() {
+            @Override
+            public void callback(String json) {
+                ToastUtil.show("图片上传成功");
+                String photoUrl = JsonUtil.getStringFromArray(json, "url");
+                //调用一个更新到数据库的接口
+                myCallBack.success(photoUrl);
+
+
+            }
+        });
+    }
+    public interface MyCallBack {
+        public void success(String url);
+    }
 }

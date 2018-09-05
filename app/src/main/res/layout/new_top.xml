@@ -20,6 +20,10 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="50dp"
             android:text="扶贫一点通"
+
+            android:maxLines="1"
+            android:maxEms="10"
+            android:ellipsize="end"
             android:gravity="center"
             android:id="@+id/title_tx"
             android:layout_centerHorizontal="true"

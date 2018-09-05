@@ -217,11 +217,9 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == MemberListActivity.REQUEST_CODE_ADD_LEADER) {
-                list.clear();
-                getData();
-                String num = data.getStringExtra("num");
+                int num = data.getIntExtra("num",Integer.valueOf(chat.getLeader_num()));
                 tile.setText(chat.getTitle() + "(" + num + "人)");
-                refreshChat();
+
             }
         }
     }
@@ -245,7 +243,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
     @Override
     protected void onRestart() {
         super.onRestart();
-        refreshChat();
+
     }
 
     public void sendContent() {
@@ -295,7 +293,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
                 }
                 list.addAll(0, result);
                 myAdapter.notifyDataSetChanged();
-
+                listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
             }
 
             @Override

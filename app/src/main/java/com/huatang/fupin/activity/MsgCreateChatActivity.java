@@ -148,6 +148,7 @@ public class MsgCreateChatActivity extends BaseActivity {
                     ToastUtil.show("请选择消息发布对象");
                     return;
                 }
+                phones += leader.getLeader_phone();
                 createGroup(title, content);
                 break;
             case R.id.rl_leader:

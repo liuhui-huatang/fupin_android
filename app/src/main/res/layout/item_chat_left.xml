@@ -57,7 +57,7 @@
                 android:src="@mipmap/yifu"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/chat_upload_img"
-                />
+                android:visibility="gone"/>
 
 
 

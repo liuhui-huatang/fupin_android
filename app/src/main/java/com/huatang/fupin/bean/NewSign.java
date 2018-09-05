@@ -1,6 +1,7 @@
 package com.huatang.fupin.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class NewSign implements Serializable {
     private String id                ;
@@ -17,7 +18,7 @@ public class NewSign implements Serializable {
     private String sign_content      ;
     private String sign_address      ;
     private String sign_time         ;
-    private String sign_imgs         ;
+    private List<String> sign_imgs         ;
     private String longitude         ;
     private String dimension         ;
     private String sign_type         ;
@@ -144,11 +145,11 @@ public class NewSign implements Serializable {
         this.sign_time = sign_time;
     }
 
-    public String getSign_imgs() {
+    public List<String> getSign_imgs() {
         return sign_imgs;
     }
 
-    public void setSign_imgs(String sign_imgs) {
+    public void setSign_imgs(List<String> sign_imgs) {
         this.sign_imgs = sign_imgs;
     }
 

@@ -136,7 +136,7 @@ public class DanganDetailActivity extends BaseActivity implements View.OnClickLi
         pingjia_layout.setVisibility(View.VISIBLE);
         pingjia_layout.setOnClickListener(this);
         if(!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))){
-            GlideUtils.LoadCircleImageWithoutBorderColor(this, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+            GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl +SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
         }else{
             GlideUtils.LoadCircleImageWithoutBorderColor(this, BaseConfig.ImageUrl+ poor.getPhoto(),iv_photo);
         }

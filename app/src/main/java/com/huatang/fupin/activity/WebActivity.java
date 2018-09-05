@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,12 +48,18 @@ public class WebActivity extends BaseActivity {
      * 描述：跳转到登录页面
      *
      */
-    public static void startIntent(Activity activity, String url) {
+    public static void startIntent(Activity activity, String url,String title) {
         Intent it = new Intent(activity, WebActivity.class);
-        it.putExtra("url", url);
+        it.putExtra(URL, url);
+        it.putExtra(TITLE,title);
         activity.startActivity(it);
     }
-
+    public static void startIntent(Activity activity, String url) {
+        Intent it = new Intent(activity, WebActivity.class);
+        it.putExtra(URL, url);
+        it.putExtra(TITLE,"贫困户详情信息");
+        activity.startActivity(it);
+    }
     /*
     * @ forever 在 17/5/17 下午2:28 创建
     *
@@ -101,7 +109,10 @@ public class WebActivity extends BaseActivity {
         webview.getSettings().setLoadsImagesAutomatically(true); //支持自动加载图片
 
         webview.getSettings().setSupportZoom(true);
-        webview.getSettings().setTextSize(WebSettings.TextSize.LARGEST);
+        if(url.contains("getNewsInfoWithid")){
+            webview.getSettings().setTextSize(WebSettings.TextSize.LARGER);
+        }
+
 
 
         webview.loadUrl(url);

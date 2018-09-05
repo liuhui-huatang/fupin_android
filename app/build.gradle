@@ -6,7 +6,7 @@ android {
         applicationId "com.huatang.fupin"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 10
+        versionCode 11
         versionName "3.1"//
 
         // 1.签到添加标题内容的限制;
@@ -60,6 +60,8 @@ android {
         }
     }
 
+
+
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -103,4 +105,6 @@ dependencies {
    // compile 'com.android.support:design:26.1.0'
     compile 'com.alibaba:fastjson:1.2.49'
     compile 'com.alibaba:fastjson:1.1.70.android'
+   // compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.github.techery:properratingbar:0.0.5'
 }

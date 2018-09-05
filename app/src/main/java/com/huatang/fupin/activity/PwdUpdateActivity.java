@@ -15,12 +15,16 @@ import android.widget.TextView;
 import com.dou361.dialogui.DialogUIUtils;
 import com.huatang.fupin.R;
 import com.huatang.fupin.app.BaseActivity;
+import com.huatang.fupin.app.Config;
+import com.huatang.fupin.bean.NewLeader;
+import com.huatang.fupin.bean.NewPoor;
 import com.huatang.fupin.http.HttpRequest;
 import com.huatang.fupin.http.NewHttpRequest;
 import com.huatang.fupin.utils.AndroidInfoUtils;
 import com.huatang.fupin.utils.CountDownUtil;
 import com.huatang.fupin.utils.MLog;
 import com.huatang.fupin.utils.RandomUtil;
+import com.huatang.fupin.utils.SPUtil;
 import com.huatang.fupin.utils.SmsUtil;
 import com.huatang.fupin.utils.TimerUtil;
 import com.huatang.fupin.utils.ToastUtil;
@@ -63,6 +67,8 @@ public class PwdUpdateActivity extends BaseActivity implements View.OnClickListe
     private String code="";
     private String pwd="";
     String phone="";
+    private String type;
+
     /*
          * @ forever 在 17/5/17 下午2:28 创建
          *
@@ -84,8 +90,15 @@ public class PwdUpdateActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwdupdate);
         ButterKnife.bind(this);
+        type = SPUtil.getString(Config.Type);
         ((TextView)findViewById(R.id.title_tx)).setText("设置密码");
         initSMSCode();
+        if(!TextUtils.isEmpty(SPUtil.getString(Config.TOKEN))){
+            etLoginPhone.setText(SPUtil.getString(Config.PHONE));
+            etLoginPhone.setEnabled(false);
+        }else{
+            etLoginPhone.setEnabled(true);
+        }
     }
     private void initSMSCode(){
         myHandler = new MyHandler();
@@ -216,12 +229,28 @@ public class PwdUpdateActivity extends BaseActivity implements View.OnClickListe
     private void startCountDown(){
         CountDownUtil countDownUtil =new CountDownUtil(btLoginGetCode);
         countDownUtil.setCountDownMillis(60_000L)//倒计时60000ms
-                .setCountDownColor(android.R.color.holo_blue_dark,android.R.color.background_dark)//不同状态字体颜色
+                .setCountDownColor(android.R.color.white,android.R.color.background_dark)//不同状态字体颜色
                 .setOnClickListener(this).start();
 
     }
     public void updatePwd(){
-        NewHttpRequest.updatePwd(this, phone, pwd, new NewHttpRequest.MyCallBack(this) {
+        String fcard = "";
+        String leader_id = "";
+        switch (type){
+            case Config.YOUKE:
+                break;
+            case Config.PENKUNHU_TYPE:
+                NewPoor poor = (NewPoor)SPUtil.getObject(Config.PENKUNHU_KEY);
+                fcard = poor.getFcard();
+                break;
+            case Config.GANBU_TYPE:
+                NewLeader leader = (NewLeader)SPUtil.getObject(Config.GANBU_KEY);
+                leader_id = leader.getId();
+                break;
+            case Config.ADMIN_TYPE:
+                break;
+        }
+        NewHttpRequest.updatePwd(this, type,phone, pwd, fcard,leader_id,new NewHttpRequest.MyCallBack(this) {
             @Override
             public void ok(String json) {
                 ToastUtil.show("设置密码成功");
@@ -236,5 +265,9 @@ public class PwdUpdateActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SMSSDK.unregisterEventHandler(eh);
+    }
 }

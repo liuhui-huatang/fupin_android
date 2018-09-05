@@ -92,7 +92,7 @@ public class ZhuanlanActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                ZhuanlanDetailsActivity.startIntent(ZhuanlanActivity.this, list.get(position));
-                WebActivity.startIntent(ZhuanlanActivity.this, "http://61.138.108.34:8088/index/message.cloumn/appdetails?id=" + list.get(position).getId());
+              //  WebActivity.startIntent(ZhuanlanActivity.this, "http://61.138.108.34:8088/index/message.cloumn/appdetails?id=" + list.get(position).getId());
             }
         });
 

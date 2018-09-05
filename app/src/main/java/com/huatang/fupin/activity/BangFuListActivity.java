@@ -253,26 +253,25 @@ public class BangFuListActivity extends BaseActivity {
 
 
             if (!TextUtils.isEmpty(SPUtil.getString(Config.HEAD_PHOTO))) {
-               GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
+               GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, BaseConfig.ImageUrl+ SPUtil.getString(Config.HEAD_PHOTO),iv_photo);
             }else{
                 GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mContext, BaseConfig.ImageUrl+leader.getLeader_photo(),iv_photo);
-                SPUtil.saveString(Config.HEAD_PHOTO,BaseConfig.ImageUrl+leader.getLeader_photo());
+                SPUtil.saveString(Config.HEAD_PHOTO,leader.getLeader_photo());
             }
-
-            tv_title.setText(list.get(position).getSign_title());
-            tv_text.setText(list.get(position).getSign_content());
-            tv_location.setText(list.get(position).getSign_address());
-            long time = Long.parseLong(list.get(position).getSign_time());
+            NewSign sign = list.get(position);
+            tv_title.setText(sign.getSign_title());
+            tv_text.setText(sign.getSign_content());
+            tv_location.setText(sign.getSign_address());
+            long time = Long.parseLong(sign.getSign_time());
             tv_time.setText(DateUtil.getStandardTime(time));
 
-            String images = list.get(position).getSign_imgs();
-            if (!TextUtils.isEmpty(images)) {
-                String[] strings = images.split(StringUtil.separator);
+            List<String> images = sign.getSign_imgs();
+            if (images != null && images.size() > 0) {
                 for (int i = 0; i < 8; i++) {
-                    if (i < strings.length) {
-                        if (!TextUtils.isEmpty(strings[i])) {
+                    if (i < images.size()) {
+                        if (!TextUtils.isEmpty(images.get(i))) {
                             imageViewList.get(i).setVisibility(View.VISIBLE);
-                            GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + strings[i],R.mipmap.news_default_img);
+                            GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + images.get(i),R.mipmap.news_default_img);
                         }
                     } else {
                         imageViewList.get(i).setVisibility(View.GONE);
