@@ -106,9 +106,12 @@ public class ImageViewPageActivity extends BaseActivity {
         tvTitle.setText("图片浏览");
         String type = SPUtil.getString(Config.Type);
         if(type.equals(Config.GANBU_TYPE) || type.equals(Config.ADMIN_TYPE)){
-            rightMenu.setText("添加");
-            rightMenu.setVisibility(View.VISIBLE);
-            delete_photo.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(from)){
+                rightMenu.setText("添加");
+                rightMenu.setVisibility(View.VISIBLE);
+                delete_photo.setVisibility(View.VISIBLE);
+            }
+
         }else{
             rightMenu.setVisibility(View.INVISIBLE);
             delete_photo.setVisibility(View.INVISIBLE);

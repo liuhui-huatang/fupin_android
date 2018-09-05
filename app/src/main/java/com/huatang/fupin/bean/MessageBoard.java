@@ -17,6 +17,7 @@ public class MessageBoard implements Serializable {
     private String village_name;
     private String update_time;
     private String create_time;
+    private String photo;
 
     public String getId() {
         return id;
@@ -120,5 +121,13 @@ public class MessageBoard implements Serializable {
 
     public void setImgs(List<String> imgs) {
         this.imgs = imgs;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

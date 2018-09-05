@@ -148,7 +148,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
                 list.clear();
                 pageNo = 1;
                 getData();
-                listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
+
             }
         });
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -361,7 +361,7 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             NewChat chat = list.get(position);
-            if (convertView == null) {
+
                 if (chat.getPush_leader_id().equals(leader.getId())) {
                     convertView = View.inflate(mContext, R.layout.item_chat_right, null);
                     holder = new ViewHolder(1, convertView);
@@ -370,16 +370,8 @@ public class MsgChatActivity extends BaseActivity implements TextWatcher {
                     convertView = View.inflate(mContext, R.layout.item_chat_left, null);
                     holder = new ViewHolder(2, convertView);
                 }
-                convertView.setTag(holder);
-            } else {
+               // convertView.setTag(holder);
 
-                if (chat.getPush_leader_id().equals(leader.getId())) {
-                    holder = (ViewHolder) convertView.getTag();
-
-                } else {
-                    holder = (ViewHolder) convertView.getTag();
-                }
-            }
 
             GlideUtils.displayHomeUrl(holder.itemPhoto, BaseConfig.ImageUrl + chat.getPush_leader_photo(), R.mipmap.header_default);
             holder.itemName.setText(chat.getPush_leader_name());

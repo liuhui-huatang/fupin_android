@@ -463,12 +463,12 @@ public class NewHttpRequest {
         httpParams.put("village",meb.getVillage());
         httpParams.put("village_name",meb.getVillage_name());
         httpParams.put("is_leader","0");
+        httpParams.put("photo",poor.getPhoto());
         httpParams.put("group_id",meb.getId());
         executePost(activity,"leave/poorReplyMsg",httpParams,callBack);
     }
     public static void leaderReplyMsg(Activity activity,String reply,MessageBoard meb ,NewLeader leader,MyCallBack callBack){
         httpParams =  getHttpParams();
-        httpParams.put("reply_content",reply);
         httpParams.put("name",leader.getLeader_name());
         httpParams.put("phone",leader.getLeader_phone());
         httpParams.put("reply_content",reply);
@@ -477,6 +477,7 @@ public class NewHttpRequest {
         httpParams.put("village",meb.getVillage());
         httpParams.put("village_name",meb.getVillage_name());
         httpParams.put("is_leader","1");
+        httpParams.put("photo",leader.getLeader_photo());
         httpParams.put("group_id",meb.getId());
         executePost(activity,"leave/leaderReplyMsg",httpParams,callBack);
     }

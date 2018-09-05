@@ -121,6 +121,7 @@ public class MsgCreateChatActivity extends BaseActivity {
         } else if (SPUtil.getString(Config.Type).equals(Config.GANBU_TYPE)) {
             leader = (NewLeader) SPUtil.getObject(Config.ADMIN_KEY);
         }
+
     }
 
     private void initHeadView() {
@@ -148,6 +149,7 @@ public class MsgCreateChatActivity extends BaseActivity {
                     ToastUtil.show("请选择消息发布对象");
                     return;
                 }
+                leader_list.add(leader);
                 phones += leader.getLeader_phone();
                 createGroup(title, content);
                 break;

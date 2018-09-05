@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -93,6 +94,7 @@ public class QunZhongHuDongActivity extends BaseActivity {
             @Override
             public void onRefresh(final RefreshLayout freshlayout) {
                 freshlayout.finishRefresh(true);
+                list.clear();
                 load = 1 ;
                 getData();
 
@@ -103,7 +105,7 @@ public class QunZhongHuDongActivity extends BaseActivity {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadmore(1000);
-                list.clear();
+                load++;
                 getData();
             }
         });
@@ -162,11 +164,11 @@ public class QunZhongHuDongActivity extends BaseActivity {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
                     adapter.notifyDataSetChanged();
+                    listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
                 } else {
                     tvEmpty.setVisibility(View.VISIBLE);
                     listview.setVisibility(View.GONE);
                 }
-                load++;
             }
 
             @Override
@@ -201,6 +203,7 @@ public class QunZhongHuDongActivity extends BaseActivity {
                     tvEmpty.setVisibility(View.GONE);
                     listview.setVisibility(View.VISIBLE);
                     adapter.notifyDataSetChanged();
+                    listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
                 } else {
                     tvEmpty.setVisibility(View.VISIBLE);
                     listview.setVisibility(View.GONE);
@@ -297,7 +300,10 @@ public class QunZhongHuDongActivity extends BaseActivity {
                 viewHolder.author.setText(messageBoard.getName());
                 viewHolder.iv_photo.setVisibility(View.VISIBLE);
                 viewHolder.author_ll.setVisibility(View.VISIBLE);
-                GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mcontext, BaseConfig.ImageUrl+leader.getLeader_photo(),viewHolder.iv_photo);
+                if(!TextUtils.isEmpty(messageBoard.getPhoto())){
+                    GlideUtils.LoadCircleImageWithoutBorderColor((Activity)mcontext, BaseConfig.ImageUrl+messageBoard.getPhoto() ,viewHolder.iv_photo);
+                }
+
             }else if(poor != null){
                 viewHolder.iv_photo.setVisibility(View.GONE);
                 viewHolder.author_ll.setVisibility(View.GONE);

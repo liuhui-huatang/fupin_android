@@ -92,6 +92,7 @@ public class MessageBoradDetailActivity extends BaseActivity {
                     listview.setVisibility(View.VISIBLE);
                     tv_empty.setVisibility(View.GONE);
                     mAdapter.notifyDataSetChanged();
+                    listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
                 }
 
             }
@@ -124,7 +125,7 @@ public class MessageBoradDetailActivity extends BaseActivity {
                 break;
         }
     }
-    private class MyAdapter extends BaseAdapter  {
+    public class MyAdapter extends BaseAdapter  {
         private Context mcontext;
 
 
@@ -132,6 +133,11 @@ public class MessageBoradDetailActivity extends BaseActivity {
         public MyAdapter(Context context ,List<Reply> list) {
             this.mcontext = context;
 
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return Integer.valueOf(list.get(position).getIs_leader());
         }
 
         @Override
@@ -150,93 +156,119 @@ public class MessageBoradDetailActivity extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder = null ;
-            final Reply reply =  list.get(position);
-            final List<String> imgsList = reply.getImgs();
-            if(convertView == null){
-                viewHolder = new ViewHolder();
-                if(reply.isLeader()){
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolderRight vhRight = null;
+            ViewHolderLeft vhLeft = null;
+            Reply reply =  list.get(position);
+            if(getItemViewType(position) == 1){
+                if(convertView == null){
                     convertView = View.inflate(mcontext, R.layout.activity_board_detail_right, null);
-                    viewHolder.right_layout = convertView.findViewById(R.id.right_layout);
+                    vhRight = new ViewHolderRight(convertView);
+                    convertView.setTag(vhRight);
                 }else{
-                    convertView = View.inflate(mcontext, R.layout.activity_board_detail_left, null);
-                    viewHolder.left_layout = convertView.findViewById(R.id.left_layout);
-                    if(position == 0 && imgsList.size() > 0){
-                        viewHolder.image_ll = convertView.findViewById(R.id.image_ll);
-                        View view =  LayoutInflater.from(mcontext).inflate(R.layout.add_image_layout,null);
-                        viewHolder.image_ll.addView(view);
-                        viewHolder.layout_images = convertView.findViewById(R.id.layout_images);
-                        viewHolder.iv_01 = convertView.findViewById(R.id.iv_01);
-                        viewHolder.iv_02 = convertView.findViewById(R.id.iv_02);
-                        viewHolder.iv_03 = convertView.findViewById(R.id.iv_03);
-                        viewHolder.iv_04 = convertView.findViewById(R.id.iv_04);
-                        viewHolder.iv_05 = convertView.findViewById(R.id.iv_05);
-                        viewHolder.iv_06 = convertView.findViewById(R.id.iv_06);
-                        viewHolder.iv_07 = convertView.findViewById(R.id.iv_07);
-                        viewHolder.iv_08 = convertView.findViewById(R.id.iv_08);
+                    if(convertView.getTag() instanceof ViewHolderRight){
+                        vhRight = (ViewHolderRight) convertView.getTag();
+                    }else{
+                        convertView = View.inflate(mcontext, R.layout.activity_board_detail_right, null);
+                        vhRight = new ViewHolderRight(convertView);
+                        convertView.setTag(vhRight);
                     }
+
                 }
-                viewHolder.author = convertView.findViewById(R.id.author);
-                viewHolder.author_content = convertView.findViewById(R.id.author_content);
-                convertView.setTag(viewHolder);
 
             }else{
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-            viewHolder.author.setText(reply.getName()+":");
-            viewHolder.author_content.setText(TextUtils.isEmpty(reply.getContent()) ? reply.getReply_content() : reply.getContent());
-
-            if(position == 0 && !reply.isLeader() &&  imgsList != null && imgsList.size() > 0){
-                List<ImageView> imageViewList = new ArrayList<>();
-                imageViewList.add(viewHolder.iv_01);
-                imageViewList.add(viewHolder.iv_02);
-                imageViewList.add(viewHolder.iv_03);
-                imageViewList.add(viewHolder.iv_04);
-                imageViewList.add(viewHolder.iv_05);
-                imageViewList.add(viewHolder.iv_06);
-                imageViewList.add(viewHolder.iv_07);
-                imageViewList.add(viewHolder.iv_08);
-                for(int i = 0 ; i < imgsList.size();i++){
-                    if(i < imageViewList.size()){
-                        imageViewList.get(i).setVisibility(View.VISIBLE);
-                        GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + imgsList.get(i),R.mipmap.news_default_img);
-                    }else {
-                        imageViewList.get(i).setVisibility(View.GONE);
+                if(convertView == null){
+                    convertView = View.inflate(mcontext, R.layout.activity_board_detail_left, null);
+                    vhLeft = new ViewHolderLeft(convertView);
+                    convertView.setTag(vhLeft);
+                }else{
+                    if(convertView.getTag() instanceof ViewHolderLeft){
+                        vhLeft = (ViewHolderLeft) convertView.getTag();
+                    }else{
+                        convertView = View.inflate(mcontext, R.layout.activity_board_detail_left, null);
+                        vhLeft = new ViewHolderLeft(convertView);
+                        convertView.setTag(vhLeft);
                     }
+
                 }
-                viewHolder.layout_images.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ImageViewPageActivity.startIntent((Activity) mcontext,imgsList);
-                    }
-                });
+
             }
 
 
-
+            if(reply.isLeader()){
+                vhRight.author.setText(reply.getName()+":");
+                vhRight.author_content.setText(TextUtils.isEmpty(reply.getContent()) ? reply.getReply_content() : reply.getContent());
+            }else{
+                vhLeft.author.setText(reply.getName()+":");
+                vhLeft.author_content.setText(TextUtils.isEmpty(reply.getContent()) ? reply.getReply_content() : reply.getContent());
+                List<String> imgsList = reply.getImgs();
+                if(position == 0 && !reply.isLeader() &&  imgsList != null && imgsList.size() > 0){
+                    List<ImageView> imageViewList = new ArrayList<>();
+                    imageViewList.add(vhLeft.iv_01);
+                    imageViewList.add(vhLeft.iv_02);
+                    imageViewList.add(vhLeft.iv_03);
+                    imageViewList.add(vhLeft.iv_04);
+                    imageViewList.add(vhLeft.iv_05);
+                    imageViewList.add(vhLeft.iv_06);
+                    imageViewList.add(vhLeft.iv_07);
+                    imageViewList.add(vhLeft.iv_08);
+                    for(int i = 0 ; i < imgsList.size();i++){
+                        if(i < imageViewList.size()){
+                            imageViewList.get(i).setVisibility(View.VISIBLE);
+                            GlideUtils.displayHomeUrl(imageViewList.get(i), BaseConfig.ImageUrl + imgsList.get(i),R.mipmap.news_default_img);
+                        }else {
+                            imageViewList.get(i).setVisibility(View.GONE);
+                        }
+                    }
+                    vhLeft.layout_images.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageViewPageActivity.startIntent((Activity) mcontext,list.get(position).getImgs());
+                        }
+                    });
+                }
+            }
             return convertView;
-
         }
 
 
 
-        class ViewHolder  {
+        class ViewHolderRight  {
+            @BindView(R.id.author)
             TextView author;
+            @BindView(R.id.author_content)
             TextView author_content;
+            ViewHolderRight( View view) {
+                ButterKnife.bind(this, view);
+            }
+        }
+        class ViewHolderLeft{
+            @BindView(R.id.author)
+            TextView author;
+            @BindView(R.id.author_content)
+            TextView author_content;
+            @BindView(R.id.layout_images)
             LinearLayout layout_images;
+            @BindView(R.id.iv_01)
             ImageView iv_01;
+            @BindView(R.id.iv_02)
             ImageView iv_02;
+            @BindView(R.id.iv_03)
             ImageView iv_03;
+            @BindView(R.id.iv_04)
             ImageView iv_04;
+            @BindView(R.id.iv_05)
             ImageView iv_05;
+            @BindView(R.id.iv_06)
             ImageView iv_06;
+            @BindView(R.id.iv_07)
             ImageView iv_07;
+            @BindView(R.id.iv_08)
             ImageView iv_08;
-            LinearLayout image_ll;
-            LinearLayout right_layout;
-            LinearLayout left_layout;
+
+            ViewHolderLeft( View view) {
+                ButterKnife.bind(this, view);
+            }
         }
 
     }
@@ -272,6 +304,7 @@ public class MessageBoradDetailActivity extends BaseActivity {
                 et_reply.setText("");
                 list = JsonUtil.toList(json,Reply.class);
                 mAdapter.notifyDataSetChanged();
+                listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
             }
 
             @Override
@@ -287,8 +320,10 @@ public class MessageBoradDetailActivity extends BaseActivity {
             public void ok(String json) {
                 ToastUtil.show("回复成功");
                 list.clear();
+                et_reply.setText("");
                 list = JsonUtil.toList(json,Reply.class);
                 mAdapter.notifyDataSetChanged();
+                listview.setSelection(ListView.FOCUS_DOWN);//刷新到底部
             }
 
             @Override
